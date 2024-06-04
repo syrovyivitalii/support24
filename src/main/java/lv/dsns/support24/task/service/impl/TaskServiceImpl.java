@@ -1,6 +1,8 @@
 package lv.dsns.support24.task.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import lv.dsns.support24.common.exception.ClientBackendException;
+import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.mapper.TaskMapper;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,4 +39,19 @@ public class TaskServiceImpl implements TaskService {
         var savedTask = tasksRepository.save(tasks);
         return tasksMapper.mapToDTO(savedTask);
     }
+
+    @Override
+    @Transactional
+    public TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO){
+        var taskById = tasksRepository.findById(id)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
+
+        tasksMapper.patchMerge(requestDTO,taskById);
+
+        var savedTask = tasksRepository.save(taskById);
+
+        return tasksMapper.mapToDTO(savedTask);
+    }
+
+
 }
