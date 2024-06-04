@@ -1,5 +1,6 @@
 package lv.dsns.support24.task.controller.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,8 @@ import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskRequestDTO {
+
+    @NotBlank(message = "name is mandatory")
     private String name;
     private String description;
     private Status status;

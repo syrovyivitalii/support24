@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/task")
@@ -28,5 +29,11 @@ public class TaskController {
     public ResponseEntity<TaskResponseDTO> save (@RequestBody TaskRequestDTO tasksDTO){
         var saveTask = tasksService.save(tasksDTO);
         return ResponseEntity.ok(saveTask);
+    }
+    @PatchMapping
+    public ResponseEntity<TaskResponseDTO> patch(@PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
+        var patchedTask = tasksService.patch(id,requestDTO);
+
+        return ResponseEntity.ok(patchedTask);
     }
 }
