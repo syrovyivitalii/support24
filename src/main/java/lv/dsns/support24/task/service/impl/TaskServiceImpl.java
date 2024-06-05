@@ -8,6 +8,9 @@ import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.mapper.TaskMapper;
 import lv.dsns.support24.task.repository.TasksRepository;
 import lv.dsns.support24.task.service.TaskService;
+import lv.dsns.support24.task.service.filter.TaskFilter;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +55,12 @@ public class TaskServiceImpl implements TaskService {
 
         return tasksMapper.mapToDTO(savedTask);
     }
+
+//    private Specification<Task> getSearchSpecification(TaskFilter taskFilter) {
+//        return Specification.where((Specification<Task>) searchLikeString("teamName", taskFilter.getSearch()))
+//                .and((Specification<Task>) searchFieldInCollectionOfIds("reference", taskFilter.getIds()))
+//                .and((Specification<Task>) searchFieldInCollectionOfJoinedIds("teamCompetitions", "competition", "reference", taskFilter.getCompetitionReferences()));
+//    }
 
 
 }
