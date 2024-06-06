@@ -2,7 +2,9 @@ package lv.dsns.support24.task.controller;
 
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
+import lv.dsns.support24.task.service.filter.TaskFilter;
 import lv.dsns.support24.task.service.impl.TaskServiceImpl;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +22,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponseDTO>> getAllTasks(){
-        var allTasks = tasksService.findAll();
+    public ResponseEntity<List<TaskResponseDTO>> getAllTasks(@ParameterObject TaskFilter taskFilter){
+        var allTasks = tasksService.findAll(taskFilter);
         return ResponseEntity.ok(allTasks);
     }
 
