@@ -2,10 +2,10 @@ package lv.dsns.support24.task.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,18 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class Tasks{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-
-    @CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
+public class Tasks extends BaseEntity {
 
     @Column(name = "name",nullable = false)
     private String name;
@@ -37,7 +26,7 @@ public class Tasks{
     private String description;
 
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @Column(name = "status",nullable = false)
     private String status;
@@ -45,11 +34,17 @@ public class Tasks{
     @Column(name = "priority",nullable = false)
     private String priority;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_for_id", referencedColumnName = "id", nullable = false)
-    private SystemUsers createdForId;
+    @Column(name = "created_for_id")
+    private UUID createdForId;
+
+    @Column(name = "create_by_id")
+    private UUID createdById;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "create_by_id", referencedColumnName = "id",nullable = false)
-    private SystemUsers createdById;
+    @JoinColumn(name = "created_for_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    private SystemUsers createdFor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "create_by_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private SystemUsers createdBy;
 }

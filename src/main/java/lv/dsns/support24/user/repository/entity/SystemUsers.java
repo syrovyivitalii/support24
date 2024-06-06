@@ -2,6 +2,7 @@ package lv.dsns.support24.user.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,18 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class SystemUsers{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public class SystemUsers extends BaseEntity {
 
-    @CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -41,9 +32,9 @@ public class SystemUsers{
 
     private boolean verify;
 
-    @OneToMany(mappedBy = "createdForId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdFor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> createdForTasks;
 
-    @OneToMany(mappedBy = "createdById", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> createdByTasks;
 }
