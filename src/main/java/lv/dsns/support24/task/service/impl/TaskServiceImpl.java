@@ -2,6 +2,7 @@ package lv.dsns.support24.task.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
@@ -11,6 +12,7 @@ import lv.dsns.support24.task.repository.TasksRepository;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,23 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
         var allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter));
         return allTasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable) {
+        var allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
+
+
+        List<TaskResponseDTO> taskDTOs = allTasks.stream()
+                .map(tasksMapper::mapToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponse.<TaskResponseDTO>builder()
+                .totalPages((long) allTasks.getTotalPages())
+                .pageSize((long) pageable.getPageSize())
+                .totalElements(allTasks.getTotalElements())
+                .content(taskDTOs)
+                .build();
     }
 
     @Override

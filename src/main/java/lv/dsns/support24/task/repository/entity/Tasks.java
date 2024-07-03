@@ -22,22 +22,22 @@ public class Tasks extends BaseEntity {
     @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description",nullable = false)
     private String description;
 
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-    @Column(name = "status",nullable = false)
+    @Column(name = "status")
     private String status;
 
-    @Column(name = "priority",nullable = false)
+    @Column(name = "priority")
     private String priority;
 
     @Column(name = "created_for_id")
     private UUID createdForId;
 
-    @Column(name = "create_by_id")
+    @Column(name = "created_by_id")
     private UUID createdById;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,6 +45,6 @@ public class Tasks extends BaseEntity {
     private SystemUsers createdFor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "create_by_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "created_by_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private SystemUsers createdBy;
 }
