@@ -17,4 +17,6 @@ public class UserRequestDTO {
     private Role role;
     private String password;
     private boolean verify;
+    private String name;
+    private String job_title;
 }

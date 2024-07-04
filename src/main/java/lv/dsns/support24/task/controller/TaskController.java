@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/task")
+@RequestMapping("/api/v1/tasks")
 @CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
 
@@ -31,7 +31,7 @@ public class TaskController {
         return ResponseEntity.ok(allTasks);
     }
 
-    @GetMapping("/getAllPageable")
+    @GetMapping("/pageable")
     public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable){
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
@@ -42,7 +42,7 @@ public class TaskController {
         var saveTask = tasksService.save(tasksDTO);
         return ResponseEntity.ok(saveTask);
     }
-    @PatchMapping
+    @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> patch(@PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
         var patchedTask = tasksService.patch(id,requestDTO);
 

@@ -32,6 +32,10 @@ public class SystemUsers extends BaseEntity {
 
     private boolean verify;
 
+    private String name;
+
+    private String job_title;
+
     @OneToMany(mappedBy = "createdFor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> createdForTasks;
 
