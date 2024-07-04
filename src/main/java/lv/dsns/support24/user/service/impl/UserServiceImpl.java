@@ -38,5 +38,10 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.mapToDTO(savedUser);
     }
+    @Override
+    public boolean existUserByEmail(String email){
+        return systemUsersRepository.existsByEmail(email);
+    }
+
 
 }

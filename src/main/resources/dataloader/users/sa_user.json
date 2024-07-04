@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "email" : "syrovyi@gmail.com",
+      "role" : "ROLE_SUPER_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Сировий Віталій",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "test@gmail.com",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "test",
+      "jobTitle": "Фахівець"
+    }
+  ]
+}

@@ -8,4 +8,6 @@ import java.util.List;
 public interface UserService {
     List<UserResponseDTO> findAll();
     UserResponseDTO save(UserRequestDTO userRequestDTO);
+
+    boolean existUserByEmail(String email);
 }
