@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "email" : "syrovyi@gmail.com",
+      "email" : "v.syrovyi@dsns.gov.ua",
       "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
@@ -9,12 +9,20 @@
       "jobTitle": "Фахівець"
     },
     {
-      "email" : "test@gmail.com",
-      "role" : "ROLE_ADMIN",
+      "email" : "s.movchan@dsns.gov.ua",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
-      "name": "test",
-      "jobTitle": "Фахівець"
+      "name": "Сергій Мовчан",
+      "jobTitle": "Провідний Фахівець"
+    },
+    {
+      "email" : "y.golovatyi@dsns.gov.ua",
+      "role" : "ROLE_SUPER_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Юрій Головатий",
+      "jobTitle": "Начальник відділу"
     }
   ]
 }
