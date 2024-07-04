@@ -34,7 +34,8 @@ public class SystemUsers extends BaseEntity {
 
     private String name;
 
-    private String job_title;
+    @Column(name = "job_title")
+    private String jobTitle;
 
     @OneToMany(mappedBy = "createdFor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> createdForTasks;

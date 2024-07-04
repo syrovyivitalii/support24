@@ -22,5 +22,5 @@ public class UserResponseDTO {
     private String password;
     private boolean verify;
     private String name;
-    private String job_title;
+    private String jobTitle;
 }
