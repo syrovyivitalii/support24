@@ -40,6 +40,11 @@ public enum ErrorCode {
             "Task not found",
             404
     ),
+    USER_ALREADY_EXISTS(
+            "404-004",
+            "User already exists",
+            405
+    ),
     //403
     FORBIDDEN(
             "403",
