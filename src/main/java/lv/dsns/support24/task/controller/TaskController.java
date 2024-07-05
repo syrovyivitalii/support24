@@ -9,6 +9,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,9 @@ public class TaskController {
         this.tasksService = tasksService;
     }
 
+
     @GetMapping
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(@ParameterObject TaskFilter taskFilter){
         var allTasks = tasksService.findAll(taskFilter);
         return ResponseEntity.ok(allTasks);
