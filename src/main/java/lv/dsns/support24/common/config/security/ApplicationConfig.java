@@ -1,4 +1,4 @@
-package lv.dsns.support24.common.config;
+package lv.dsns.support24.common.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
