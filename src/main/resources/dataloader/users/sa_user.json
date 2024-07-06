@@ -2,7 +2,7 @@
   "users": [
     {
       "email" : "v.syrovyi@dsns.gov.ua",
-      "role" : "ROLE_SUPER_ADMIN",
+      "role" : "ROLE_USER",
       "password" : "123",
       "verify": true,
       "name": "Сировий Віталій",
@@ -10,7 +10,7 @@
     },
     {
       "email" : "s.movchan@dsns.gov.ua",
-      "role" : "ROLE_SUPER_ADMIN",
+      "role" : "ROLE_USER",
       "password" : "123",
       "verify": true,
       "name": "Сергій Мовчан",
@@ -18,7 +18,7 @@
     },
     {
       "email" : "y.golovatyi@dsns.gov.ua",
-      "role" : "ROLE_SUPER_ADMIN",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Юрій Головатий",

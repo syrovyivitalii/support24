@@ -4,7 +4,6 @@ import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.service.impl.UserServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
