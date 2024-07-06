@@ -1,6 +1,14 @@
 {
   "users": [
     {
+      "email" : "admin@dsns.gov.ua",
+      "role" : "ROLE_SUPER_ADMIN",
+      "password" : "admin",
+      "verify": true,
+      "name": "Admin",
+      "jobTitle": "Admin"
+    },
+    {
       "email" : "v.syrovyi@dsns.gov.ua",
       "role" : "ROLE_USER",
       "password" : "123",
