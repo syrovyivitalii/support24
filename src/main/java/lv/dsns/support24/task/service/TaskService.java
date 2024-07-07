@@ -5,6 +5,7 @@ import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.service.filter.TaskFilter;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public interface TaskService {
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
 
-    PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable);
+    PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable, UserDetails userDetails);
     TaskResponseDTO save (TaskRequestDTO tasksDTO);
 
     TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO);

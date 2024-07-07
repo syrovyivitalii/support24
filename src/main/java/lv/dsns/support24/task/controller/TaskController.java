@@ -10,8 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,8 +38,8 @@ public class TaskController {
 
 //    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/pageable")
-    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable){
-        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable, @AuthenticationPrincipal UserDetails userDetails){
+        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable,userDetails);
         return ResponseEntity.ok(responseDTOS);
     }
 
