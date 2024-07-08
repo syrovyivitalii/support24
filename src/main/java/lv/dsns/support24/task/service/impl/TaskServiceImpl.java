@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.mapper.TaskMapper;
@@ -12,6 +13,7 @@ import lv.dsns.support24.task.repository.TasksRepository;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
+import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.springframework.data.domain.Page;
@@ -87,21 +89,24 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         var taskById = tasksRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
 
-        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
-            tasksMapper.patchMergeByUser(requestDTO,taskById);
-        }else {
-            tasksMapper.patchMerge(requestDTO,taskById);
-        }
+        tasksMapper.patchMerge(requestDTO,taskById);
 
-        var savedTask = tasksRepository.save(taskById);
+        return tasksMapper.mapToDTO(taskById);
+    }
+    @Override
+    @Transactional
+    public TaskResponseDTO patchByUser (UUID id, PatchByUserTaskRequestDTO requestDTO){
 
-        return tasksMapper.mapToDTO(savedTask);
+        var taskById = tasksRepository.findById(id)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
+
+        tasksMapper.patchMergeByUser(requestDTO,taskById);
+
+        return tasksMapper.mapToDTO(taskById);
     }
 
     private Specification<Tasks> getSearchSpecification(TaskFilter taskFilter) {

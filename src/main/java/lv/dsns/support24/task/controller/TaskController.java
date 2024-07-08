@@ -1,6 +1,7 @@
 package lv.dsns.support24.task.controller;
 
 import lv.dsns.support24.common.dto.response.PageResponse;
+import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.service.filter.TaskFilter;
@@ -50,6 +51,12 @@ public class TaskController {
     @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> patch(@PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
         var patchedTask = tasksService.patch(id,requestDTO);
+
+        return ResponseEntity.ok(patchedTask);
+    }
+    @PatchMapping("/by-user/{id}")
+    public ResponseEntity<TaskResponseDTO> patchByUser(@PathVariable UUID id, @RequestBody PatchByUserTaskRequestDTO requestDTO){
+        var patchedTask = tasksService.patchByUser(id,requestDTO);
 
         return ResponseEntity.ok(patchedTask);
     }
