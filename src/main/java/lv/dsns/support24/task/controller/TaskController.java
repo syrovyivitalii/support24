@@ -9,6 +9,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,16 +31,14 @@ public class TaskController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(@ParameterObject TaskFilter taskFilter){
         var allTasks = tasksService.findAll(taskFilter);
         return ResponseEntity.ok(allTasks);
     }
 
-//    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/pageable")
-    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable, @AuthenticationPrincipal UserDetails userDetails){
-        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable,userDetails);
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable){
+        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
 

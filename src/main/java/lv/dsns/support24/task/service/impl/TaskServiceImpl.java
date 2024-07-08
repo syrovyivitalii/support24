@@ -17,16 +17,14 @@ import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static lv.dsns.support24.common.specification.SpecificationCustom.*;
@@ -48,24 +46,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable, UserDetails userDetails) {
-        // Extract the role of the user
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        boolean isAdminOrSuperAdmin = authorities.stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN") || auth.getAuthority().equals("ROLE_SUPER_ADMIN"));
+    public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable) {
+        // Get the current authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String email = userDetails.getUsername();
+
+        Optional<SystemUsers> byEmail = usersRepository.findByEmail(email);
+
+        UUID userUUID = byEmail.get().getId();
 
         Page<Tasks> allTasks;
 
-        if (isAdminOrSuperAdmin) {
-            // Admin or Super Admin: Get all tasks
+        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
+            taskFilter.setCreatedForIds(Set.of(userUUID));
             allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        } else {
-            // Regular User: Get tasks assigned to them
-            UUID userId = getUserIdFromUserDetails(userDetails);  // Method to extract the user's UUID from UserDetails
-            taskFilter.setCreatedForIds(Set.of(userId));
+        }else {
             allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
         }
-
         List<TaskResponseDTO> taskDTOs = allTasks.stream()
                 .map(tasksMapper::mapToDTO)
                 .collect(Collectors.toList());
@@ -77,14 +76,6 @@ public class TaskServiceImpl implements TaskService {
                 .content(taskDTOs)
                 .build();
     }
-
-    // Helper method to extract user UUID from UserDetails
-    private UUID getUserIdFromUserDetails(UserDetails userDetails) {
-        SystemUsers user = usersRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return user.getId();
-    }
-
 
     @Override
     @Transactional

@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface TaskService {
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
 
-    PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable, UserDetails userDetails);
+    PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable);
     TaskResponseDTO save (TaskRequestDTO tasksDTO);
 
     TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO);
