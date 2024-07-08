@@ -21,4 +21,12 @@ public interface TaskMapper {
     @Mapping(target = "id", ignore = true)
     void patchMerge(TaskRequestDTO tasksDTO, @MappingTarget Tasks tasks);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", ignore = true)
+    @Mapping(target = "dueDate", ignore = true)
+    @Mapping(target = "priority", ignore = true)
+    @Mapping(target = "createdForId", ignore = true)
+    void patchMergeByUser(TaskRequestDTO tasksDTO, @MappingTarget Tasks tasks);
+
 }

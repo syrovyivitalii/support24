@@ -61,10 +61,8 @@ public class TaskServiceImpl implements TaskService {
 
         if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
             taskFilter.setCreatedForIds(Set.of(userUUID));
-            allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        }else {
-            allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
         }
+        allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
         List<TaskResponseDTO> taskDTOs = allTasks.stream()
                 .map(tasksMapper::mapToDTO)
                 .collect(Collectors.toList());
@@ -89,10 +87,17 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         var taskById = tasksRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
 
-        tasksMapper.patchMerge(requestDTO,taskById);
+        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
+            tasksMapper.patchMergeByUser(requestDTO,taskById);
+        }else {
+            tasksMapper.patchMerge(requestDTO,taskById);
+        }
 
         var savedTask = tasksRepository.save(taskById);
 
