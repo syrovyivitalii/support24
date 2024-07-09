@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/tasks")
+@RequestMapping("/api/v1")
 //@CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
 
@@ -31,30 +31,30 @@ public class TaskController {
         this.tasksService = tasksService;
     }
 
-    @GetMapping
+    @GetMapping("/private/tasks")
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(@ParameterObject TaskFilter taskFilter){
         var allTasks = tasksService.findAll(taskFilter);
         return ResponseEntity.ok(allTasks);
     }
 
-    @GetMapping("/pageable")
+    @GetMapping("/private/tasks/pageable")
     public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable){
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
 
-    @PostMapping
+    @PostMapping("/public/tasks")
     public ResponseEntity<TaskResponseDTO> save (@RequestBody TaskRequestDTO tasksDTO){
         var saveTask = tasksService.save(tasksDTO);
         return ResponseEntity.ok(saveTask);
     }
-    @PatchMapping("/{id}")
+    @PatchMapping("/private/tasks/{id}")
     public ResponseEntity<TaskResponseDTO> patch(@PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
         var patchedTask = tasksService.patch(id,requestDTO);
 
         return ResponseEntity.ok(patchedTask);
     }
-    @PatchMapping("/by-user/{id}")
+    @PatchMapping("/private/tasks/by-user/{id}")
     public ResponseEntity<TaskResponseDTO> patchByUser(@PathVariable UUID id, @RequestBody PatchByUserTaskRequestDTO requestDTO){
         var patchedTask = tasksService.patchByUser(id,requestDTO);
 

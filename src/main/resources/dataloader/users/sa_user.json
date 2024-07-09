@@ -31,6 +31,46 @@
       "verify": true,
       "name": "Юрій Головатий",
       "jobTitle": "Начальник відділу"
+    },
+    {
+      "email" : "v.pylypenko@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Володимир Пелипенко",
+      "jobTitle": "Начальник відділу"
+    },
+    {
+      "email" : "y.golovatyi@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Юрій Головатий",
+      "jobTitle": "Начальник відділу"
+    },
+    {
+      "email" : "b.koval@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Богдан Коваль",
+      "jobTitle": "Начальник центру"
+    },
+    {
+      "email" : "o.sukmanovskyi@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Олег Сукмановський",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "y.bilenko@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Ярослав Біленко",
+      "jobTitle": "Фахівець"
     }
   ]
 }
