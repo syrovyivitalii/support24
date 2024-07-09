@@ -15,6 +15,7 @@ public interface TaskService {
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
 
     PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable);
+    PageResponse<TaskResponseDTO> findAllCompletedPageable(TaskFilter taskFilter, Pageable pageable);
 
     TaskResponseDTO save (TaskRequestDTO tasksDTO);
 

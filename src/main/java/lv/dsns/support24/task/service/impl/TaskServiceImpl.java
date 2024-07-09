@@ -76,6 +76,36 @@ public class TaskServiceImpl implements TaskService {
                 .content(taskDTOs)
                 .build();
     }
+    @Override
+    public PageResponse<TaskResponseDTO> findAllCompletedPageable(TaskFilter taskFilter, Pageable pageable) {
+        // Get the current authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String email = userDetails.getUsername();
+
+        Optional<SystemUsers> byEmail = usersRepository.findByEmail(email);
+
+        UUID userUUID = byEmail.get().getId();
+
+        Page<Tasks> allTasks;
+
+        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
+            taskFilter.setCreatedForIds(Set.of(userUUID));
+        }
+        taskFilter.setStatus("COMPLETED");
+        allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
+        List<TaskResponseDTO> taskDTOs = allTasks.stream()
+                .map(tasksMapper::mapToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponse.<TaskResponseDTO>builder()
+                .totalPages((long) allTasks.getTotalPages())
+                .pageSize((long) pageable.getPageSize())
+                .totalElements(allTasks.getTotalElements())
+                .content(taskDTOs)
+                .build();
+    }
 
     @Override
     @Transactional
@@ -116,6 +146,5 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Tasks>) searchOnString("status", taskFilter.getStatus()))
                 .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
     }
-
 
 }

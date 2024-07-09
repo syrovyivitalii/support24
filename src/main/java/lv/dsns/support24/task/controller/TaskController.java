@@ -9,6 +9,8 @@ import lv.dsns.support24.task.service.impl.TaskServiceImpl;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,8 +40,14 @@ public class TaskController {
     }
 
     @GetMapping("/private/tasks/pageable")
-    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @ParameterObject Pageable pageable){
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
+        return ResponseEntity.ok(responseDTOS);
+    }
+
+    @GetMapping("/private/tasks/completed/pageable")
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksCompletedPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
+        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllCompletedPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
 
