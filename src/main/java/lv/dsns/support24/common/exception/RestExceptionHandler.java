@@ -2,7 +2,7 @@ package lv.dsns.support24.common.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-//import io.jsonwebtoken.ExpiredJwtException;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

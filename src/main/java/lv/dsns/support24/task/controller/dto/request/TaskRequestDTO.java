@@ -1,6 +1,6 @@
 package lv.dsns.support24.task.controller.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TaskRequestDTO {
 
-    @NotBlank(message = "name is mandatory")
+//    @NotBlank(message = "name is mandatory")
     private String name;
     private String description;
     private LocalDate dueDate;

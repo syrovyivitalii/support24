@@ -41,7 +41,7 @@ public class SpecificationCustom {
                 null;
     }
 
-    public static Specification<Tasks> searchOnString(String field, String value) {
+    public static Specification<? extends BaseEntity> searchOnString(String field, String value) {
         return (root, query, builder) -> {
             if (value == null || value.isEmpty()) {
                 return builder.conjunction();
@@ -50,7 +50,7 @@ public class SpecificationCustom {
         };
     }
 
-    public static Specification<Tasks> searchByDueDate(String field, LocalDate value) {
+    public static Specification<? extends BaseEntity> searchByDueDate(String field, LocalDate value) {
         return (root, query, builder) -> {
             if (value == null) {
                 return builder.conjunction();

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 public class UserLoader implements Consumer<List<Map<String, Object>>> {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void accept(List<Map<String, Object>> maps) {
@@ -31,10 +33,12 @@ public class UserLoader implements Consumer<List<Map<String, Object>>> {
                         ((List<HashMap>) x.get("users")).forEach(y -> {
                             UserRequestDTO userRequestDto = mapper.convertValue(y, UserRequestDTO.class);
                             if (!userService.existUserByEmail(userRequestDto.getEmail())) {
+                                // Encrypt the password
+                                String encryptedPassword = passwordEncoder.encode(userRequestDto.getPassword());
+                                userRequestDto.setPassword(encryptedPassword);
                                 userService.save(userRequestDto);
                             }
                         })
                 );
-
     }
 }
