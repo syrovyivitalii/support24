@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
@@ -26,6 +27,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -125,6 +128,13 @@ public class TaskServiceImpl implements TaskService {
 
         tasksMapper.patchMerge(requestDTO,taskById);
 
+        // Set the completedDate only if the status is COMPLETED
+        if (requestDTO.getStatus() == Status.COMPLETED) {
+            taskById.setCompletedDate(LocalDateTime.now());
+        } else {
+            taskById.setCompletedDate(null); // Clear the completedDate if the status is not COMPLETED
+        }
+
         return tasksMapper.mapToDTO(taskById);
     }
     @Override
@@ -133,6 +143,13 @@ public class TaskServiceImpl implements TaskService {
 
         var taskById = tasksRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
+
+        // Set the completedDate only if the status is COMPLETED
+        if (requestDTO.getStatus() == Status.COMPLETED) {
+            taskById.setCompletedDate(LocalDateTime.now());
+        } else {
+            taskById.setCompletedDate(null); // Clear the completedDate if the status is not COMPLETED
+        }
 
         tasksMapper.patchMergeByUser(requestDTO,taskById);
 
