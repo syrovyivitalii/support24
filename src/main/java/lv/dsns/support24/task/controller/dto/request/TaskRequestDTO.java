@@ -21,7 +21,7 @@ public class TaskRequestDTO {
 
     private String name;
     private String description;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     private LocalDateTime completedDate;
     private Status status;
     private Priority priority;
