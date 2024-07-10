@@ -13,9 +13,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
-    private UUID id;
     private String email;
     private Role role;
     private String password;
     private boolean verify;
+    private String name;
+    private String jobTitle;
 }

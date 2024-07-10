@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
-import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
+import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 @Data
@@ -20,9 +22,10 @@ public class TaskResponseDTO {
     private LocalDateTime updatedDate;
     private String name;
     private String description;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     private Status status;
     private Priority priority;
-    private UserRequestDTO createdForId;
-    private UserRequestDTO createdById;
+    private UserResponseDTO createdFor;
+    private UUID createdForId;
+    private UUID createdById;
 }
