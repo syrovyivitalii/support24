@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.security.AuthenticationRequest;
 import lv.dsns.support24.common.security.AuthenticationResponse;
 import lv.dsns.support24.common.security.RegisterRequest;
-import lv.dsns.support24.user.service.AuthenticationService;
+import lv.dsns.support24.user.service.impl.AuthenticationServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+    private final AuthenticationServiceImpl authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
