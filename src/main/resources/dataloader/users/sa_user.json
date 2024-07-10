@@ -33,6 +33,86 @@
       "jobTitle": "Начальник відділу"
     },
     {
+      "email" : "n.chastylo@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Анастасія Частило",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "r.yaremchuk@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Роман Яремчук",
+      "jobTitle": "Начальник відділу"
+    },
+    {
+      "email" : "t.ivanytskyi@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Тарас Іваницький",
+      "jobTitle": "Заступник начальника відділу"
+    },
+    {
+      "email" : "y.graban@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Юрій Грабан",
+      "jobTitle": "Провідний фахівець"
+    },
+    {
+      "email" : "s.hlushko@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Софія Глушко",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "y.zapisetskyi@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Юрій Запісецький",
+      "jobTitle": "Начальник відділу"
+    },
+    {
+      "email" : "y.koshelenko@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Юрій Кошеленко",
+      "jobTitle": "Начальник ППУ"
+    },
+    {
+      "email" : "a.krainuk@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Адріана Крайнюк",
+      "jobTitle": "Начальник сектору"
+    },
+    {
+      "email" : "v.bortnyk@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Валерія Бортник",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "v.bogdan@dsns.gov.ua",
+      "role" : "ROLE_ADMIN",
+      "password" : "123",
+      "verify": true,
+      "name": "Владислав Богдан",
+      "jobTitle": "Заступник начальника відділу"
+    },
+    {
       "email" : "v.pylypenko@dsns.gov.ua",
       "role" : "ROLE_ADMIN",
       "password" : "123",
@@ -41,12 +121,52 @@
       "jobTitle": "Начальник відділу"
     },
     {
-      "email" : "y.golovatyi@dsns.gov.ua",
+      "email" : "d.gordon@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Дмитро Гордон",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "n.halan@dsns.gov.ua",
       "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
-      "name": "Юрій Головатий",
-      "jobTitle": "Начальник відділу"
+      "name": "Назар Галан",
+      "jobTitle": "Заступник начальника центру"
+    },
+    {
+      "email" : "r.kuza@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Роман Куза",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "y.vinarchuk@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Юрій Вінарчук",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "o.lavrivska@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Ольга Лаврівська",
+      "jobTitle": "Фахівець"
+    },
+    {
+      "email" : "o.kazakov@dsns.gov.ua",
+      "role" : "ROLE_USER",
+      "password" : "123",
+      "verify": true,
+      "name": "Олексій Казаков",
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "b.koval@dsns.gov.ua",
@@ -72,5 +192,6 @@
       "name": "Ярослав Біленко",
       "jobTitle": "Фахівець"
     }
+
   ]
 }
