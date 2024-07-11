@@ -23,6 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class TaskFilter extends SearchFilter {
 
     Set<UUID> createdForIds;
+    Set<UUID> createdByIds;
     String status;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate dueDate;

@@ -20,6 +20,7 @@ public class TaskResponseDTO {
     private UUID id;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private LocalDateTime completedDate;
     private String name;
     private String description;
     private LocalDate dueDate;
