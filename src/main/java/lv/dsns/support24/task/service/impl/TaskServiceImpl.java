@@ -160,6 +160,7 @@ public class TaskServiceImpl implements TaskService {
         return Specification.where((Specification<Tasks>) searchLikeString("name", taskFilter.getSearch()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdForId", taskFilter.getCreatedForIds()))
+                .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
                 .and((Specification<Tasks>) searchOnString("status", taskFilter.getStatus()))
                 .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
     }
