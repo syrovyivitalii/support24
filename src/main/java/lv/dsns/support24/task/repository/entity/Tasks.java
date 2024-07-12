@@ -3,7 +3,12 @@ package lv.dsns.support24.task.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+import org.hibernate.type.SqlTypes;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
@@ -33,7 +38,9 @@ public class Tasks extends BaseEntity {
     private LocalDateTime completedDate;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private Status status;
 
     @Column(name = "priority")
     private String priority;
