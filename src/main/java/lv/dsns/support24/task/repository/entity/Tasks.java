@@ -3,6 +3,7 @@ package lv.dsns.support24.task.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.hibernate.annotations.JdbcType;
@@ -45,7 +46,7 @@ public class Tasks extends BaseEntity {
     @Column(name = "priority")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    private String priority;
+    private Priority priority;
 
     @Column(name = "created_for_id")
     private UUID createdForId;
