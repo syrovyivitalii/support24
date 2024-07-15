@@ -20,7 +20,7 @@ import java.util.UUID;
 public abstract class BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(updatable = false, nullable = false)
     @EqualsAndHashCode.Include
     @ToString.Include
@@ -33,13 +33,6 @@ public abstract class BaseEntity implements Serializable {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
-
-    @PrePersist
-    public void generateUUID() {
-        if (this.id == null) {
-            this.id = UUID.randomUUID();
-        }
-    }
 
 
 }

@@ -44,10 +44,14 @@ public class TaskController {
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
-
     @GetMapping("/private/tasks/completed/pageable")
-    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksCompletedPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksCompletedPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "completedDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllCompletedPageable(taskFilter,pageable);
+        return ResponseEntity.ok(responseDTOS);
+    }
+    @GetMapping("/private/tasks/not-completed/pageable")
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksNotCompletedPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
+        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllNotCompletedPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
 

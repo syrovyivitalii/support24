@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
@@ -52,64 +53,33 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable) {
-        // Get the current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UUID userUUID = getCurrentUserUUID();
+        applyRoleBasedFilter(taskFilter, userUUID);
 
-        String email = userDetails.getUsername();
-
-        Optional<SystemUsers> byEmail = usersRepository.findByEmail(email);
-
-        UUID userUUID = byEmail.get().getId();
-
-        Page<Tasks> allTasks;
-
-        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
-            taskFilter.setCreatedForIds(Set.of(userUUID));
-        }
-        allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        List<TaskResponseDTO> taskDTOs = allTasks.stream()
-                .map(tasksMapper::mapToDTO)
-                .collect(Collectors.toList());
-
-        return PageResponse.<TaskResponseDTO>builder()
-                .totalPages((long) allTasks.getTotalPages())
-                .pageSize((long) pageable.getPageSize())
-                .totalElements(allTasks.getTotalElements())
-                .content(taskDTOs)
-                .build();
+        Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
+        return convertToPageResponse(allTasks,pageable);
     }
     @Override
     public PageResponse<TaskResponseDTO> findAllCompletedPageable(TaskFilter taskFilter, Pageable pageable) {
-        // Get the current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UUID userUUID = getCurrentUserUUID();
+        taskFilter.setStatuses(Collections.singleton(Status.COMPLETED));
+        applyRoleBasedFilter(taskFilter, userUUID);
 
-        String email = userDetails.getUsername();
-
-        Optional<SystemUsers> byEmail = usersRepository.findByEmail(email);
-
-        UUID userUUID = byEmail.get().getId();
-
-        Page<Tasks> allTasks;
-
-        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
-            taskFilter.setCreatedForIds(Set.of(userUUID));
-        }
-        taskFilter.setStatus("COMPLETED");
-        allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        List<TaskResponseDTO> taskDTOs = allTasks.stream()
-                .map(tasksMapper::mapToDTO)
-                .collect(Collectors.toList());
-
-        return PageResponse.<TaskResponseDTO>builder()
-                .totalPages((long) allTasks.getTotalPages())
-                .pageSize((long) pageable.getPageSize())
-                .totalElements(allTasks.getTotalElements())
-                .content(taskDTOs)
-                .build();
+        Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
+        return convertToPageResponse(allTasks,pageable);
     }
+    @Override
+    public PageResponse<TaskResponseDTO> findAllNotCompletedPageable(TaskFilter taskFilter, Pageable pageable) {
+        UUID userUUID = getCurrentUserUUID();
+        Set<Status> statuses = EnumSet.noneOf(Status.class);
+        statuses.add(Status.UNCOMPLETED);
+        statuses.add(Status.INPROGRESS);
+        taskFilter.setStatuses(statuses);
+        applyRoleBasedFilter(taskFilter, userUUID);
 
+        Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
+        return convertToPageResponse(allTasks,pageable);
+    }
     @Override
     @Transactional
     public TaskResponseDTO save (TaskRequestDTO tasksDTO){
@@ -161,8 +131,37 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdForId", taskFilter.getCreatedForIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
-                .and((Specification<Tasks>) searchOnString("status", taskFilter.getStatus()))
+                .and((Specification<Tasks>) searchOnStatus(taskFilter.getStatuses()))
+                .and((Specification<Tasks>) searchOnPriority(taskFilter.getPriorities()))
                 .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
+    }
+
+    private UUID getCurrentUserUUID() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        Optional<SystemUsers> user = usersRepository.findByEmail(email);
+        return user.map(SystemUsers::getId).orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+    }
+    private void applyRoleBasedFilter(TaskFilter taskFilter, UUID userUUID) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
+            taskFilter.setCreatedForIds(Set.of(userUUID));
+        }
+    }
+
+    private PageResponse<TaskResponseDTO> convertToPageResponse(Page<Tasks> allTasks, Pageable pageable) {
+        List<TaskResponseDTO> taskDTOs = allTasks.stream()
+                .map(tasksMapper::mapToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponse.<TaskResponseDTO>builder()
+                .totalPages((long) allTasks.getTotalPages())
+                .pageSize((long) pageable.getPageSize())
+                .totalElements(allTasks.getTotalElements())
+                .content(taskDTOs)
+                .build();
     }
 
 }

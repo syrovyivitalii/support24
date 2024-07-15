@@ -2,6 +2,8 @@ package lv.dsns.support24.common.specification;
 
 import jakarta.persistence.criteria.Path;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.task.controller.dto.enums.Priority;
+import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +60,15 @@ public class SpecificationCustom {
             Path<LocalDate> datePath = root.get(field);
             return builder.equal(datePath, value);
         };
+    }
+
+    public static Specification<? extends BaseEntity> searchOnStatus(Set<Status> statuses) {
+        return CollectionUtils.isNotEmpty(statuses)?
+                (root, query, builder) -> root.get("status").in(statuses):null;
+    }
+    public static Specification<? extends BaseEntity> searchOnPriority(Set<Priority> priorities) {
+        return CollectionUtils.isNotEmpty(priorities)?
+                (root, query, builder) -> root.get("priority").in(priorities):null;
     }
 
 }

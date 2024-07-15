@@ -43,6 +43,8 @@ public class Tasks extends BaseEntity {
     private Status status;
 
     @Column(name = "priority")
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private String priority;
 
     @Column(name = "created_for_id")
@@ -58,4 +60,11 @@ public class Tasks extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private SystemUsers createdBy;
+
+    @PrePersist
+    protected void onCreate() {
+        if (status == null) {
+            status = Status.UNCOMPLETED;
+        }
+    }
 }
