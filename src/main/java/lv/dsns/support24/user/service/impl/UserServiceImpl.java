@@ -11,6 +11,7 @@ import lv.dsns.support24.user.service.UserService;
 import lv.dsns.support24.user.service.filter.UserFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponseDTO> findAll(){
-        var allSystemUsers = systemUsersRepository.findAll();
+        var allSystemUsers = systemUsersRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
         return allSystemUsers.stream().map(userMapper::mapToDTO).collect(Collectors.toList());
     }
 

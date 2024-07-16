@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface SystemUsersRepository extends JpaRepository <SystemUsers, Long>, JpaSpecificationExecutor<SystemUsers> {
+public interface SystemUsersRepository extends JpaRepository <SystemUsers, UUID>, JpaSpecificationExecutor<SystemUsers> {
 
     Optional<SystemUsers> findByEmail(String email);
 
