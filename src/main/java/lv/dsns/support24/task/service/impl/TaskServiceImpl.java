@@ -60,27 +60,6 @@ public class TaskServiceImpl implements TaskService {
         return convertToPageResponse(allTasks,pageable);
     }
     @Override
-    public PageResponse<TaskResponseDTO> findAllCompletedPageable(TaskFilter taskFilter, Pageable pageable) {
-        UUID userUUID = getCurrentUserUUID();
-        taskFilter.setStatuses(Collections.singleton(Status.COMPLETED));
-        applyRoleBasedFilter(taskFilter, userUUID);
-
-        Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        return convertToPageResponse(allTasks,pageable);
-    }
-    @Override
-    public PageResponse<TaskResponseDTO> findAllNotCompletedPageable(TaskFilter taskFilter, Pageable pageable) {
-        UUID userUUID = getCurrentUserUUID();
-        Set<Status> statuses = EnumSet.noneOf(Status.class);
-        statuses.add(Status.UNCOMPLETED);
-        statuses.add(Status.INPROGRESS);
-        taskFilter.setStatuses(statuses);
-        applyRoleBasedFilter(taskFilter, userUUID);
-
-        Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        return convertToPageResponse(allTasks,pageable);
-    }
-    @Override
     @Transactional
     public TaskResponseDTO save (TaskRequestDTO tasksDTO){
         var tasks = tasksMapper.mapToEntity(tasksDTO);
