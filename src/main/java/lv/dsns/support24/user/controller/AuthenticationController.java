@@ -3,6 +3,7 @@ package lv.dsns.support24.user.controller;
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.security.AuthenticationRequest;
 import lv.dsns.support24.common.security.AuthenticationResponse;
+import lv.dsns.support24.common.security.RefreshTokenRequest;
 import lv.dsns.support24.common.security.RegisterRequest;
 import lv.dsns.support24.user.service.impl.AuthenticationServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -31,4 +32,10 @@ public class AuthenticationController {
     ){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+        return ResponseEntity.ok(authenticationService.refreshToken(requestRefreshToken));
+    }
+
 }
