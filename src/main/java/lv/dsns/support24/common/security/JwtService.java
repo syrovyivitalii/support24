@@ -22,16 +22,20 @@ public class JwtService {
     @Value("${spring.jwt.secretKey}")
     private String secretKey;
 
-    @Value("${spring.jwt.expiration}")
-    private long expiration;
+    @Value("${spring.jwt.expirationRefresh}")
+    private long expirationRefresh;
+    @Value("${spring.jwt.expirationAccess}")
+    private long getExpirationAccess;
 
     private static String SECRET_KEY;
-    private static long EXPIRATION;
+    private static long EXPIRATION_ACCESS;
+    private static long EXPIRATION_REFRESH;
 
     @PostConstruct
     public void init() {
         SECRET_KEY = this.secretKey;
-        EXPIRATION = this.expiration;
+        EXPIRATION_REFRESH = this.expirationRefresh;
+        EXPIRATION_ACCESS = this.getExpirationAccess;
     }
 
     public String extractEmail(String token){
@@ -47,6 +51,10 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    public String generateRefreshToken(UserDetails userDetails){
+        return generateRefreshToken(new HashMap<>(), userDetails);
+    }
+
     public String generateToken(
             Map<String, Object> extraClaims, UserDetails userDetails
     ){
@@ -54,7 +62,19 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_ACCESS))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(
+            Map<String, Object> extraClaims, UserDetails userDetails
+    ){
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_REFRESH))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

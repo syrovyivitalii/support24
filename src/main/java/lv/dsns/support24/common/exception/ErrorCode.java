@@ -23,6 +23,16 @@ public enum ErrorCode {
             "JWT is expired",
             400
     ),
+    JWT_TOKEN_INVALID(
+            "400-005",
+            "JWT is invalid",
+            400
+    ),
+    REFRESH_TOKEN_EXPIRED(
+            "400-006",
+            "REFRESH_TOKEN_EXPIRED",
+            400
+    ),
 
     // 404
     NOT_FOUND(

@@ -3,10 +3,7 @@ package lv.dsns.support24.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.common.security.AuthenticationRequest;
-import lv.dsns.support24.common.security.AuthenticationResponse;
-import lv.dsns.support24.common.security.JwtService;
-import lv.dsns.support24.common.security.RegisterRequest;
+import lv.dsns.support24.common.security.*;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
@@ -40,9 +37,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .role(Role.ROLE_USER)
                 .build();
         usersRepository.save(user);
-        var jwtToken = jwtService.generateToken((UserDetails) user);
+
+        var accessToken = jwtService.generateToken((UserDetails) user);
+        var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
+
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
 
     }
@@ -55,9 +56,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         var user = usersRepository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken((UserDetails) user);
+        var accessToken = jwtService.generateToken((UserDetails) user);
+        var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
+    public AuthenticationResponse refreshToken(String refreshToken) {
+        if (jwtService.isTokenExpired(refreshToken)) {
+            throw new ClientBackendException(ErrorCode.REFRESH_TOKEN_EXPIRED);
+        }
+
+        String userEmail = jwtService.extractEmail(refreshToken);
+        var user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        var accessToken = jwtService.generateToken((UserDetails) user);
+        var newRefreshToken = jwtService.generateRefreshToken((UserDetails) user);
+
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(newRefreshToken)
+                .build();
+    }
+
 }
