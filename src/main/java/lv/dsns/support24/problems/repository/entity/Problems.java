@@ -13,13 +13,13 @@ import lv.dsns.support24.task.repository.entity.Tasks;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class CommonProblems extends BaseEntity {
+public class Problems extends BaseEntity {
 
     @Column(name = "problem",nullable = false)
     private String problem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "problem_type",nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "id", referencedColumnName = "problem_type_id",nullable = false, insertable = false, updatable = false)
     private Tasks problemType;
 
 }

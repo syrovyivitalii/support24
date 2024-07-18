@@ -3,15 +3,12 @@ package lv.dsns.support24.task.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
-import lv.dsns.support24.problems.repository.entity.CommonProblems;
+import lv.dsns.support24.problems.repository.entity.Problems;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.hibernate.annotations.JdbcType;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
-import org.hibernate.type.SqlTypes;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,9 +24,6 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Tasks extends BaseEntity {
-
-    @Column(name = "name",nullable = false)
-    private String name;
 
     @Column(name = "description",nullable = false)
     private String description;
@@ -59,7 +53,7 @@ public class Tasks extends BaseEntity {
     @Column(name = "created_by_id")
     private UUID createdById;
 
-    @Column(name = "problem_type")
+    @Column(name = "problem_type_id")
     private UUID problemTypeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,12 +69,15 @@ public class Tasks extends BaseEntity {
     private SystemUsers createdBy;
 
     @OneToMany(mappedBy = "problemType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommonProblems> taskProblem;
+    private List<Problems> taskProblem;
 
     @PrePersist
     protected void onCreate() {
         if (status == null) {
             status = Status.UNCOMPLETED;
+        }
+        if (priority == null) {
+            priority = Priority.LOW;
         }
     }
 }

@@ -2,7 +2,7 @@
   "users": [
     {
       "email" : "admin@dsns.gov.ua",
-      "role" : "ROLE_SUPER_ADMIN",
+      "role" : "ROLE_SYSTEM_ADMIN",
       "password" : "admin",
       "verify": true,
       "name": "Admin",
@@ -10,7 +10,7 @@
     },
     {
       "email" : "v.syrovyi@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Віталій Сировий",
@@ -18,7 +18,7 @@
     },
     {
       "email" : "s.movchan@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Сергій Мовчан",
@@ -26,7 +26,7 @@
     },
     {
       "email" : "y.golovatyi@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Юрій Головатий",
@@ -34,7 +34,7 @@
     },
     {
       "email" : "n.chastylo@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Анастасія Частило",
@@ -42,7 +42,7 @@
     },
     {
       "email" : "r.yaremchuk@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Роман Яремчук",
@@ -50,7 +50,7 @@
     },
     {
       "email" : "t.ivanytskyi@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Тарас Іваницький",
@@ -58,7 +58,7 @@
     },
     {
       "email" : "y.graban@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Юрій Грабан",
@@ -66,7 +66,7 @@
     },
     {
       "email" : "s.hlushko@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Софія Глушко",
@@ -74,7 +74,7 @@
     },
     {
       "email" : "y.zapisetskyi@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Юрій Запісецький",
@@ -82,7 +82,7 @@
     },
     {
       "email" : "y.koshelenko@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Юрій Кошеленко",
@@ -90,7 +90,7 @@
     },
     {
       "email" : "a.krainuk@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Адріана Крайнюк",
@@ -98,7 +98,7 @@
     },
     {
       "email" : "v.bortnyk@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Валерія Бортник",
@@ -106,7 +106,7 @@
     },
     {
       "email" : "v.bogdan@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Владислав Богдан",
@@ -114,7 +114,7 @@
     },
     {
       "email" : "v.pylypenko@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Володимир Пелипенко",
@@ -122,7 +122,7 @@
     },
     {
       "email" : "d.gordon@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Дмитро Гордон",
@@ -130,7 +130,7 @@
     },
     {
       "email" : "n.halan@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Назар Галан",
@@ -138,7 +138,7 @@
     },
     {
       "email" : "r.kuza@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Роман Куза",
@@ -146,7 +146,7 @@
     },
     {
       "email" : "y.vinarchuk@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Юрій Вінарчук",
@@ -154,7 +154,7 @@
     },
     {
       "email" : "o.lavrivska@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Ольга Лаврівська",
@@ -162,7 +162,7 @@
     },
     {
       "email" : "o.kazakov@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Олексій Казаков",
@@ -170,7 +170,7 @@
     },
     {
       "email" : "b.koval@dsns.gov.ua",
-      "role" : "ROLE_ADMIN",
+      "role" : "ROLE_SUPER_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Богдан Коваль",
@@ -178,7 +178,7 @@
     },
     {
       "email" : "o.sukmanovskyi@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Олег Сукмановський",
@@ -186,7 +186,7 @@
     },
     {
       "email" : "y.bilenko@dsns.gov.ua",
-      "role" : "ROLE_USER",
+      "role" : "ROLE_ADMIN",
       "password" : "123",
       "verify": true,
       "name": "Ярослав Біленко",

@@ -1,10 +1,10 @@
-package lv.dsns.support24.unit.controller.request;
+package lv.dsns.support24.unit.controller.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lv.dsns.support24.unit.controller.enums.UnitType;
+import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 
 @Data
 @Builder

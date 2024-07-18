@@ -1,7 +1,7 @@
 package lv.dsns.support24.unit.mapper;
 
-import lv.dsns.support24.unit.controller.request.UnitRequestDTO;
-import lv.dsns.support24.unit.controller.response.UnitResponseDTO;
+import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
+import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.unit.repository.entity.Units;
 import org.mapstruct.Mapper;
 
