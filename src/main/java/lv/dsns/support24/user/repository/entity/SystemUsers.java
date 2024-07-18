@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.repository.entity.Tasks;
+import lv.dsns.support24.unit.repository.entity.Units;
 import lv.dsns.support24.user.controller.dto.enums.Role;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,11 +40,18 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(name = "job_title")
     private String jobTitle;
 
-    @OneToMany(mappedBy = "createdFor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tasks> createdForTasks;
+    @OneToMany(mappedBy = "assignedFor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tasks> assignedForTasks;
+
+    @OneToMany(mappedBy = "assignedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tasks> assignedByTasks;
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> createdByTasks;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_unit", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Units userUnit;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

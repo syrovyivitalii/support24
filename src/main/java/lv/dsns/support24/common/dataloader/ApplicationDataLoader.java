@@ -30,13 +30,16 @@ import static lombok.AccessLevel.PRIVATE;
 public class ApplicationDataLoader {
 
     UserLoader userLoader;
+    UnitLoader unitLoader;
 
     static final String DATA_LOADER_CLASSPATH_LOCATION = "classpath:dataloader";
 
     public void load() {
         String users = getDataLoaderJsonFullPath("users");
+        String units = getDataLoaderJsonFullPath("units");
 
         loadData(users, userLoader);
+        loadData(units, unitLoader);
 
     }
 

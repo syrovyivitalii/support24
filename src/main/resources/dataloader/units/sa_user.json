@@ -1,0 +1,323 @@
+{
+  "units": [
+    {
+      "unitName": "ГУ ДСНС України у Львівській області",
+      "unitType": "ГУ"
+    },
+    {
+      "unitName": "Червоноградське РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "Золочівське РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "Стрийське РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "Дрогобицьке РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "Самбірське РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "Яворівське РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "Львівське РУ",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "АРЗ СП",
+      "unitType": "РУ"
+    },
+    {
+      "unitName": "1 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "2 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "3 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "4 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "5 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "6 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "7 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "8 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "9 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "10 ДПРЗ",
+      "unitType": "ДПРЗ"
+    },
+    {
+      "unitName": "10 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "11 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "12 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },    {
+      "unitName": "13 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },    {
+      "unitName": "14 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },    {
+      "unitName": "15 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },    {
+      "unitName": "16 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "17 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "18 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "19 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "1 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "20 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "21 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "22 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "23 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "24 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "25 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },    {
+      "unitName": "26 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "27 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "28 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "29 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "2 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "30 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "31 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "32 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "33 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "34 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "35 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "36 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "3 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "4 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "53 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "5 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "61 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "6 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "7 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "8 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "9 ДПРЧ",
+      "unitType": "ДПРЧ"
+    },
+    {
+      "unitName": "37 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "38 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "39 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "40 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "41 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "42 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "43 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "44 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "45 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "46 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "47 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "48 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "49 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "50 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "51 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "52 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "53 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "54 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "55 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "56 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "57 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "58 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "59 ДПРП",
+      "unitType": "ДПРП"
+    },
+    {
+      "unitName": "60 ДПРП",
+      "unitType": "ДПРП"
+    }
+  ]
+}
