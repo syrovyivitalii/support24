@@ -6,6 +6,7 @@ import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.problems.repository.entity.Problems;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
+import lv.dsns.support24.unit.repository.entity.Units;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
@@ -68,8 +69,9 @@ public class Tasks extends BaseEntity {
     @JoinColumn(name = "created_by_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private SystemUsers createdBy;
 
-    @OneToMany(mappedBy = "problemType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Problems> taskProblem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_type_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Problems taskProblem;
 
     @PrePersist
     protected void onCreate() {

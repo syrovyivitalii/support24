@@ -64,6 +64,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDTO save (TaskRequestDTO tasksDTO){
         var tasks = tasksMapper.mapToEntity(tasksDTO);
 
+        tasks.setCreatedById(getCurrentUserUUID());
+
         var savedTask = tasksRepository.save(tasks);
         return tasksMapper.mapToDTO(savedTask);
     }

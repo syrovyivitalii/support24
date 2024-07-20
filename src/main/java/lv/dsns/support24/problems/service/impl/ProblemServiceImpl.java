@@ -7,11 +7,13 @@ import lv.dsns.support24.problems.controller.dto.response.ProblemResponseDTO;
 import lv.dsns.support24.problems.mapper.ProblemMapper;
 import lv.dsns.support24.problems.repository.ProblemRepository;
 import lv.dsns.support24.problems.service.ProblemService;
-import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
-import org.springframework.security.web.PortMapper;
+import lv.dsns.support24.unit.service.filter.UnitFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,6 +29,12 @@ public class ProblemServiceImpl implements ProblemService {
 
         var savedTask = problemRepository.save(problem);
         return problemMapper.mapToDTO(savedTask);
+    }
+
+    @Override
+    public List<ProblemResponseDTO> findAll(){
+        var allTasks = problemRepository.findAll();
+        return allTasks.stream().map(problemMapper::mapToDTO).collect(Collectors.toList());
     }
 
     @Override

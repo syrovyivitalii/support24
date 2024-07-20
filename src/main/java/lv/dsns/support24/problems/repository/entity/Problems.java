@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.repository.entity.Tasks;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_common_problems")
@@ -18,8 +21,7 @@ public class Problems extends BaseEntity {
     @Column(name = "problem",nullable = false)
     private String problem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "problem_type_id",nullable = false, insertable = false, updatable = false)
-    private Tasks problemType;
+    @OneToMany(mappedBy = "taskProblem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tasks> problemType;
 
 }
