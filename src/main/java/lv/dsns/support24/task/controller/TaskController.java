@@ -1,6 +1,7 @@
 package lv.dsns.support24.task.controller;
 
 import lv.dsns.support24.common.dto.response.PageResponse;
+import lv.dsns.support24.common.smtp.MailStructure;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.common.smtp.EmailNotificationService;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
@@ -14,7 +15,12 @@ import lv.dsns.support24.task.repository.TasksRepository;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
+import lv.dsns.support24.unit.repository.UnitRepository;
+import lv.dsns.support24.unit.repository.entity.Units;
+import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,9 +42,14 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TasksRepository tasksRepository;
+    private final UnitRepository unitRepository;
     private final TaskMapper tasksMapper;
-
     private final SystemUsersRepository usersRepository;
+
+    private final EmailNotificationService emailNotificationService;
+
+    @Value("${spring.mail.username}")
+    private String fromMail;
 
 
     @Override
@@ -57,12 +68,41 @@ public class TaskServiceImpl implements TaskService {
     }
     @Override
     @Transactional
-    public TaskResponseDTO save (TaskRequestDTO tasksDTO){
-        var tasks = tasksMapper.mapToEntity(tasksDTO);
+    public TaskResponseDTO save(TaskRequestDTO taskDTO) {
+        // Convert DTO to entity and save
+        var task = tasksMapper.mapToEntity(taskDTO);
+        var savedTask = tasksRepository.save(task);
 
-        var savedTask = tasksRepository.save(tasks);
+        Optional<SystemUsers> userById = usersRepository.findById(savedTask.getCreatedById());
+        Optional<Units> unitById = unitRepository.findById(userById.get().getUnitId());
+
+        // Get emails from the repository
+        List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SYSTEM_ADMIN);
+
+        // If no emails found, use a default recipient or handle the situation
+        if (optionalEmails.isEmpty()) {
+            optionalEmails.add("v.syrovyi@dsns.gov.ua");
+        }
+        // Prepare properties for email template
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("userName", userById.get().getName()); // Assume the Task entity has a 'getTitle()' method
+        properties.put("union", unitById.get().getUnitName());
+        properties.put("taskDescription", savedTask.getDescription()); // Assume the Task entity has a 'getDescription()' method
+
+        // Send email notification to all recipients
+        for (String recipient : optionalEmails) {
+            emailNotificationService.sendNotification(
+                    recipient,
+                    "Нове звернення з проблемою!", // Subject
+                    properties,
+                    "new-task-email.ftl" // Ensure you have a corresponding template
+            );
+        }
+
+        // Return the saved task DTO
         return tasksMapper.mapToDTO(savedTask);
     }
+
 
     @Override
     @Transactional
@@ -139,5 +179,16 @@ public class TaskServiceImpl implements TaskService {
                 .content(taskDTOs)
                 .build();
     }
+
+//    private void sendMail(String mail){
+//        MailStructure mailStructure = new MailStructure();
+//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//        simpleMailMessage.setFrom(fromMail);
+//        simpleMailMessage.setSubject(mailStructure.getSubject());
+//        simpleMailMessage.setText(mailStructure.getMessage());
+//        simpleMailMessage.setTo(mail);
+//
+//        javaMailSender.send(simpleMailMessage);
+//    }
 
 }
