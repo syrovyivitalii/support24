@@ -48,10 +48,6 @@ public class TaskServiceImpl implements TaskService {
 
     private final EmailNotificationService emailNotificationService;
 
-    @Value("${spring.mail.username}")
-    private String fromMail;
-
-
     @Override
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
         var allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter));
