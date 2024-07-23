@@ -24,7 +24,8 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class TaskFilter extends SearchFilter {
 
-    Set<UUID> createdForIds;
+    Set<UUID> assignedForIds;
+    Set<UUID> assignedByIds;
     Set<UUID> createdByIds;
     Set<Status> statuses;
     Set<Priority> priorities;
