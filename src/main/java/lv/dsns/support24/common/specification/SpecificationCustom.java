@@ -5,6 +5,7 @@ import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.repository.entity.Tasks;
+import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -69,6 +70,11 @@ public class SpecificationCustom {
     public static Specification<? extends BaseEntity> searchOnPriority(Set<Priority> priorities) {
         return CollectionUtils.isNotEmpty(priorities)?
                 (root, query, builder) -> root.get("priority").in(priorities):null;
+    }
+
+    public static Specification<? extends BaseEntity> searchOnUnitType(Set<UnitType> types) {
+        return CollectionUtils.isNotEmpty(types)?
+                (root, query, builder) -> root.get("unitType").in(types):null;
     }
 
 }

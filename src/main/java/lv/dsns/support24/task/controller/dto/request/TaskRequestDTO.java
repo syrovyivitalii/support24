@@ -18,13 +18,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskRequestDTO {
-
-    private String name;
     private String description;
     private LocalDate dueDate;
     private LocalDateTime completedDate;
     private Status status;
     private Priority priority;
-    private UUID createdForId;
+    private UUID assignedForId;
+    private UUID assignedById;
     private UUID createdById;
+    private UUID problemTypeId;
 }

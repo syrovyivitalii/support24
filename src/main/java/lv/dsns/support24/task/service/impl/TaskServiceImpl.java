@@ -14,21 +14,17 @@ import lv.dsns.support24.task.repository.TasksRepository;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
-import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
-import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -108,25 +104,26 @@ public class TaskServiceImpl implements TaskService {
     private Specification<Tasks> getSearchSpecification(TaskFilter taskFilter) {
         return Specification.where((Specification<Tasks>) searchLikeString("name", taskFilter.getSearch()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
-                .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdForId", taskFilter.getCreatedForIds()))
+                .and((Specification<Tasks>) searchFieldInCollectionOfIds("assignedForId", taskFilter.getAssignedForIds()))
+                .and((Specification<Tasks>) searchFieldInCollectionOfIds("assignedById", taskFilter.getAssignedByIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
                 .and((Specification<Tasks>) searchOnStatus(taskFilter.getStatuses()))
                 .and((Specification<Tasks>) searchOnPriority(taskFilter.getPriorities()))
                 .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
     }
-
     private UUID getCurrentUserUUID() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
-        Optional<SystemUsers> user = usersRepository.findByEmail(email);
-        return user.map(SystemUsers::getId).orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        return usersRepository.findIdByEmail(email)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
     }
     private void applyRoleBasedFilter(TaskFilter taskFilter, UUID userUUID) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
-            taskFilter.setCreatedForIds(Set.of(userUUID));
+            taskFilter.setAssignedByIds(Set.of(userUUID));
         }
     }
 
