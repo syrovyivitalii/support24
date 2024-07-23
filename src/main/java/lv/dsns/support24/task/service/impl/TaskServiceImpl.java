@@ -75,7 +75,7 @@ public class TaskServiceImpl implements TaskService {
 
         Optional<SystemUsers> userById = usersRepository.findById(savedTask.getCreatedById());
         Optional<Units> unitById = unitRepository.findById(userById.get().getUnitId());
-
+        // TODO: 23.07.2024 change tole to SUPER_ADMIN 
         // Get emails from the repository
         List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SYSTEM_ADMIN);
 
@@ -179,16 +179,4 @@ public class TaskServiceImpl implements TaskService {
                 .content(taskDTOs)
                 .build();
     }
-
-//    private void sendMail(String mail){
-//        MailStructure mailStructure = new MailStructure();
-//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//        simpleMailMessage.setFrom(fromMail);
-//        simpleMailMessage.setSubject(mailStructure.getSubject());
-//        simpleMailMessage.setText(mailStructure.getMessage());
-//        simpleMailMessage.setTo(mail);
-//
-//        javaMailSender.send(simpleMailMessage);
-//    }
-
 }
