@@ -158,8 +158,8 @@ public class TaskServiceImpl implements TaskService {
     private void applyRoleBasedFilter(TaskFilter taskFilter, UUID userUUID) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
-            taskFilter.setAssignedByIds(Set.of(userUUID));
+        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            taskFilter.setAssignedForIds(Set.of(userUUID));
         }
     }
 
