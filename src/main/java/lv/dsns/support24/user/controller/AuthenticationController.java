@@ -50,12 +50,12 @@ public class AuthenticationController {
     }
     @PutMapping("/change-password/by-admin")
     public ResponseEntity<Void> changePasswordByAdmin(
-            @RequestBody ChangePasswordRequestDTO request
+            @RequestBody ChangePasswordByAdminRequestDTO request
     ){
         String userEmail = getAuthenticatedUserEmail(); // Implement this method to retrieve the email of the currently authenticated user
         Optional<SystemUsers> byEmail = usersRepository.findByEmail(userEmail);
         if (byEmail.get().getRole().equals(Role.ROLE_SYSTEM_ADMIN)){
-            authenticationService.changePasswordByAdmin(userEmail, request.getNewPassword());
+            authenticationService.changePasswordByAdmin(request.getEmail(), request.getNewPassword());
         }else {
             new ClientBackendException(ErrorCode.FORBIDDEN);
         }
