@@ -56,12 +56,35 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable) {
-        UUID userUUID = getCurrentUserUUID();
-        applyRoleBasedFilter(taskFilter, userUUID);
+        // Retrieve the current user's UUID
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
 
+        UUID userUUID = usersRepository.findIdByEmail(email)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        // Apply role-based filters
+        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            taskFilter.setAssignedForIds(Set.of(userUUID));
+        }
+
+        // Retrieve tasks with pagination and filtering
         Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
-        return convertToPageResponse(allTasks,pageable);
+
+        // Convert to PageResponse
+        List<TaskResponseDTO> taskDTOs = allTasks.stream()
+                .map(tasksMapper::mapToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponse.<TaskResponseDTO>builder()
+                .totalPages((long) allTasks.getTotalPages())
+                .pageSize((long) pageable.getPageSize())
+                .totalElements(allTasks.getTotalElements())
+                .content(taskDTOs)
+                .build();
     }
+
     @Override
     @Transactional
     public TaskResponseDTO save(TaskRequestDTO taskDTO) {
@@ -146,33 +169,5 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Tasks>) searchOnStatus(taskFilter.getStatuses()))
                 .and((Specification<Tasks>) searchOnPriority(taskFilter.getPriorities()))
                 .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
-    }
-    private UUID getCurrentUserUUID() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-
-        return usersRepository.findIdByEmail(email)
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-    }
-    private void applyRoleBasedFilter(TaskFilter taskFilter, UUID userUUID) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-            taskFilter.setAssignedForIds(Set.of(userUUID));
-        }
-    }
-
-    private PageResponse<TaskResponseDTO> convertToPageResponse(Page<Tasks> allTasks, Pageable pageable) {
-        List<TaskResponseDTO> taskDTOs = allTasks.stream()
-                .map(tasksMapper::mapToDTO)
-                .collect(Collectors.toList());
-
-        return PageResponse.<TaskResponseDTO>builder()
-                .totalPages((long) allTasks.getTotalPages())
-                .pageSize((long) pageable.getPageSize())
-                .totalElements(allTasks.getTotalElements())
-                .content(taskDTOs)
-                .build();
     }
 }

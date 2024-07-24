@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.common.security.*;
+import lv.dsns.support24.common.security.dto.AuthenticationRequest;
+import lv.dsns.support24.common.security.dto.AuthenticationResponse;
+import lv.dsns.support24.common.security.dto.RegisterRequest;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
@@ -79,6 +82,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(newRefreshToken)
                 .build();
+    }
+    public void changePassword(String email, String currentPassword, String newPassword) {
+        var user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new ClientBackendException(ErrorCode.INVALID_CURRENT_PASSWORD);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        usersRepository.save(user);
+    }
+    public void changePasswordByAdmin(String email, String newPassword) {
+        var user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        usersRepository.save(user);
     }
 
 }

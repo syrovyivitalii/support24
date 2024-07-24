@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     private Specification<SystemUsers> getSearchSpecification(UserFilter userFilter) {
         return Specification.where((Specification<SystemUsers>) searchLikeString("email", userFilter.getEmail()))
-                .and((Specification<SystemUsers>) searchLikeString("role", userFilter.getRole()))
+                .and((Specification<SystemUsers>) searchOnRole(userFilter.getRoles()))
                 .and((Specification<SystemUsers>) searchLikeString("name", userFilter.getName()));
     }
 
