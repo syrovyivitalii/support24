@@ -1,4 +1,4 @@
-package lv.dsns.support24.common.security;
+package lv.dsns.support24.common.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-    private String email;
-    private String password;
+public class RefreshTokenRequest {
+    private String refreshToken;
 }

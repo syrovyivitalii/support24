@@ -1,4 +1,4 @@
-package lv.dsns.support24.common.security;
+package lv.dsns.support24.common.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
