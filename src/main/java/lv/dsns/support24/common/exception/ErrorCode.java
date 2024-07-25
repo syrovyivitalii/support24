@@ -53,7 +53,12 @@ public enum ErrorCode {
     USER_ALREADY_EXISTS(
             "404-004",
             "User already exists",
-            405
+            404
+    ),
+    PROBLEM_NOT_FOUND(
+            "404-005",
+            "Problem not found",
+            404
     ),
     //403
     FORBIDDEN(
