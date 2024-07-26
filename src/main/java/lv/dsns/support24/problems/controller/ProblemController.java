@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/private/common-problems")
+@RequestMapping("/api/v1")
 public class ProblemController {
 
     private final ProblemService problemService;
@@ -23,17 +23,17 @@ public class ProblemController {
         this.problemService = problemService;
     }
 
-    @GetMapping()
+    @GetMapping("/public/common-problems")
     public ResponseEntity<List<ProblemResponseDTO>> getAll(){
         var allProblems = problemService.findAll();
         return ResponseEntity.ok(allProblems);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/private/common-problems/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         problemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PostMapping
+    @PostMapping("/private/common-problems")
     public ResponseEntity<ProblemResponseDTO> save (@RequestBody ProblemRequestDTO problemRequestDTO){
         var responseDto = problemService.save(problemRequestDTO);
         return ResponseEntity.ok(responseDto);

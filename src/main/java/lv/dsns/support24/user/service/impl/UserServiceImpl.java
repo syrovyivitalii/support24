@@ -4,9 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.task.controller.dto.enums.Status;
-import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
-import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.mapper.UserMapper;
@@ -21,7 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -65,6 +61,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
+        if (systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) {
+            throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
+        }
+
         var user = userMapper.mapToEntity(userRequestDTO);
         var savedUser = systemUsersRepository.save(user);
 
@@ -73,6 +73,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO saveDefault(UserRequestDTO userRequestDTO) {
+        if (systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) {
+            throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
+        }
+
         var user = userMapper.mapToDefaultEntity(userRequestDTO, DEFAULT_PASSWORD);
         var savedUser = systemUsersRepository.save(user);
 
@@ -81,13 +85,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDTO patch (UUID id, UserRequestDTO requestDTO){
-
         var userById = systemUsersRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
         userMapper.patchMerge(requestDTO,userById);
 
         return userMapper.mapToDTO(userById);
+    }
+
+    @Override
+    public void delete(UUID id){
+        var problemById = systemUsersRepository.findById(id)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+
+        systemUsersRepository.deleteById(problemById.getId());
     }
 
     @Override

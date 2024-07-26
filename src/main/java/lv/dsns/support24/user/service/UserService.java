@@ -16,4 +16,5 @@ public interface UserService {
     UserResponseDTO saveDefault(UserRequestDTO userRequestDTO);
     boolean existUserByEmail(String email);
     UserResponseDTO patch (UUID id, UserRequestDTO requestDTO);
+    void delete(UUID id);
 }

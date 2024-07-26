@@ -83,6 +83,7 @@
     <p>Нове звернення про проблему з такими деталями:</p>
     <p><span class="highlight">Працівник:</span> ${userName! "Не отримано імені"}</p>
     <p><span class="highlight">Підрозділ:</span> ${union! "Не отримано підрозділу"}</p>
+    <p><span class="highlight">Тип проблеми:</span> ${typeProblem}</p>
     <p><span class="highlight">Опис:</span> ${taskDescription}</p>
     <div class="button-container">
         <a href=${baseUrl} class="button">Опрацювати звернення</a>

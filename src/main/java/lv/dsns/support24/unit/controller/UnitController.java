@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/private/units")
+@RequestMapping("/api/v1")
 public class UnitController {
 
     private final UnitService unitService;
@@ -22,7 +22,7 @@ public class UnitController {
         this.unitService = unitService;
     }
 
-    @GetMapping()
+    @GetMapping("/public/units")
     public ResponseEntity<List<UnitResponseDTO>> getAllTasks(@ParameterObject UnitFilter unitFilter){
         var allUnits = unitService.findAll(unitFilter);
         return ResponseEntity.ok(allUnits);
