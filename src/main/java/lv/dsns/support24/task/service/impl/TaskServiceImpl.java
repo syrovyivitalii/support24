@@ -6,6 +6,8 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.common.smtp.EmailNotificationService;
+import lv.dsns.support24.problems.repository.ProblemRepository;
+import lv.dsns.support24.problems.repository.entity.Problems;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
@@ -45,6 +47,7 @@ public class TaskServiceImpl implements TaskService {
     private final UnitRepository unitRepository;
     private final TaskMapper tasksMapper;
     private final SystemUsersRepository usersRepository;
+    private final ProblemRepository problemRepository;
 
     private final EmailNotificationService emailNotificationService;
 
@@ -94,6 +97,7 @@ public class TaskServiceImpl implements TaskService {
 
         Optional<SystemUsers> userById = usersRepository.findById(savedTask.getCreatedById());
         Optional<Units> unitById = unitRepository.findById(userById.get().getUnitId());
+        Optional<Problems> problemById = problemRepository.findById(savedTask.getProblemTypeId());
         // TODO: 23.07.2024 change tole to SUPER_ADMIN 
         // Get emails from the repository
         List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SYSTEM_ADMIN);
@@ -107,6 +111,7 @@ public class TaskServiceImpl implements TaskService {
         properties.put("userName", userById.get().getName()); // Assume the Task entity has a 'getTitle()' method
         properties.put("union", unitById.get().getUnitName());
         properties.put("taskDescription", savedTask.getDescription()); // Assume the Task entity has a 'getDescription()' method
+        properties.put("typeProblem",problemById.get().getProblem());
 
         // Send email notification to all recipients
         for (String recipient : optionalEmails) {
