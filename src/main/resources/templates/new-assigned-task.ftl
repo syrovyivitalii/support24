@@ -80,13 +80,16 @@
 <body>
 <div class="container">
     <h1>ГУ ДСНС України у Львівській області</h1>
-    <p>Нове звернення про проблему з такими деталями:</p>
-    <p><span class="highlight">Працівник:</span> ${userName! "Не отримано імені"}</p>
-    <p><span class="highlight">Підрозділ:</span> ${union! "Не отримано підрозділу"}</p>
+    <p>Вам призначено нове завдання:</p>
+    <p><span class="highlight">Доручитель:</span> ${assignedBy! "Не отримано імені"}</p>
+    <p><span class="highlight">Дедлайн:</span> ${dueDate! "Дедлайн не призначено"}</p>
+    <p><span class="highlight">Заявник:</span> ${createdBy}</p>
+    <p><span class="highlight">Підрозділ:</span> ${unit}</p>
     <p><span class="highlight">Тип проблеми:</span> ${typeProblem}</p>
     <p><span class="highlight">Опис:</span> ${taskDescription! "Додатковий опис відсутній"}</p>
+    <p><span class="highlight">Пріоритетність:</span> ${priority! "Пріоритетність не визначено"}</p>
     <div class="button-container">
-        <a href=${baseUrl} class="button">Опрацювати звернення</a>
+        <a href=${baseUrl} class="button">Виконати</a>
     </div>
     <div class="footer">
         <p>Цей лист автоматично згенерований системою підтримки.</p>

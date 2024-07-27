@@ -13,7 +13,6 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -56,6 +55,8 @@ public class Tasks extends BaseEntity {
 
     @Column(name = "problem_type_id")
     private UUID problemTypeId;
+
+    private boolean notified;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_for_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)

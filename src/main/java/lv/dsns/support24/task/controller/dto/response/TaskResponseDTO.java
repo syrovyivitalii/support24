@@ -29,5 +29,7 @@ public class TaskResponseDTO {
     private UUID assignedById;
     private UUID createdById;
     private UUID problemTypeId;
+    private boolean notified;
     private UserResponseDTO assignedFor;
+
 }
