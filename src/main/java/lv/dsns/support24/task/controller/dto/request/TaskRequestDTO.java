@@ -23,6 +23,7 @@ public class TaskRequestDTO {
     private LocalDateTime completedDate;
     private Status status;
     private Priority priority;
+    private boolean notified;
     private UUID assignedForId;
     private UUID assignedById;
     private UUID createdById;

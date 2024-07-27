@@ -22,7 +22,6 @@ import lv.dsns.support24.unit.repository.entity.Units;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -98,9 +97,8 @@ public class TaskServiceImpl implements TaskService {
         Optional<SystemUsers> userById = usersRepository.findById(savedTask.getCreatedById());
         Optional<Units> unitById = unitRepository.findById(userById.get().getUnitId());
         Optional<Problems> problemById = problemRepository.findById(savedTask.getProblemTypeId());
-        // TODO: 23.07.2024 change tole to SUPER_ADMIN 
         // Get emails from the repository
-        List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SYSTEM_ADMIN);
+        List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SUPER_ADMIN);
 
         // If no emails found, use a default recipient or handle the situation
         if (optionalEmails.isEmpty()) {
@@ -135,15 +133,43 @@ public class TaskServiceImpl implements TaskService {
         var taskById = tasksRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
 
-        tasksMapper.patchMerge(requestDTO,taskById);
+        if (requestDTO.getAssignedForId() != null && !requestDTO.isNotified()) {
+            String assignedForEmail = usersRepository.findEmailById(requestDTO.getAssignedForId())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned for user not found"));
 
-        // Set the completedDate only if the status is COMPLETED
+            SystemUsers assignedBy = usersRepository.findById(requestDTO.getAssignedById())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
+
+            SystemUsers createdBy = usersRepository.findById(requestDTO.getCreatedById())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Created by user not found"));
+
+            Units unitCreatedBy = unitRepository.findById(createdBy.getUnitId())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
+
+            Problems problem = problemRepository.findById(requestDTO.getProblemTypeId())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("assignedBy", assignedBy.getName());
+            properties.put("createdBy", createdBy.getName());
+            properties.put("unit", unitCreatedBy.getUnitName());
+            properties.put("dueDate", requestDTO.getDueDate());
+            properties.put("typeProblem", problem.getProblem());
+            properties.put("taskDescription", requestDTO.getDescription());
+            properties.put("priority", requestDTO.getPriority());
+
+            emailNotificationService.sendNotification(assignedForEmail, "Нове завдання!", properties, "new-assigned-task.ftl");
+
+            requestDTO.setNotified(true);
+        }
+
         if (requestDTO.getStatus() == Status.COMPLETED) {
             taskById.setCompletedDate(LocalDateTime.now());
         } else {
             taskById.setCompletedDate(null); // Clear the completedDate if the status is not COMPLETED
         }
 
+        tasksMapper.patchMerge(requestDTO, taskById);
         return tasksMapper.mapToDTO(taskById);
     }
     @Override

@@ -16,6 +16,8 @@ public interface SystemUsersRepository extends JpaRepository <SystemUsers, UUID>
 
     @Query("select u.id from SystemUsers u where u.email = ?1")
     Optional<UUID> findIdByEmail(String email);
+    @Query("select u.email from SystemUsers u where u.id = ?1")
+    Optional<String> findEmailById(UUID id);
 
     @Query("select u.email from SystemUsers u where u.role = ?1")
     List<String> findEmailsByRole(Role role);

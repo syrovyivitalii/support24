@@ -60,6 +60,11 @@ public enum ErrorCode {
             "Problem not found",
             404
     ),
+    UNIT_NOT_FOUND(
+            "404-006",
+            "Unit not found",
+            404
+    ),
     //403
     FORBIDDEN(
             "403",
