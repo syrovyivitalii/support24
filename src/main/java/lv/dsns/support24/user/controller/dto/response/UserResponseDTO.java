@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 
 import java.time.LocalDateTime;
@@ -22,4 +23,5 @@ public class UserResponseDTO {
     private boolean verify;
     private String name;
     private String jobTitle;
+    private UnitResponseDTO userUnit;
 }

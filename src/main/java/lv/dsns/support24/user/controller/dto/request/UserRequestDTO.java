@@ -19,4 +19,6 @@ public class UserRequestDTO {
     private boolean verify;
     private String name;
     private String jobTitle;
+    private UUID unitId;
+
 }

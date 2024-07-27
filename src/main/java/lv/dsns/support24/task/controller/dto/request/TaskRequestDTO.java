@@ -18,13 +18,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskRequestDTO {
-
-//    @NotBlank(message = "name is mandatory")
-    private String name;
     private String description;
     private LocalDate dueDate;
+    private LocalDateTime completedDate;
     private Status status;
     private Priority priority;
-    private UUID createdForId;
+    private boolean notified;
+    private UUID assignedForId;
+    private UUID assignedById;
     private UUID createdById;
+    private UUID problemTypeId;
 }

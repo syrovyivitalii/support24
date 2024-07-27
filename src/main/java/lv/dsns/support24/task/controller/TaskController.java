@@ -1,24 +1,19 @@
 package lv.dsns.support24.task.controller;
 
 import lv.dsns.support24.common.dto.response.PageResponse;
+import lv.dsns.support24.common.smtp.MailStructure;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.service.filter.TaskFilter;
 import lv.dsns.support24.task.service.impl.TaskServiceImpl;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,13 +39,6 @@ public class TaskController {
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
-
-    @GetMapping("/private/tasks/completed/pageable")
-    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksCompletedPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
-        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllCompletedPageable(taskFilter,pageable);
-        return ResponseEntity.ok(responseDTOS);
-    }
-
     @PostMapping("/public/tasks")
     public ResponseEntity<TaskResponseDTO> save (@RequestBody TaskRequestDTO tasksDTO){
         var saveTask = tasksService.save(tasksDTO);

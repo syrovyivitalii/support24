@@ -4,15 +4,29 @@ import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public abstract class UserMapper {
 
-    SystemUsers mapToEntity (UserRequestDTO userRequestDTO);
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    UserResponseDTO mapToDTO (SystemUsers systemUsers);
+    public abstract SystemUsers mapToEntity (UserRequestDTO userRequestDTO);
+    public abstract UserResponseDTO mapToDTO(SystemUsers systemUsers);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "verify", constant = "false")
+    @Mapping(target = "password", source = "defaultPassword", qualifiedByName = "generateDefaultPassword")
+    public abstract SystemUsers mapToDefaultEntity (UserRequestDTO userRequestDTO, String defaultPassword);
+
     @Mapping(target = "id", ignore = true)
-    void patchMerge(UserRequestDTO userRequestDTO, @MappingTarget SystemUsers systemUsers);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    public abstract void patchMerge(UserRequestDTO userRequestDTO, @MappingTarget SystemUsers systemUsers);
+
+    @Named("generateDefaultPassword")
+    String generateDefaultPassword(String defaultPassword) {
+        return passwordEncoder.encode(defaultPassword);
+    }
 
 }

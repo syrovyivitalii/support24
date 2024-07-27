@@ -8,6 +8,8 @@ import lombok.experimental.SuperBuilder;
 import lv.dsns.support24.common.util.filter.SearchFilter;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 
+import java.util.Set;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter
@@ -18,6 +20,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class UserFilter extends SearchFilter {
 
      String name;
-     String role;
+     Set<Role> roles;
      String email;
 }

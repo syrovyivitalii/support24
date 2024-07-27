@@ -1,0 +1,1 @@
+ALTER TABLE tbl_tasks DROP COLUMN name;

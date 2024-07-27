@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import lv.dsns.support24.common.util.filter.SearchFilter;
+import lv.dsns.support24.task.controller.dto.enums.Priority;
+import lv.dsns.support24.task.controller.dto.enums.Status;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -22,8 +24,11 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class TaskFilter extends SearchFilter {
 
-    Set<UUID> createdForIds;
-    String status;
+    Set<UUID> assignedForIds;
+    Set<UUID> assignedByIds;
+    Set<UUID> createdByIds;
+    Set<Status> statuses;
+    Set<Priority> priorities;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate dueDate;
 

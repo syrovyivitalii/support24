@@ -20,12 +20,16 @@ public class TaskResponseDTO {
     private UUID id;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
-    private String name;
+    private LocalDateTime completedDate;
     private String description;
     private LocalDate dueDate;
     private Status status;
     private Priority priority;
-    private UserResponseDTO createdFor;
-    private UUID createdForId;
+    private UUID assignedForId;
+    private UUID assignedById;
     private UUID createdById;
+    private UUID problemTypeId;
+    private boolean notified;
+    private UserResponseDTO assignedFor;
+
 }

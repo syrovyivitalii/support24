@@ -13,14 +13,24 @@ public enum ErrorCode {
             "Bad credentials",
             400
     ),
-    USER_ALREADY_EXIST(
-            "400-003",
-            "User already exist",
-            400
-    ),
     JWT_TOKEN_EXPIRED(
             "400-004",
             "JWT is expired",
+            400
+    ),
+    JWT_TOKEN_INVALID(
+            "400-005",
+            "JWT is invalid",
+            400
+    ),
+    REFRESH_TOKEN_EXPIRED(
+            "400-006",
+            "REFRESH_TOKEN_EXPIRED",
+            400
+    ),
+    INVALID_CURRENT_PASSWORD(
+            "400-007",
+            "Invalid current passwrod",
             400
     ),
 
@@ -43,7 +53,17 @@ public enum ErrorCode {
     USER_ALREADY_EXISTS(
             "404-004",
             "User already exists",
-            405
+            404
+    ),
+    PROBLEM_NOT_FOUND(
+            "404-005",
+            "Problem not found",
+            404
+    ),
+    UNIT_NOT_FOUND(
+            "404-006",
+            "Unit not found",
+            404
     ),
     //403
     FORBIDDEN(
