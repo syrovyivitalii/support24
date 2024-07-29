@@ -22,6 +22,8 @@ import lv.dsns.support24.unit.repository.entity.Units;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper tasksMapper;
     private final SystemUsersRepository usersRepository;
     private final ProblemRepository problemRepository;
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     private final EmailNotificationService emailNotificationService;
 
@@ -94,10 +97,13 @@ public class TaskServiceImpl implements TaskService {
         var task = tasksMapper.mapToEntity(taskDTO);
         var savedTask = tasksRepository.save(task);
 
-        Optional<SystemUsers> userById = usersRepository.findById(savedTask.getCreatedById());
-        Optional<Units> unitById = unitRepository.findById(userById.get().getUnitId());
-        Optional<Problems> problemById = problemRepository.findById(savedTask.getProblemTypeId());
-        // Get emails from the repository
+        SystemUsers userById = usersRepository.findById(savedTask.getCreatedById())
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
+        Units unitById = unitRepository.findById(userById.getUnitId())
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
+        Problems problemById = problemRepository.findById(savedTask.getProblemTypeId())
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+
         List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SUPER_ADMIN);
 
         // If no emails found, use a default recipient or handle the situation
@@ -106,10 +112,10 @@ public class TaskServiceImpl implements TaskService {
         }
         // Prepare properties for email template
         Map<String, Object> properties = new HashMap<>();
-        properties.put("userName", userById.get().getName()); // Assume the Task entity has a 'getTitle()' method
-        properties.put("union", unitById.get().getUnitName());
+        properties.put("userName", userById.getName()); // Assume the Task entity has a 'getTitle()' method
+        properties.put("union", unitById.getUnitName());
         properties.put("taskDescription", savedTask.getDescription()); // Assume the Task entity has a 'getDescription()' method
-        properties.put("typeProblem",problemById.get().getProblem());
+        properties.put("typeProblem",problemById.getProblem());
 
         // Send email notification to all recipients
         for (String recipient : optionalEmails) {

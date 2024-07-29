@@ -20,7 +20,12 @@ public class WebConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("http://10.114.10.11:8080");
+        config.addAllowedOrigin("http://10.114.10.11:5173");
+        config.addAllowedOrigin("http://10.114.10.11:8085");
+        config.addAllowedOrigin("http://support24.lv.dsns.gov.ua:8080");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,

@@ -36,13 +36,13 @@ public class ApplicationDataLoader {
     static final String DATA_LOADER_CLASSPATH_LOCATION = "classpath:dataloader";
 
     public void load() {
-        String users = getDataLoaderJsonFullPath("users");
         String units = getDataLoaderJsonFullPath("units");
         String problems = getDataLoaderJsonFullPath("problems");
+        String users = getDataLoaderJsonFullPath("users");
 
-        loadData(users, userLoader);
         loadData(units, unitLoader);
         loadData(problems,problemLoader);
+        loadData(users, userLoader);
 
     }
 
