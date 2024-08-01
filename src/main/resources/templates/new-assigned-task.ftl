@@ -81,7 +81,7 @@
 <div class="container">
     <h1>ГУ ДСНС України у Львівській області</h1>
     <p>Вам призначено нове завдання:</p>
-    <p><span class="highlight">Доручитель:</span> ${assignedBy! "Не отримано імені"}</p>
+    <p><span class="highlight">Відповідальний:</span> ${assignedBy! "Не отримано імені"}</p>
     <p><span class="highlight">Дедлайн:</span> ${dueDate! "Дедлайн не призначено"}</p>
     <p><span class="highlight">Заявник:</span> ${createdBy}</p>
     <p><span class="highlight">Підрозділ:</span> ${unit}</p>

@@ -202,6 +202,7 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("assignedForId", taskFilter.getAssignedForIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("assignedById", taskFilter.getAssignedByIds()))
+                .and((Specification<Tasks>) searchFieldInCollectionOfIds("problemTypeId", taskFilter.getProblemTypeIds()))
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
                 .and((Specification<Tasks>) searchOnStatus(taskFilter.getStatuses()))
                 .and((Specification<Tasks>) searchOnPriority(taskFilter.getPriorities()))

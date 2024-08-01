@@ -27,6 +27,7 @@ public class TaskFilter extends SearchFilter {
     Set<UUID> assignedForIds;
     Set<UUID> assignedByIds;
     Set<UUID> createdByIds;
+    Set<UUID> problemTypeIds;
     Set<Status> statuses;
     Set<Priority> priorities;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
