@@ -27,6 +27,6 @@ public class Units extends BaseEntity {
     @JdbcType(PostgreSQLEnumJdbcType.class)
     private UnitType unitType;
 
-    @OneToMany(mappedBy = "userUnit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<SystemUsers> unitUser;
 }
