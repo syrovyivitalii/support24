@@ -6,8 +6,7 @@
       "password" : "1qaz@WSX",
       "verify": true,
       "name": "Admin",
-      "jobTitle": "Admin",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Admin"
     },
     {
       "email" : "v.syrovyi@dsns.gov.ua",
@@ -15,8 +14,7 @@
       "password" : "123",
       "verify": true,
       "name": "Сировий В.І",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "movchan.s@dsns.gov.ua",
@@ -24,8 +22,7 @@
       "password" : "123",
       "verify": true,
       "name": "Мовчан С.І",
-      "jobTitle": "Провідний Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Провідний Фахівець"
     },
     {
       "email" : "y.golovatuy@dsns.gov.ua",
@@ -33,8 +30,7 @@
       "password" : "123",
       "verify": true,
       "name": "Головатий Ю.О",
-      "jobTitle": "Начальник відділу",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник відділу"
     },
     {
       "email" : "a.chastylo@dsns.gov.ua",
@@ -42,8 +38,7 @@
       "password" : "123",
       "verify": true,
       "name": "Частило А.О",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "r.yaremchuk@dsns.gov.ua",
@@ -51,8 +46,7 @@
       "password" : "123",
       "verify": true,
       "name": "Яремчук Р.І",
-      "jobTitle": "Начальник відділу",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник відділу"
     },
     {
       "email" : "t.ivanytskyi@dsns.gov.ua",
@@ -60,8 +54,7 @@
       "password" : "123",
       "verify": true,
       "name": "Іваницький Т.Б",
-      "jobTitle": "Заступник начальника відділу",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Заступник начальника відділу"
     },
     {
       "email" : "y.graban@dsns.gov.ua",
@@ -69,8 +62,7 @@
       "password" : "123",
       "verify": true,
       "name": "Грабан Ю.Ю",
-      "jobTitle": "Провідний фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Провідний фахівець"
     },
     {
       "email" : "s.hlushko@dsns.gov.ua",
@@ -78,8 +70,7 @@
       "password" : "123",
       "verify": true,
       "name": "Глушко С.В",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "y.zapisetskyi@dsns.gov.ua",
@@ -87,8 +78,7 @@
       "password" : "123",
       "verify": true,
       "name": "Запісецький Ю.Ю",
-      "jobTitle": "Начальник відділу",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник відділу"
     },
     {
       "email" : "y.koshelenko@dsns.gov.ua",
@@ -96,8 +86,7 @@
       "password" : "123",
       "verify": true,
       "name": "Кошеленко Ю.В",
-      "jobTitle": "Начальник ППУ",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник ППУ"
     },
     {
       "email" : "a.krainuk@dsns.gov.ua",
@@ -105,8 +94,7 @@
       "password" : "123",
       "verify": true,
       "name": "Крайнюк А.В",
-      "jobTitle": "Начальник сектору",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник сектору"
     },
     {
       "email" : "v.bortnyk@dsns.gov.ua",
@@ -114,8 +102,7 @@
       "password" : "123",
       "verify": true,
       "name": "Бортник В.Л",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "v.bogdan@dsns.gov.ua",
@@ -123,8 +110,7 @@
       "password" : "123",
       "verify": true,
       "name": "Богдан В.В",
-      "jobTitle": "Провідний фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Провідний фахівець"
     },
     {
       "email" : "v.m.pylypenko@dsns.gov.ua",
@@ -132,8 +118,7 @@
       "password" : "123",
       "verify": true,
       "name": "Пилипенко В.М",
-      "jobTitle": "Начальник відділу",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник відділу"
     },
     {
       "email" : "d.gordon@dsns.gov.ua",
@@ -141,8 +126,7 @@
       "password" : "123",
       "verify": true,
       "name": "Гордон Д.І",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "n.halan@dsns.gov.ua",
@@ -150,8 +134,7 @@
       "password" : "123",
       "verify": true,
       "name": "Галан Н.Я",
-      "jobTitle": "Заступник начальника центру",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Заступник начальника центру"
     },
     {
       "email" : "r.kuza@dsns.gov.ua",
@@ -159,8 +142,7 @@
       "password" : "123",
       "verify": true,
       "name": "Куза Р.А",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "y.vinarchuk@dsns.gov.ua",
@@ -168,8 +150,7 @@
       "password" : "123",
       "verify": true,
       "name": "Вінарчук Ю.А",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "o.lavrivska@dsns.gov.ua",
@@ -177,8 +158,7 @@
       "password" : "123",
       "verify": true,
       "name": "Лаврівська О.З",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "o.kazakov@dsns.gov.ua",
@@ -186,8 +166,7 @@
       "password" : "123",
       "verify": true,
       "name": "Казаков О.В",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "b.koval@dsns.gov.ua",
@@ -195,8 +174,7 @@
       "password" : "123",
       "verify": true,
       "name": "Коваль Б.О",
-      "jobTitle": "Начальник центру",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Начальник центру"
     },
     {
       "email" : "o.sukmanovskiy@dsns.gov.ua",
@@ -204,8 +182,7 @@
       "password" : "123",
       "verify": true,
       "name": "Сукмановський О.М",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     },
     {
       "email" : "y.bilenko@dsns.gov.ua",
@@ -213,8 +190,7 @@
       "password" : "123",
       "verify": true,
       "name": "Біленко Я.В",
-      "jobTitle": "Фахівець",
-      "unitId": "2dee5521-87bc-4e7f-b6b1-ab801f1c0c0e"
+      "jobTitle": "Фахівець"
     }
 
   ]

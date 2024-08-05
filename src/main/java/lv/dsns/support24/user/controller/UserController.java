@@ -31,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping("/private/users")
-    public ResponseEntity<List<UserResponseDTO>> getAllSystemUsers(){
-        var allSystemUsers = userService.findAll();
+    public ResponseEntity<List<UserResponseDTO>> getAllSystemUsers(@ParameterObject UserFilter userFilter){
+        var allSystemUsers = userService.findAll(userFilter);
         return ResponseEntity.ok(allSystemUsers);
     }
     @GetMapping("/public/users/pageable")

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    List<UserResponseDTO> findAll();
+    List<UserResponseDTO> findAll(UserFilter userFilter);
     PageResponse<UserResponseDTO> findAllPageable(UserFilter userFilter, Pageable pageable);
     UserResponseDTO save(UserRequestDTO userRequestDTO);
     UserResponseDTO saveDefault(UserRequestDTO userRequestDTO);

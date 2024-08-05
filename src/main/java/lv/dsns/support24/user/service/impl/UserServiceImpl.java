@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.mapper.UserMapper;
@@ -18,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,8 +41,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDTO> findAll(){
-        var allSystemUsers = systemUsersRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    public List<UserResponseDTO> findAll(UserFilter userFilter){
+        var allSystemUsers = systemUsersRepository.findAll(getSearchSpecification(userFilter), Sort.by(Sort.Direction.ASC, "name"));
         return allSystemUsers.stream().map(userMapper::mapToDTO).collect(Collectors.toList());
     }
 
@@ -96,9 +98,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(UUID id){
         var problemById = systemUsersRepository.findById(id)
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
-        systemUsersRepository.deleteById(problemById.getId());
+        problemById.setStatus(UserStatus.DELETED);
+
+        systemUsersRepository.save(problemById);
     }
 
     @Override
@@ -109,6 +113,7 @@ public class UserServiceImpl implements UserService {
     private Specification<SystemUsers> getSearchSpecification(UserFilter userFilter) {
         return Specification.where((Specification<SystemUsers>) searchLikeString("email", userFilter.getEmail()))
                 .and((Specification<SystemUsers>) searchOnRole(userFilter.getRoles()))
+                .and((Specification<SystemUsers>) searchOnUserStatus(userFilter.getStatuses()))
                 .and((Specification<SystemUsers>) searchLikeString("name", userFilter.getName()));
     }
 

@@ -7,6 +7,7 @@ import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.unit.repository.entity.Units;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @JdbcType(PostgreSQLEnumJdbcType.class)
     private Role role;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private UserStatus status;
+
     private boolean verify;
 
     private String name;
@@ -50,13 +56,13 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(name = "user_unit_id")
     private UUID unitId;
 
-    @OneToMany(mappedBy = "assignedFor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "assignedFor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Tasks> assignedForTasks;
 
-    @OneToMany(mappedBy = "assignedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "assignedBy", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Tasks> assignedByTasks;
 
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Tasks> createdByTasks;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -100,6 +106,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     protected void onCreate() {
         if (role == null) {
             role = Role.ROLE_USER;
+        }
+        if (status == null){
+            status = UserStatus.ACTIVE;
         }
     }
 }

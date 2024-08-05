@@ -8,6 +8,7 @@ import lv.dsns.support24.common.security.dto.AuthenticationRequest;
 import lv.dsns.support24.common.security.dto.AuthenticationResponse;
 import lv.dsns.support24.common.security.dto.RegisterRequest;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.AuthenticationService;
@@ -58,7 +59,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
         var user = usersRepository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
+        }
         var accessToken = jwtService.generateToken((UserDetails) user);
         var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
         return AuthenticationResponse.builder()
@@ -74,7 +78,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String userEmail = jwtService.extractEmail(refreshToken);
         var user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-
+        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
+        }
         var accessToken = jwtService.generateToken((UserDetails) user);
         var newRefreshToken = jwtService.generateRefreshToken((UserDetails) user);
 
@@ -86,7 +92,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void changePassword(String email, String currentPassword, String newPassword) {
         var user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-
+        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
+        }
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             throw new ClientBackendException(ErrorCode.INVALID_CURRENT_PASSWORD);
         }
@@ -97,7 +105,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void changePasswordByAdmin(String email, String newPassword) {
         var user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-
+        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
+        }
         user.setPassword(passwordEncoder.encode(newPassword));
         usersRepository.save(user);
     }
