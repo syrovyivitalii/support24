@@ -63,6 +63,21 @@ public class SpecificationCustom {
             return builder.equal(datePath, value);
         };
     }
+    public static Specification<? extends BaseEntity> searchByDateRange(String field, LocalDate startDate, LocalDate endDate) {
+        return (root, query, builder) -> {
+            if (startDate == null && endDate == null) {
+                return builder.conjunction();
+            }
+            Path<LocalDate> datePath = root.get(field);
+            if (startDate != null && endDate != null) {
+                return builder.between(datePath, startDate, endDate);
+            } else if (startDate != null) {
+                return builder.greaterThanOrEqualTo(datePath, startDate);
+            } else {
+                return builder.lessThanOrEqualTo(datePath, endDate);
+            }
+        };
+    }
 
     public static Specification<? extends BaseEntity> searchOnStatus(Set<Status> statuses) {
         return CollectionUtils.isNotEmpty(statuses)?

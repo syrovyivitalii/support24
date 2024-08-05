@@ -30,7 +30,11 @@ public class TaskFilter extends SearchFilter {
     Set<UUID> problemTypeIds;
     Set<Status> statuses;
     Set<Priority> priorities;
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+//    LocalDate dueDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    LocalDate dueDate;
+    LocalDate startDate; // New field for start date
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    LocalDate endDate;   // New field for end date
 
 }

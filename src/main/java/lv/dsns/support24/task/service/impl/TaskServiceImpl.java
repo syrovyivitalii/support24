@@ -206,6 +206,7 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
                 .and((Specification<Tasks>) searchOnStatus(taskFilter.getStatuses()))
                 .and((Specification<Tasks>) searchOnPriority(taskFilter.getPriorities()))
-                .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
+                .and((Specification<Tasks>) searchByDateRange("dueDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
+//                .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
     }
 }
