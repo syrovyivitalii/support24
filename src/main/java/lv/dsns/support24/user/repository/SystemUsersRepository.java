@@ -23,4 +23,5 @@ public interface SystemUsersRepository extends JpaRepository <SystemUsers, UUID>
     List<String> findEmailsByRole(Role role);
 
     boolean existsByEmail(String email);
+
 }

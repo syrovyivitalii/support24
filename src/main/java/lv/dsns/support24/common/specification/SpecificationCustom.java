@@ -7,6 +7,7 @@ import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -63,6 +64,21 @@ public class SpecificationCustom {
             return builder.equal(datePath, value);
         };
     }
+    public static Specification<? extends BaseEntity> searchByDateRange(String field, LocalDate startDate, LocalDate endDate) {
+        return (root, query, builder) -> {
+            if (startDate == null && endDate == null) {
+                return builder.conjunction();
+            }
+            Path<LocalDate> datePath = root.get(field);
+            if (startDate != null && endDate != null) {
+                return builder.between(datePath, startDate, endDate);
+            } else if (startDate != null) {
+                return builder.greaterThanOrEqualTo(datePath, startDate);
+            } else {
+                return builder.lessThanOrEqualTo(datePath, endDate);
+            }
+        };
+    }
 
     public static Specification<? extends BaseEntity> searchOnStatus(Set<Status> statuses) {
         return CollectionUtils.isNotEmpty(statuses)?
@@ -77,7 +93,10 @@ public class SpecificationCustom {
         return CollectionUtils.isNotEmpty(roles)?
                 (root, query, builder) -> root.get("role").in(roles):null;
     }
-
+    public static Specification<? extends BaseEntity> searchOnUserStatus(Set<UserStatus> statuses) {
+        return CollectionUtils.isNotEmpty(statuses)?
+                (root, query, builder) -> root.get("status").in(statuses):null;
+    }
 
     public static Specification<? extends BaseEntity> searchOnUnitType(Set<UnitType> types) {
         return CollectionUtils.isNotEmpty(types)?

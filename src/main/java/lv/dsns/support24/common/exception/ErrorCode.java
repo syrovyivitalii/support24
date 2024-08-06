@@ -65,6 +65,11 @@ public enum ErrorCode {
             "Unit not found",
             404
     ),
+    USER_NOT_ACTIVE(
+            "404-007",
+            "User not active",
+            404
+    ),
     //403
     FORBIDDEN(
             "403",
