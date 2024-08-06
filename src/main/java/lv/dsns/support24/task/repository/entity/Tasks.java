@@ -29,7 +29,7 @@ public class Tasks extends BaseEntity {
     private String description;
 
     @Column(name = "due_date")
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     @Column(name = "completed_date")
     private LocalDateTime completedDate;

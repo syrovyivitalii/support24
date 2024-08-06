@@ -22,7 +22,7 @@ public class TaskResponseDTO {
     private LocalDateTime updatedDate;
     private LocalDateTime completedDate;
     private String description;
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
     private Status status;
     private Priority priority;
     private UUID assignedForId;

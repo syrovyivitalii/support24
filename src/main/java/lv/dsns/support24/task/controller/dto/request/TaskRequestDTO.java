@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TaskRequestDTO {
     private String description;
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
     private LocalDateTime completedDate;
     private Status status;
     private Priority priority;
