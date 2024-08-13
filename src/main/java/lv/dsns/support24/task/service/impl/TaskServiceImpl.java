@@ -7,21 +7,18 @@ import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.common.smtp.EmailNotificationService;
 import lv.dsns.support24.problems.repository.ProblemRepository;
-import lv.dsns.support24.problems.repository.entity.Problems;
 import lv.dsns.support24.task.controller.dto.enums.Status;
+import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.mapper.TaskMapper;
-import lv.dsns.support24.task.repository.TasksRepository;
-import lv.dsns.support24.task.repository.entity.Tasks;
+import lv.dsns.support24.task.repository.TaskRepository;
+import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
 import lv.dsns.support24.unit.repository.UnitRepository;
-import lv.dsns.support24.unit.repository.entity.Units;
-import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
-import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -44,7 +41,7 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
-    private final TasksRepository tasksRepository;
+    private final TaskRepository taskRepository;
     private final UnitRepository unitRepository;
     private final TaskMapper tasksMapper;
     private final SystemUsersRepository usersRepository;
@@ -55,8 +52,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
-        var allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter));
+        var allTasks = taskRepository.findAll(getSearchSpecification(taskFilter));
         return allTasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
+    }
+    @Override
+    public List<TaskResponseDTO> findAllSubtasks(UUID parentId){
+        var allSubtasks = taskRepository.findAllSubtask(parentId);
+        return allSubtasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -75,7 +77,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         // Retrieve tasks with pagination and filtering
-        Page<Tasks> allTasks = tasksRepository.findAll(getSearchSpecification(taskFilter), pageable);
+        Page<Task> allTasks = taskRepository.findAll(getSearchSpecification(taskFilter), pageable);
 
         // Convert to PageResponse
         List<TaskResponseDTO> taskDTOs = allTasks.stream()
@@ -95,37 +97,42 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDTO save(TaskRequestDTO taskDTO) {
         // Convert DTO to entity and save
         var task = tasksMapper.mapToEntity(taskDTO);
-        var savedTask = tasksRepository.save(task);
 
-        SystemUsers userById = usersRepository.findById(savedTask.getCreatedById())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
-        Units unitById = unitRepository.findById(userById.getUnitId())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
-        Problems problemById = problemRepository.findById(savedTask.getProblemTypeId())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+        //set task type to SUBTASK if parent is set
+        task.setTaskType(taskDTO.getParentId() != null ? Type.SUBTASK : Type.TASK);
 
-        List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SUPER_ADMIN);
+        var savedTask = taskRepository.save(task);
+
+
+//        SystemUsers userById = usersRepository.findById(savedTask.getCreatedById())
+//                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
+//        Units unitById = unitRepository.findById(userById.getUnitId())
+//                .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
+//        Problems problemById = problemRepository.findById(savedTask.getProblemTypeId())
+//                .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+//
+//        List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SUPER_ADMIN);
 
         // If no emails found, use a default recipient or handle the situation
-        if (optionalEmails.isEmpty()) {
-            optionalEmails.add("v.syrovyi@dsns.gov.ua");
-        }
-        // Prepare properties for email template
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("userName", userById.getName()); // Assume the Task entity has a 'getTitle()' method
-        properties.put("union", unitById.getUnitName());
-        properties.put("taskDescription", savedTask.getDescription()); // Assume the Task entity has a 'getDescription()' method
-        properties.put("typeProblem",problemById.getProblem());
-
-        // Send email notification to all recipients
-        for (String recipient : optionalEmails) {
-            emailNotificationService.sendNotification(
-                    recipient,
-                    "Нове звернення з проблемою!", // Subject
-                    properties,
-                    "new-task-email.ftl" // Ensure you have a corresponding template
-            );
-        }
+//        if (optionalEmails.isEmpty()) {
+//            optionalEmails.add("v.syrovyi@dsns.gov.ua");
+//        }
+//        // Prepare properties for email template
+//        Map<String, Object> properties = new HashMap<>();
+//        properties.put("userName", userById.getName()); // Assume the Task entity has a 'getTitle()' method
+//        properties.put("union", unitById.getUnitName());
+//        properties.put("taskDescription", savedTask.getDescription()); // Assume the Task entity has a 'getDescription()' method
+//        properties.put("typeProblem",problemById.getProblem());
+//
+//        // Send email notification to all recipients
+//        for (String recipient : optionalEmails) {
+//            emailNotificationService.sendNotification(
+//                    recipient,
+//                    "Нове звернення з проблемою!", // Subject
+//                    properties,
+//                    "new-task-email.ftl" // Ensure you have a corresponding template
+//            );
+//        }
 
         // Return the saved task DTO
         return tasksMapper.mapToDTO(savedTask);
@@ -136,44 +143,40 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO){
 
-        var taskById = tasksRepository.findById(id)
+        var taskById = taskRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
 
-        if (requestDTO.getAssignedForId() != null && !requestDTO.isNotified()) {
-            String assignedForEmail = usersRepository.findEmailById(requestDTO.getAssignedForId())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned for user not found"));
+//        if (requestDTO.getAssignedForId() != null && !requestDTO.isNotified()) {
+//            String assignedForEmail = usersRepository.findEmailById(requestDTO.getAssignedForId())
+//                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned for user not found"));
+//
+//            SystemUsers assignedBy = usersRepository.findById(requestDTO.getAssignedById())
+//                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
+//
+//            SystemUsers createdBy = usersRepository.findById(requestDTO.getCreatedById())
+//                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Created by user not found"));
+//
+//            Units unitCreatedBy = unitRepository.findById(createdBy.getUnitId())
+//                    .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
+//
+//            Problems problem = problemRepository.findById(requestDTO.getProblemTypeId())
+//                    .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
+//
+//            Map<String, Object> properties = new HashMap<>();
+//            properties.put("assignedBy", assignedBy.getName());
+//            properties.put("createdBy", createdBy.getName());
+//            properties.put("unit", unitCreatedBy.getUnitName());
+//            properties.put("dueDate", requestDTO.getDueDate());
+//            properties.put("typeProblem", problem.getProblem());
+//            properties.put("taskDescription", requestDTO.getDescription());
+//            properties.put("priority", requestDTO.getPriority());
+//
+//            emailNotificationService.sendNotification(assignedForEmail, "Нове завдання!", properties, "new-assigned-task.ftl");
+//
+//            requestDTO.setNotified(true);
+//        }
 
-            SystemUsers assignedBy = usersRepository.findById(requestDTO.getAssignedById())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
-
-            SystemUsers createdBy = usersRepository.findById(requestDTO.getCreatedById())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Created by user not found"));
-
-            Units unitCreatedBy = unitRepository.findById(createdBy.getUnitId())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
-
-            Problems problem = problemRepository.findById(requestDTO.getProblemTypeId())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
-
-            Map<String, Object> properties = new HashMap<>();
-            properties.put("assignedBy", assignedBy.getName());
-            properties.put("createdBy", createdBy.getName());
-            properties.put("unit", unitCreatedBy.getUnitName());
-            properties.put("dueDate", requestDTO.getDueDate());
-            properties.put("typeProblem", problem.getProblem());
-            properties.put("taskDescription", requestDTO.getDescription());
-            properties.put("priority", requestDTO.getPriority());
-
-            emailNotificationService.sendNotification(assignedForEmail, "Нове завдання!", properties, "new-assigned-task.ftl");
-
-            requestDTO.setNotified(true);
-        }
-
-        if (requestDTO.getStatus() == Status.COMPLETED) {
-            taskById.setCompletedDate(LocalDateTime.now());
-        } else {
-            taskById.setCompletedDate(null); // Clear the completedDate if the status is not COMPLETED
-        }
+        taskById.setCompletedDate(requestDTO.getStatus() == Status.COMPLETED ? LocalDateTime.now() : null);
 
         tasksMapper.patchMerge(requestDTO, taskById);
         return tasksMapper.mapToDTO(taskById);
@@ -182,7 +185,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public TaskResponseDTO patchByUser (UUID id, PatchByUserTaskRequestDTO requestDTO){
 
-        var taskById = tasksRepository.findById(id)
+        var taskById = taskRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
 
         // Set the completedDate only if the status is COMPLETED
@@ -197,16 +200,16 @@ public class TaskServiceImpl implements TaskService {
         return tasksMapper.mapToDTO(taskById);
     }
 
-    private Specification<Tasks> getSearchSpecification(TaskFilter taskFilter) {
-        return Specification.where((Specification<Tasks>) searchLikeString("name", taskFilter.getSearch()))
-                .and((Specification<Tasks>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
-                .and((Specification<Tasks>) searchFieldInCollectionOfIds("assignedForId", taskFilter.getAssignedForIds()))
-                .and((Specification<Tasks>) searchFieldInCollectionOfIds("assignedById", taskFilter.getAssignedByIds()))
-                .and((Specification<Tasks>) searchFieldInCollectionOfIds("problemTypeId", taskFilter.getProblemTypeIds()))
-                .and((Specification<Tasks>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
-                .and((Specification<Tasks>) searchOnStatus(taskFilter.getStatuses()))
-                .and((Specification<Tasks>) searchOnPriority(taskFilter.getPriorities()))
-                .and((Specification<Tasks>) searchByDateRange("dueDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
+    private Specification<Task> getSearchSpecification(TaskFilter taskFilter) {
+        return Specification.where((Specification<Task>) searchLikeString("name", taskFilter.getSearch()))
+                .and((Specification<Task>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
+                .and((Specification<Task>) searchFieldInCollectionOfIds("assignedForId", taskFilter.getAssignedForIds()))
+                .and((Specification<Task>) searchFieldInCollectionOfIds("assignedById", taskFilter.getAssignedByIds()))
+                .and((Specification<Task>) searchFieldInCollectionOfIds("problemTypeId", taskFilter.getProblemTypeIds()))
+                .and((Specification<Task>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
+                .and((Specification<Task>) searchOnStatus(taskFilter.getStatuses()))
+                .and((Specification<Task>) searchOnPriority(taskFilter.getPriorities()))
+                .and((Specification<Task>) searchByDateRange("dueDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
 //                .and((Specification<Tasks>) searchByDueDate("dueDate", taskFilter.getDueDate()));
     }
 }

@@ -14,6 +14,7 @@ public interface TaskService {
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
 
     PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable);
+    List<TaskResponseDTO> findAllSubtasks(UUID parentId);
     TaskResponseDTO save (TaskRequestDTO tasksDTO);
 
     TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO);

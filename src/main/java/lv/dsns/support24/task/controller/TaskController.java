@@ -38,6 +38,11 @@ public class TaskController {
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
+    @GetMapping("/private/tasks/get-subtasks/{id}")
+    public ResponseEntity<List<TaskResponseDTO>> getAllSubtask(@PathVariable UUID id){
+        var allSubtasks = tasksService.findAllSubtasks(id);
+        return ResponseEntity.ok(allSubtasks);
+    }
     @PostMapping("/public/tasks")
     public ResponseEntity<TaskResponseDTO> save (@RequestBody TaskRequestDTO tasksDTO){
         var saveTask = tasksService.save(tasksDTO);

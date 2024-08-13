@@ -4,7 +4,6 @@ import jakarta.persistence.criteria.Path;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
-import lv.dsns.support24.task.repository.entity.Tasks;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;

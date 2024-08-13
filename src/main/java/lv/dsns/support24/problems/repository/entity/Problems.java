@@ -3,7 +3,7 @@ package lv.dsns.support24.problems.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
-import lv.dsns.support24.task.repository.entity.Tasks;
+import lv.dsns.support24.task.repository.entity.Task;
 
 import java.util.List;
 
@@ -21,6 +21,6 @@ public class Problems extends BaseEntity {
     private String problem;
 
     @OneToMany(mappedBy = "taskProblem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<Tasks> problemType;
+    private List<Task> problemType;
 
 }
