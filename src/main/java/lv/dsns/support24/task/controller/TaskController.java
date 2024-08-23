@@ -32,6 +32,11 @@ public class TaskController {
         var allTasks = tasksService.findAll(taskFilter);
         return ResponseEntity.ok(allTasks);
     }
+    @GetMapping("/private/task/{id}")
+    public ResponseEntity<List<TaskResponseDTO>> getTaskById(@PathVariable UUID id){
+        var taskById = tasksService.findTaskById(id);
+        return ResponseEntity.ok(taskById);
+    }
 
     @GetMapping("/private/tasks/pageable")
     public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){

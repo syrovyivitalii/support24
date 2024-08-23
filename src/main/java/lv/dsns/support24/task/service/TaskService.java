@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface TaskService {
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
-
+    List<TaskResponseDTO> findTaskById(UUID id);
     PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable);
     List<TaskResponseDTO> findAllSubtasks(UUID parentId);
     TaskResponseDTO save (TaskRequestDTO tasksDTO);

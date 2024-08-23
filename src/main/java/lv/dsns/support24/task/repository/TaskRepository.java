@@ -1,6 +1,9 @@
 package lv.dsns.support24.task.repository;
 
 import lv.dsns.support24.task.repository.entity.Task;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +19,8 @@ import java.util.Optional;
     List<Task> findNotCompletedTasks();
 
     @Query("SELECT t FROM Task t WHERE t.parentId = ?1")
-    List<Task> findAllSubtask(UUID parentId);
+    List<Task> findAllSubtasks(UUID parentId);
+
+    Page<Task> findTasksByParentIdIsNull(Specification<Task> spec, Pageable pageable);
 
 }
