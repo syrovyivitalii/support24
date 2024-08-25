@@ -5,10 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.common.smtp.EmailNotificationFactory;
-import lv.dsns.support24.common.smtp.EmailNotificationService;
-import lv.dsns.support24.problems.repository.ProblemRepository;
-import lv.dsns.support24.problems.repository.entity.Problems;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
@@ -19,16 +15,14 @@ import lv.dsns.support24.task.repository.TaskRepository;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
-import lv.dsns.support24.unit.repository.UnitRepository;
-import lv.dsns.support24.unit.repository.entity.Units;
-import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lv.dsns.support24.user.service.UserService;
+import lv.dsns.support24.user.service.impl.UserServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +42,9 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
-    private final UnitRepository unitRepository;
     private final TaskMapper tasksMapper;
     private final SystemUsersRepository usersRepository;
-    private final EmailNotificationFactory emailNotificationFactory;
+    private final UserServiceImpl userService;
 
     @Override
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
@@ -71,16 +64,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable) {
-        // Retrieve the current user's UUID
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
+        //get email of user
+        String email = userService.getAuthenticatedUserEmail();
 
         UUID userUUID = usersRepository.findIdByEmail(email)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
+        Collection<? extends GrantedAuthority> authenticatedUserAuthority = userService.getAuthenticatedUserAuthority();
+
         // Apply role-based filters
-        if (userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+        if (authenticatedUserAuthority.stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
             taskFilter.setAssignedForIds(Set.of(userUUID));
         }
 
@@ -131,6 +124,12 @@ public class TaskServiceImpl implements TaskService {
         //add user comment to description
         if (requestDTO.getComment() != null){
             setCommentToTask(requestDTO.getComment(),taskById);
+        }
+
+        if (requestDTO.getAssignedForId() != null){
+            var byEmail = usersRepository.findByEmail(userService.getAuthenticatedUserEmail())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+            taskById.setAssignedById(byEmail.getId());
         }
 
         tasksMapper.patchMerge(requestDTO, taskById);
