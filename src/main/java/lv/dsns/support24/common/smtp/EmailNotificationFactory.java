@@ -11,11 +11,12 @@ import lv.dsns.support24.unit.repository.entity.Units;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Component
 public class EmailNotificationFactory {
     private final EmailNotificationService emailNotificationService;
     private final SystemUsersRepository usersRepository;

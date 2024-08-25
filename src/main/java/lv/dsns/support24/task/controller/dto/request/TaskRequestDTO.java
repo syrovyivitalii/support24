@@ -21,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TaskRequestDTO {
     private String description;
+    private String comment;
     private LocalDateTime dueDate;
     private LocalDateTime completedDate;
     private Status status;

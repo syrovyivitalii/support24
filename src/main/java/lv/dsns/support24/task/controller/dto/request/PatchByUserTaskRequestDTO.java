@@ -14,4 +14,5 @@ import lv.dsns.support24.task.controller.dto.enums.Status;
 public class PatchByUserTaskRequestDTO {
     private String description;
     private Status status;
+    private String comment;
 }

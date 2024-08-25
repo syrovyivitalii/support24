@@ -37,6 +37,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -127,6 +128,11 @@ public class TaskServiceImpl implements TaskService {
 
         taskById.setCompletedDate(requestDTO.getStatus() == Status.COMPLETED ? LocalDateTime.now() : null);
 
+        //add user comment to description
+        if (requestDTO.getComment() != null){
+            setCommentToTask(requestDTO.getComment(),taskById);
+        }
+
         tasksMapper.patchMerge(requestDTO, taskById);
         return tasksMapper.mapToDTO(taskById);
     }
@@ -144,6 +150,11 @@ public class TaskServiceImpl implements TaskService {
             taskById.setCompletedDate(null); // Clear the completedDate if the status is not COMPLETED
         }
 
+        //add user comment to description
+        if (requestDTO.getComment() != null){
+            setCommentToTask(requestDTO.getComment(),taskById);
+        }
+
         tasksMapper.patchMergeByUser(requestDTO,taskById);
 
         return tasksMapper.mapToDTO(taskById);
@@ -159,6 +170,25 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Task>) searchOnStatus(taskFilter.getStatuses()))
                 .and((Specification<Task>) searchOnPriority(taskFilter.getPriorities()))
                 .and((Specification<Task>) searchOnTaskType(taskFilter.getTaskTypes()))
-                .and((Specification<Task>) searchByDateRange("dueDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
+                .and((Specification<Task>) searchByDateRange("createdDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
+    }
+
+    private void setCommentToTask(String comment, Task taskById){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+
+        var byEmail = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        String description = String.format(
+                "%s%n%n%s %s: %s",
+                taskById.getDescription(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                byEmail.getName(),
+                comment
+        );
+
+        taskById.setDescription(description);
     }
 }
