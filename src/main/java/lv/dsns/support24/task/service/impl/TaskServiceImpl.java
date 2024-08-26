@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.common.smtp.EmailNotificationFactory;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
@@ -45,6 +46,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper tasksMapper;
     private final SystemUsersRepository usersRepository;
     private final UserServiceImpl userService;
+    private final EmailNotificationFactory emailNotificationFactory;
 
     @Override
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
@@ -101,9 +103,22 @@ public class TaskServiceImpl implements TaskService {
         var task = tasksMapper.mapToEntity(taskDTO);
         //set task type to SUBTASK if parent is set
         task.setTaskType(taskDTO.getParentId() != null ? Type.SUBTASK : Type.TASK);
-        var savedTask = taskRepository.save(task);
-        //send email notification
+
+        if (task.getTaskType().equals(Type.TASK)){
+            //send email notification about created task
 //        emailNotificationFactory.sendTaskCreatedNotification(savedTask);
+        }else {
+            var parentById = taskRepository.findById(task.getParentId())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
+            task.setCreatedById(parentById.getCreatedById());
+            task.setTaskProblem(parentById.getTaskProblem());
+            var byEmail = usersRepository.findByEmail(userService.getAuthenticatedUserEmail())
+                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+            task.setAssignedById(byEmail.getId());
+            //send email notification about assigned task
+            //emailNotificationFactory.sendTaskAssignedNotification(taskDTO);
+        }
+        var savedTask = taskRepository.save(task);
         // Return the saved task DTO
         return tasksMapper.mapToDTO(savedTask);
     }
