@@ -6,12 +6,11 @@ import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.problems.repository.entity.Problems;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
-import lv.dsns.support24.unit.repository.entity.Units;
+import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class Tasks extends BaseEntity {
+public class Task extends BaseEntity {
 
     @Column(name = "description",nullable = false)
     private String description;
@@ -56,6 +55,14 @@ public class Tasks extends BaseEntity {
     @Column(name = "problem_type_id")
     private UUID problemTypeId;
 
+    @Column(name = "parent_id")
+    private UUID parentId;
+
+    @Column(name = "task_type")
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private Type taskType;
+
     private boolean notified;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -74,6 +81,10 @@ public class Tasks extends BaseEntity {
     @JoinColumn(name = "problem_type_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Problems taskProblem;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Task parent;
+
     @PrePersist
     protected void onCreate() {
         if (status == null) {
@@ -81,6 +92,9 @@ public class Tasks extends BaseEntity {
         }
         if (priority == null) {
             priority = Priority.LOW;
+        }
+        if (taskType == null){
+            taskType = Type.TASK;
         }
     }
 }

@@ -23,11 +23,6 @@ public class MailConfig {
     @Value("${spring.mail.port}")
     private int port;
 
-//    @Value("${spring.mail.debug:false}")
-//    private boolean debug;
-
-//    @Value("${spring.mail.transport.protocol}")
-//    private String protocol;
     @Value("${spring.mail.properties.mail.smtp.auth}")
     private boolean auth;
 
@@ -40,10 +35,8 @@ public class MailConfig {
         mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
-//        props.put("mail.transport.protocol", protocol);
         props.put("mail.smtp.auth", auth);
         props.put("mail.smtp.starttls.enable", "true");
-//        props.put("mail.debug", debug);
         props.put("mail.timeout", "25000");
         props.put("mail.write.timeout", "25000");
         props.put("mail.connection.timeout", "25000");

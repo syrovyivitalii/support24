@@ -1,0 +1,1 @@
+ALTER TABLE tbl_tasks ALTER COLUMN task_type DROP NOT NULL;

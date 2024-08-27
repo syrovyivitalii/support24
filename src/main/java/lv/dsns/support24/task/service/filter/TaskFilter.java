@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import lv.dsns.support24.common.util.filter.SearchFilter;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
+import lv.dsns.support24.task.controller.dto.enums.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public class TaskFilter extends SearchFilter {
     Set<UUID> problemTypeIds;
     Set<Status> statuses;
     Set<Priority> priorities;
+    Set<Type> taskTypes;
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 //    LocalDate dueDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
