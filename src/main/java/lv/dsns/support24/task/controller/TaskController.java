@@ -32,11 +32,21 @@ public class TaskController {
         var allTasks = tasksService.findAll(taskFilter);
         return ResponseEntity.ok(allTasks);
     }
+    @GetMapping("/private/task/{id}")
+    public ResponseEntity<List<TaskResponseDTO>> getTaskById(@PathVariable UUID id){
+        var taskById = tasksService.findTaskById(id);
+        return ResponseEntity.ok(taskById);
+    }
 
     @GetMapping("/private/tasks/pageable")
     public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
         PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
+    }
+    @GetMapping("/private/tasks/get-subtasks/{id}")
+    public ResponseEntity<List<TaskResponseDTO>> getAllSubtask(@PathVariable UUID id){
+        var allSubtasks = tasksService.findAllSubtasks(id);
+        return ResponseEntity.ok(allSubtasks);
     }
     @PostMapping("/public/tasks")
     public ResponseEntity<TaskResponseDTO> save (@RequestBody TaskRequestDTO tasksDTO){
