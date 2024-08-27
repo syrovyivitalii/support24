@@ -111,7 +111,7 @@ public class TaskServiceImpl implements TaskService {
             var parentById = taskRepository.findById(task.getParentId())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
             task.setCreatedById(parentById.getCreatedById());
-            task.setTaskProblem(parentById.getTaskProblem());
+            task.setProblemTypeId(parentById.getProblemTypeId());
             var byEmail = usersRepository.findByEmail(userService.getAuthenticatedUserEmail())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
             task.setAssignedById(byEmail.getId());
