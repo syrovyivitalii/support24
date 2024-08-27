@@ -16,7 +16,7 @@ public class Scheduling {
     @Autowired
     private final TaskRepository taskRepository;
 
-    @Scheduled(cron = "10 1 0 * * *", zone = "Europe/Kyiv") /* every day at 01.00 in Europe/Kyiv */
+    @Scheduled(cron = "0 0 18 * * *", zone = "America/New_York") /* Every day at 18:00 in New York (which is 1:00 AM the next day in Kyiv) */
     @Transactional
     public void changeStatus() {
         taskRepository.updateStatus(LocalDateTime.now());
