@@ -26,4 +26,4 @@ CREATE TRIGGER trg_update_parent_status
     AFTER UPDATE OF status
     ON tbl_tasks
     FOR EACH ROW
-    EXECUTE FUNCTION update_parent_task_status();
+    EXECUTE PROCEDURE  update_parent_task_status();

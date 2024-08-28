@@ -63,6 +63,7 @@ public class Task extends BaseEntity {
     @JdbcType(PostgreSQLEnumJdbcType.class)
     private Type taskType;
 
+    @Column(name = "notified")
     private boolean notified;
 
     @ManyToOne(fetch = FetchType.LAZY)

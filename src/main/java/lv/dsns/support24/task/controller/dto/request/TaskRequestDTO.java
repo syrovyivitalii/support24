@@ -27,7 +27,6 @@ public class TaskRequestDTO {
     private Status status;
     private Priority priority;
     private Type taskType;
-    private boolean notified;
     private UUID assignedForId;
     private UUID assignedById;
     private UUID createdById;

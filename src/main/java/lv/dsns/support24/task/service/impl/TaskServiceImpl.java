@@ -106,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
 
         if (task.getTaskType().equals(Type.TASK)){
             //send email notification about created task
-//        emailNotificationFactory.sendTaskCreatedNotification(savedTask);
+            emailNotificationFactory.sendTaskCreatedNotification(task);
         }else {
             var parentById = taskRepository.findById(task.getParentId())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
@@ -116,7 +116,8 @@ public class TaskServiceImpl implements TaskService {
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
             task.setAssignedById(byEmail.getId());
             //send email notification about assigned task
-            //emailNotificationFactory.sendTaskAssignedNotification(taskDTO);
+            emailNotificationFactory.sendTaskAssignedNotification(task);
+            task.setNotified(true);
         }
         var savedTask = taskRepository.save(task);
         // Return the saved task DTO
@@ -131,10 +132,7 @@ public class TaskServiceImpl implements TaskService {
         var taskById = taskRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
 
-        //send notification about assigning task
-//        emailNotificationFactory.sendTaskAssignedNotification(requestDTO);
-
-        taskById.setCompletedDate(requestDTO.getStatus() == Status.COMPLETED ? LocalDateTime.now() : null);
+        tasksMapper.patchMerge(requestDTO, taskById);
 
         //add user comment to description
         if (requestDTO.getComment() != null){
@@ -145,9 +143,13 @@ public class TaskServiceImpl implements TaskService {
             var byEmail = usersRepository.findByEmail(userService.getAuthenticatedUserEmail())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
             taskById.setAssignedById(byEmail.getId());
+
+            if (!taskById.isNotified()){
+                emailNotificationFactory.sendTaskAssignedNotification(taskById);
+                taskById.setNotified(true);
+            }
         }
 
-        tasksMapper.patchMerge(requestDTO, taskById);
         return tasksMapper.mapToDTO(taskById);
     }
     @Override
