@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.unit.repository.entity.Unit;
 
@@ -16,7 +17,8 @@ import java.util.UUID;
 public class UnitRequestDTO {
     private String unitName;
     private UnitType unitType;
-    private Unit parentUnit;
-    private int groupId;
-
+    private UUID parentUnitId;
+    private String location;
+    private String street;
+    private UnitStatus unitStatus;
 }

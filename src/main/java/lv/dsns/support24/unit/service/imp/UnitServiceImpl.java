@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.task.repository.entity.Task;
+import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
@@ -12,7 +14,10 @@ import lv.dsns.support24.unit.repository.UnitRepository;
 import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.unit.service.UnitService;
 import lv.dsns.support24.unit.service.filter.UnitFilter;
+import lv.dsns.support24.user.controller.dto.enums.UserStatus;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,30 +47,40 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public List<UnitResponseDTO> findAll(UnitFilter unitFilter){
-        var allTasks = unitRepository.findAll(getSearchSpecification(unitFilter));
+        var allTasks = unitRepository.findAll(getSearchSpecification(unitFilter), Sort.by(Sort.Direction.ASC, "unitType"));
         return allTasks.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
     public List<UnitResponseDTO> findAllChildUnits(UUID id){
-        var parentUnit = unitRepository.findById(id)
+        List<Unit> allChild = unitRepository.findHierarchyByUnitId(id);
+        return allChild.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
+    }
+    @Override
+    @Transactional
+    public UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO){
+        var unitById = unitRepository.findById(id)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
+        unitMapper.patchMerge(requestDTO, unitById);
+        return unitMapper.mapToDTO(unitById);
+    }
+    @Override
+    public void delete(UUID id){
+        var unitById = unitRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
 
-        if (parentUnit.getUnitType().equals(UnitType.ГУ)){
-            List<Unit> allChild = unitRepository.findByParentUnitIdNotNull();
-            return allChild.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
-        }else {
-            List<Unit> allChild = unitRepository.findByParentUnitIdAndGroupId(parentUnit.getId(), parentUnit.getGroupId());
-            return allChild.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
-        }
-    }
+        unitById.setUnitStatus(UnitStatus.DELETED);
 
+        unitRepository.save(unitById);
+    }
     @Override
     public boolean existUnitByUnitName(String unitName){
         return unitRepository.existsUnitsByUnitName(unitName);
     }
 
     private Specification<Unit> getSearchSpecification(UnitFilter unitFilter) {
-        return Specification.where((Specification<Unit>) searchOnUnitType(unitFilter.getUnitType()));
+        return Specification.where((Specification<Unit>) searchOnUnitType(unitFilter.getUnitType()))
+                .and((Specification<Unit>) searchLikeString("unitName", unitFilter.getUnitName()))
+                .and((Specification<Unit>) searchOnUnitStatus(unitFilter.getStatuses()));
     }
 
 }

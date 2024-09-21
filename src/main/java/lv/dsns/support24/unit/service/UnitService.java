@@ -12,5 +12,7 @@ public interface UnitService {
 
     List<UnitResponseDTO> findAll(UnitFilter unitFilter);
     List<UnitResponseDTO> findAllChildUnits(UUID id);
+    UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO);
+    void delete(UUID id);
     boolean existUnitByUnitName(String unitName);
 }

@@ -5,6 +5,7 @@ import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.enums.Type;
+import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
@@ -83,6 +84,10 @@ public class SpecificationCustom {
     public static Specification<? extends BaseEntity> searchOnStatus(Set<Status> statuses) {
         return CollectionUtils.isNotEmpty(statuses)?
                 (root, query, builder) -> root.get("status").in(statuses):null;
+    }
+    public static Specification<? extends BaseEntity> searchOnUnitStatus(Set<UnitStatus> statuses) {
+        return CollectionUtils.isNotEmpty(statuses)?
+                (root, query, builder) -> root.get("unitStatus").in(statuses):null;
     }
     public static Specification<? extends BaseEntity> searchOnTaskType(Set<Type> types) {
         return CollectionUtils.isNotEmpty(types)?
