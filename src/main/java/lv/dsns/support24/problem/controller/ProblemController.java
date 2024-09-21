@@ -1,11 +1,8 @@
-package lv.dsns.support24.problems.controller;
+package lv.dsns.support24.problem.controller;
 
-import lv.dsns.support24.problems.controller.dto.request.ProblemRequestDTO;
-import lv.dsns.support24.problems.controller.dto.response.ProblemResponseDTO;
-import lv.dsns.support24.problems.service.ProblemService;
-import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
-import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
-import org.springframework.data.domain.Sort;
+import lv.dsns.support24.problem.controller.dto.request.ProblemRequestDTO;
+import lv.dsns.support24.problem.controller.dto.response.ProblemResponseDTO;
+import lv.dsns.support24.problem.service.ProblemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

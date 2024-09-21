@@ -3,6 +3,10 @@ package lv.dsns.support24.unit.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.device.repository.entity.Device;
+import lv.dsns.support24.task.controller.dto.enums.Priority;
+import lv.dsns.support24.task.controller.dto.enums.Status;
+import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
@@ -46,8 +50,16 @@ public class Unit extends BaseEntity {
     @OneToMany(mappedBy = "userUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<SystemUsers> unitUser;
 
+    @OneToMany(mappedBy = "deviceUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Device> unitDevice;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit parentUnit;
-
+    @PrePersist
+    protected void onCreate() {
+        if (unitStatus == null) {
+            unitStatus = UnitStatus.ACTIVE;
+        }
+    }
 }

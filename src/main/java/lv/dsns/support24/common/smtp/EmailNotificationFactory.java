@@ -2,8 +2,8 @@ package lv.dsns.support24.common.smtp;
 
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.problems.repository.ProblemRepository;
-import lv.dsns.support24.problems.repository.entity.Problems;
+import lv.dsns.support24.problem.repository.ProblemRepository;
+import lv.dsns.support24.problem.repository.entity.Problem;
 import lv.dsns.support24.task.repository.TaskRepository;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.repository.UnitRepository;
@@ -39,7 +39,7 @@ public class EmailNotificationFactory {
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
         Unit unitById = unitRepository.findById(userById.getUnitId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
-        Problems problemById = problemRepository.findById(task.getProblemTypeId())
+        Problem problemById = problemRepository.findById(task.getProblemTypeId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
 
         List<String> optionalEmails = usersRepository.findEmailsByRole(Role.ROLE_SUPER_ADMIN);
@@ -76,7 +76,7 @@ public class EmailNotificationFactory {
         Unit unitCreatedBy = unitRepository.findById(createdBy.getUnitId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
 
-        Problems problem = problemRepository.findById(task.getProblemTypeId())
+        Problem problem = problemRepository.findById(task.getProblemTypeId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
 
         Map<String, Object> properties = new HashMap<>();

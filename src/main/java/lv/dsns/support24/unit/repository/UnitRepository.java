@@ -27,5 +27,4 @@ public interface UnitRepository extends JpaRepository<Unit,UUID>, JpaSpecificati
     ORDER BY unit_type;
     """, nativeQuery = true)
     List<Unit> findHierarchyByUnitId(UUID unitId);
-
 }

@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lv.dsns.support24.problems.controller.dto.request.ProblemRequestDTO;
-import lv.dsns.support24.problems.service.ProblemService;
-import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
+import lv.dsns.support24.problem.controller.dto.request.ProblemRequestDTO;
+import lv.dsns.support24.problem.service.ProblemService;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

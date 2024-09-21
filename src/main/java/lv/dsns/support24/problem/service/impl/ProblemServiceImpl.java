@@ -1,18 +1,14 @@
-package lv.dsns.support24.problems.service.impl;
+package lv.dsns.support24.problem.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.problems.controller.dto.request.ProblemRequestDTO;
-import lv.dsns.support24.problems.controller.dto.response.ProblemResponseDTO;
-import lv.dsns.support24.problems.mapper.ProblemMapper;
-import lv.dsns.support24.problems.repository.ProblemRepository;
-import lv.dsns.support24.problems.service.ProblemService;
-import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
-import lv.dsns.support24.unit.service.filter.UnitFilter;
-import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
-import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
+import lv.dsns.support24.problem.controller.dto.request.ProblemRequestDTO;
+import lv.dsns.support24.problem.controller.dto.response.ProblemResponseDTO;
+import lv.dsns.support24.problem.mapper.ProblemMapper;
+import lv.dsns.support24.problem.repository.ProblemRepository;
+import lv.dsns.support24.problem.service.ProblemService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
