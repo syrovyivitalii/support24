@@ -3,7 +3,9 @@ package lv.dsns.support24.device.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
+import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.repository.entity.Unit;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.JdbcType;
@@ -47,12 +49,22 @@ public class Device extends BaseEntity {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private DeviceStatus deviceStatus;
+
     @Column(name = "unit_id")
     private UUID unitId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit deviceUnit;
-
+    @PrePersist
+    protected void onCreate() {
+        if (deviceStatus == null) {
+            deviceStatus = DeviceStatus.ACTIVE;
+        }
+    }
 
 }

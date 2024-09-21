@@ -1,12 +1,14 @@
 package lv.dsns.support24.device.controller;
 
 import lv.dsns.support24.device.controller.dto.request.DeviceRequestDTO;
+import lv.dsns.support24.device.controller.dto.request.DeviceWriteOffRequestDTO;
 import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
 import lv.dsns.support24.device.service.DeviceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1")
@@ -27,5 +29,10 @@ public class DeviceController {
     public ResponseEntity<DeviceResponseDTO> save (@RequestBody DeviceRequestDTO requestDTO){
         var savedDevice = deviceService.save(requestDTO);
         return ResponseEntity.ok(savedDevice);
+    }
+    @PatchMapping("/private/devices/write-off/{id}")
+    public ResponseEntity<DeviceResponseDTO> writeOffDevice (@PathVariable UUID id, @RequestBody DeviceWriteOffRequestDTO requestDTO){
+        var writtenOffDevice = deviceService.writeOffDevice(id, requestDTO);
+        return ResponseEntity.ok(writtenOffDevice);
     }
 }

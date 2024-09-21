@@ -75,6 +75,12 @@ public enum ErrorCode {
             "Inventory number already exists",
             404
     ),
+    DEVICE_NOT_FOUND(
+            "404-009",
+            "Device not found",
+            404
+    ),
+
     //403
     FORBIDDEN(
             "403",

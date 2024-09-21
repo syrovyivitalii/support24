@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceResponseDTO {
+    private UUID id;
     private String deviceName;
     private DeviceType deviceType;
     private String inventoryNumber;
@@ -20,5 +22,6 @@ public class DeviceResponseDTO {
     private String ipAddress;
     private Integer productionYear;
     private String note;
+    private DeviceStatus deviceStatus;
     private UUID unitId;
 }
