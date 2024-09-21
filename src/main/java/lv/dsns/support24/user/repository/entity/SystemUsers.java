@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.task.repository.entity.Task;
-import lv.dsns.support24.unit.repository.entity.Units;
+import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.hibernate.annotations.JdbcType;
@@ -64,7 +64,7 @@ public class SystemUsers extends BaseEntity implements UserDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
-    private Units userUnit;
+    private Unit userUnit;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

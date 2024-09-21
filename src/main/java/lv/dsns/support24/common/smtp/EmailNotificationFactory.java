@@ -4,11 +4,10 @@ import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.problems.repository.ProblemRepository;
 import lv.dsns.support24.problems.repository.entity.Problems;
-import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.repository.TaskRepository;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.repository.UnitRepository;
-import lv.dsns.support24.unit.repository.entity.Units;
+import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
@@ -38,7 +37,7 @@ public class EmailNotificationFactory {
     public void sendTaskCreatedNotification(Task task) {
         SystemUsers userById = usersRepository.findById(task.getCreatedById())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Assigned by user not found"));
-        Units unitById = unitRepository.findById(userById.getUnitId())
+        Unit unitById = unitRepository.findById(userById.getUnitId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
         Problems problemById = problemRepository.findById(task.getProblemTypeId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.PROBLEM_NOT_FOUND));
@@ -74,7 +73,7 @@ public class EmailNotificationFactory {
         SystemUsers createdBy = usersRepository.findById(task.getCreatedById())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND, "Created by user not found"));
 
-        Units unitCreatedBy = unitRepository.findById(createdBy.getUnitId())
+        Unit unitCreatedBy = unitRepository.findById(createdBy.getUnitId())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
 
         Problems problem = problemRepository.findById(task.getProblemTypeId())
