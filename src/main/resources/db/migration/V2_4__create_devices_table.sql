@@ -4,7 +4,7 @@ CREATE TABLE tbl_devices (
     id UUID PRIMARY KEY,
     device_name VARCHAR NOT NULL,
     device_type device_type NOT NULL DEFAULT 'Компютерний',
-    inventory_number VARCHAR NOT NULL,
+    inventory_number VARCHAR NOT NULL UNIQUE,
     decree_number VARCHAR,
     mac_adress VARCHAR,
     ip_adress VARCHAR,

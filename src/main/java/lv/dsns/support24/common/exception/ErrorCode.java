@@ -70,6 +70,11 @@ public enum ErrorCode {
             "User not active",
             404
     ),
+    INVENTORY_NUMBER_ALREADY_EXISTS(
+            "404-008",
+            "Inventory number already exists",
+            404
+    ),
     //403
     FORBIDDEN(
             "403",
