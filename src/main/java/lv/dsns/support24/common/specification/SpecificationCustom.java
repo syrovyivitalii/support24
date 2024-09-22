@@ -2,6 +2,8 @@ package lv.dsns.support24.common.specification;
 
 import jakarta.persistence.criteria.Path;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
+import lv.dsns.support24.device.controller.dto.enums.DeviceType;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.enums.Type;
@@ -80,6 +82,21 @@ public class SpecificationCustom {
             }
         };
     }
+    public static Specification<? extends BaseEntity> searchByDeviceProductionYearRange(String field, Integer startYear, Integer endYear) {
+        return (root, query, builder) -> {
+            if (startYear == null && endYear == null) {
+                return builder.conjunction();
+            }
+            Path<Integer> yearPath = root.get(field);
+            if (startYear != null && endYear != null) {
+                return builder.between(yearPath, startYear, endYear);
+            } else if (startYear != null) {
+                return builder.greaterThanOrEqualTo(yearPath, startYear);
+            } else {
+                return builder.lessThanOrEqualTo(yearPath, endYear);
+            }
+        };
+    }
 
     public static Specification<? extends BaseEntity> searchOnStatus(Set<Status> statuses) {
         return CollectionUtils.isNotEmpty(statuses)?
@@ -89,9 +106,17 @@ public class SpecificationCustom {
         return CollectionUtils.isNotEmpty(statuses)?
                 (root, query, builder) -> root.get("unitStatus").in(statuses):null;
     }
+    public static Specification<? extends BaseEntity> searchOnDeviceStatus(Set<DeviceStatus> statuses) {
+        return CollectionUtils.isNotEmpty(statuses)?
+                (root, query, builder) -> root.get("deviceStatus").in(statuses):null;
+    }
     public static Specification<? extends BaseEntity> searchOnTaskType(Set<Type> types) {
         return CollectionUtils.isNotEmpty(types)?
                 (root, query, builder) -> root.get("taskType").in(types):null;
+    }
+    public static Specification<? extends BaseEntity> searchOnDeviceType(Set<DeviceType> types) {
+        return CollectionUtils.isNotEmpty(types)?
+                (root, query, builder) -> root.get("deviceType").in(types):null;
     }
     public static Specification<? extends BaseEntity> searchOnPriority(Set<Priority> priorities) {
         return CollectionUtils.isNotEmpty(priorities)?

@@ -4,6 +4,8 @@ import lv.dsns.support24.device.controller.dto.request.DeviceRequestDTO;
 import lv.dsns.support24.device.controller.dto.request.DeviceWriteOffRequestDTO;
 import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
 import lv.dsns.support24.device.service.DeviceService;
+import lv.dsns.support24.device.service.filter.DeviceFilter;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +22,8 @@ public class DeviceController {
     }
 
     @GetMapping("/private/devices")
-    public ResponseEntity<List<DeviceResponseDTO>> getAllDevices (){
-        var allDevices = deviceService.findAllDevices();
+    public ResponseEntity<List<DeviceResponseDTO>> getAllDevices (@ParameterObject DeviceFilter deviceFilter){
+        var allDevices = deviceService.findAllDevices(deviceFilter);
         return ResponseEntity.ok(allDevices);
     }
 

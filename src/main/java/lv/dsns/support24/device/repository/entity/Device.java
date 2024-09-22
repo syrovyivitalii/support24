@@ -5,7 +5,6 @@ import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
-import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.repository.entity.Unit;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.JdbcType;
