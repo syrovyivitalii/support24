@@ -63,7 +63,16 @@ public class DeviceServiceImpl implements DeviceService {
         var deviceById = deviceRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.DEVICE_NOT_FOUND));
 
-        deviceMapper.patchMerge(requestDTO, deviceById);
+        deviceMapper.patchMergeWriteOff(requestDTO, deviceById);
+
+        return deviceMapper.mapToDTO(deviceById);
+    }
+    @Override
+    public DeviceResponseDTO patchDevice(UUID id, DeviceRequestDTO requestDTO){
+        var deviceById = deviceRepository.findById(id)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.DEVICE_NOT_FOUND));
+
+        deviceMapper.patchMerge(requestDTO,deviceById);
 
         return deviceMapper.mapToDTO(deviceById);
     }

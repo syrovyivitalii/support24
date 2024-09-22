@@ -19,6 +19,10 @@ public interface DeviceMapper {
     @Mapping(target = "inventoryNumber", expression = "java(null)")
     @Mapping(target = "deviceStatus", expression = "java(DeviceStatus.WRITTENOFF)")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void patchMerge(DeviceWriteOffRequestDTO deviceRequestDTO, @MappingTarget Device device);
+    void patchMergeWriteOff(DeviceWriteOffRequestDTO deviceRequestDTO, @MappingTarget Device device);
+
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void patchMerge(DeviceRequestDTO requestDTO, @MappingTarget Device device);
 
 }

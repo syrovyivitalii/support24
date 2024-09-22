@@ -4,16 +4,13 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.device.controller.dto.request.DeviceRequestDTO;
 import lv.dsns.support24.device.controller.dto.request.DeviceWriteOffRequestDTO;
 import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
-import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.device.service.DeviceService;
 import lv.dsns.support24.device.service.filter.DeviceFilter;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -40,5 +37,10 @@ public class DeviceController {
     public ResponseEntity<DeviceResponseDTO> writeOffDevice (@PathVariable UUID id, @RequestBody DeviceWriteOffRequestDTO requestDTO){
         var writtenOffDevice = deviceService.writeOffDevice(id, requestDTO);
         return ResponseEntity.ok(writtenOffDevice);
+    }
+    @PatchMapping("/private/devices/{id}")
+    public ResponseEntity<DeviceResponseDTO> patchDevice (@PathVariable UUID id, @RequestBody DeviceRequestDTO requestDTO){
+        var patchedDevice = deviceService.patchDevice(id, requestDTO);
+        return ResponseEntity.ok(patchedDevice);
     }
 }
