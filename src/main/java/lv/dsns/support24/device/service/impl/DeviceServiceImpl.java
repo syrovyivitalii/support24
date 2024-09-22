@@ -2,9 +2,9 @@ package lv.dsns.support24.device.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.device.controller.dto.enums.DeviceType;
 import lv.dsns.support24.device.controller.dto.request.DeviceRequestDTO;
 import lv.dsns.support24.device.controller.dto.request.DeviceWriteOffRequestDTO;
 import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
@@ -13,8 +13,9 @@ import lv.dsns.support24.device.repository.DeviceRepository;
 import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.device.service.DeviceService;
 import lv.dsns.support24.device.service.filter.DeviceFilter;
-import lv.dsns.support24.task.repository.entity.Task;
-import lv.dsns.support24.task.service.filter.TaskFilter;
+import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static lv.dsns.support24.common.specification.SpecificationCustom.*;
-import static lv.dsns.support24.common.specification.SpecificationCustom.searchByDateRange;
 
 @Slf4j
 @Service
@@ -34,9 +34,18 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceMapper deviceMapper;
 
     @Override
-    public List<DeviceResponseDTO> findAllDevices(DeviceFilter deviceFilter){
-        var allDevices = deviceRepository.findAll(getSearchSpecification(deviceFilter));
-        return allDevices.stream().map(deviceMapper::mapToDTO).collect(Collectors.toList());
+    public PageResponse<DeviceResponseDTO> findAllDevices(DeviceFilter deviceFilter, Pageable pageable){
+        Page<Device> allDevices = deviceRepository.findAll(getSearchSpecification(deviceFilter), pageable);
+
+        List<DeviceResponseDTO> deviceResponseDTOS = allDevices.stream()
+                .map(deviceMapper::mapToDTO)
+                .collect(Collectors.toList());
+        return PageResponse.<DeviceResponseDTO>builder()
+                .totalPages((long) allDevices.getTotalPages())
+                .pageSize((long) pageable.getPageSize())
+                .totalElements(allDevices.getTotalElements())
+                .content(deviceResponseDTOS)
+                .build();
     }
     @Override
     @Transactional

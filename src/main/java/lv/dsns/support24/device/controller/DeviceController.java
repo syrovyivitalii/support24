@@ -1,11 +1,15 @@
 package lv.dsns.support24.device.controller;
 
+import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.device.controller.dto.request.DeviceRequestDTO;
 import lv.dsns.support24.device.controller.dto.request.DeviceWriteOffRequestDTO;
 import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
+import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.device.service.DeviceService;
 import lv.dsns.support24.device.service.filter.DeviceFilter;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +26,9 @@ public class DeviceController {
     }
 
     @GetMapping("/private/devices")
-    public ResponseEntity<List<DeviceResponseDTO>> getAllDevices (@ParameterObject DeviceFilter deviceFilter){
-        var allDevices = deviceService.findAllDevices(deviceFilter);
-        return ResponseEntity.ok(allDevices);
+    public ResponseEntity<PageResponse<DeviceResponseDTO>> getAllDevices (@ParameterObject DeviceFilter deviceFilter, @ParameterObject Pageable pageable){
+       PageResponse<DeviceResponseDTO> responseDTOS = deviceService.findAllDevices(deviceFilter,pageable);
+        return ResponseEntity.ok(responseDTOS);
     }
 
     @PostMapping("/private/devices")
