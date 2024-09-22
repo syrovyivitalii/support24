@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +59,7 @@ public class UserController {
         return ResponseEntity.ok(patchedTask);
     }
     @DeleteMapping("/private/users/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,12 +44,14 @@ public class UnitController {
     }
 
     @PatchMapping("/public/units/{id}")
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
     public ResponseEntity<UnitResponseDTO> patch(@PathVariable UUID id, @RequestBody UnitRequestDTO requestDTO){
         var patchedTask = unitService.patchUnit(id,requestDTO);
         return ResponseEntity.ok(patchedTask);
     }
 
     @DeleteMapping("/public/units/{id}")
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         unitService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
