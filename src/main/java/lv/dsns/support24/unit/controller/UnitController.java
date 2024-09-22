@@ -1,5 +1,6 @@
 package lv.dsns.support24.unit.controller;
 
+import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.service.filter.TaskFilter;
@@ -8,6 +9,7 @@ import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.unit.service.UnitService;
 import lv.dsns.support24.unit.service.filter.UnitFilter;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
@@ -27,10 +29,10 @@ public class UnitController {
         this.unitService = unitService;
     }
 
-    @GetMapping("/public/units")
-    public ResponseEntity<List<UnitResponseDTO>> getAllUnits(@ParameterObject UnitFilter unitFilter){
-        var allUnits = unitService.findAll(unitFilter);
-        return ResponseEntity.ok(allUnits);
+    @GetMapping("/public/units/pageable")
+    public ResponseEntity<PageResponse<UnitResponseDTO>> getAllUnits(@ParameterObject UnitFilter unitFilter, @SortDefault(sort = "unitType", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
+        PageResponse <UnitResponseDTO> responseDTOs = unitService.findAll(unitFilter, pageable);
+        return ResponseEntity.ok(responseDTOs);
     }
 
     @GetMapping("/public/units/child-units/{id}")

@@ -25,7 +25,7 @@ public class DeviceController {
         this.deviceService = deviceService;
     }
 
-    @GetMapping("/private/devices")
+    @GetMapping("/private/devices/pageable")
     public ResponseEntity<PageResponse<DeviceResponseDTO>> getAllDevices (@ParameterObject DeviceFilter deviceFilter, @ParameterObject Pageable pageable){
        PageResponse<DeviceResponseDTO> responseDTOS = deviceService.findAllDevices(deviceFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
