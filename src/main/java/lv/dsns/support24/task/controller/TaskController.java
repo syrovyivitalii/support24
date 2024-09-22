@@ -11,8 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,8 +41,8 @@ public class TaskController {
     }
 
     @GetMapping("/private/tasks/pageable")
-    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
-        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(taskFilter,pageable);
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject Principal principal, @ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
+        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(principal,taskFilter,pageable);
         return ResponseEntity.ok(responseDTOS);
     }
     @GetMapping("/private/tasks/get-subtasks/{id}")
@@ -49,13 +51,13 @@ public class TaskController {
         return ResponseEntity.ok(allSubtasks);
     }
     @PostMapping("/public/tasks")
-    public ResponseEntity<TaskResponseDTO> save (@RequestBody TaskRequestDTO tasksDTO){
-        var saveTask = tasksService.save(tasksDTO);
+    public ResponseEntity<TaskResponseDTO> save (@ParameterObject Principal principal, @RequestBody TaskRequestDTO tasksDTO){
+        var saveTask = tasksService.save(principal,tasksDTO);
         return ResponseEntity.ok(saveTask);
     }
     @PatchMapping("/private/tasks/{id}")
-    public ResponseEntity<TaskResponseDTO> patch(@PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
-        var patchedTask = tasksService.patch(id,requestDTO);
+    public ResponseEntity<TaskResponseDTO> patch(@ParameterObject Principal principal, @PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
+        var patchedTask = tasksService.patch(principal,id,requestDTO);
 
         return ResponseEntity.ok(patchedTask);
     }
