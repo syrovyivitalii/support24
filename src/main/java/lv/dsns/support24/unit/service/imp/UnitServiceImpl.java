@@ -70,10 +70,27 @@ public class UnitServiceImpl implements UnitService {
         return allTasks.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
-    public List<UnitResponseDTO> findAllChildUnits(UUID id){
-        List<Unit> allChild = unitRepository.findHierarchyByUnitId(id);
-        return allChild.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
+    public PageResponse<UnitResponseDTO> findAllChildUnits(UUID id, Pageable pageable) {
+        long totalElements = unitRepository.countChildUnitsByUnitId(id);
+
+        int limit = pageable.getPageSize();
+        int offset = (int) pageable.getOffset();
+
+        List<Unit> allChild = unitRepository.findPaginatedChildUnitsByUnitId(id, limit, offset);
+
+        List<UnitResponseDTO> unitResponseDto = allChild.stream()
+                .map(unitMapper::mapToDTO)
+                .collect(Collectors.toList());
+
+        return PageResponse.<UnitResponseDTO>builder()
+                .totalPages((long) Math.ceil((double) totalElements / limit))
+                .pageSize((long) limit)
+                .totalElements(totalElements)
+                .content(unitResponseDto)
+                .build();
     }
+
+
     @Override
     @Transactional
     public UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO){

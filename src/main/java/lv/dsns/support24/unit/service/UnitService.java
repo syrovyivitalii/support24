@@ -4,6 +4,7 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.unit.service.filter.UnitFilter;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UnitService {
     UnitResponseDTO save (UnitRequestDTO unitRequestDTO);
     PageResponse<UnitResponseDTO> findAllPageable(UnitFilter unitFilter, Pageable pageable);
     List<UnitResponseDTO> findAll();
-    List<UnitResponseDTO> findAllChildUnits(UUID id);
+    PageResponse<UnitResponseDTO> findAllChildUnits(UUID id, Pageable pageable);
     UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO);
     void delete(UUID id);
     boolean existUnitByUnitName(String unitName);

@@ -44,9 +44,9 @@ public class UnitController {
     }
 
     @GetMapping("/private/units/child-units/{id}")
-    public ResponseEntity<List<UnitResponseDTO>> getChildUnits(@PathVariable UUID id){
-        var allChildUnits = unitService.findAllChildUnits(id);
-        return ResponseEntity.ok(allChildUnits);
+    public ResponseEntity<PageResponse<UnitResponseDTO>> getChildUnits(@PathVariable UUID id, @ParameterObject Pageable pageable){
+        PageResponse<UnitResponseDTO> unitResponseDto = unitService.findAllChildUnits(id, pageable);
+        return ResponseEntity.ok(unitResponseDto);
     }
 
     @PatchMapping("/private/units/{id}")

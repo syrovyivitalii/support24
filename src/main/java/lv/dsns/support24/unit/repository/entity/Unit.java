@@ -56,6 +56,9 @@ public class Unit extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit parentUnit;
+
+    @Transient
+    private Long totalCount;
     @PrePersist
     protected void onCreate() {
         if (unitStatus == null) {
