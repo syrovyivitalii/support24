@@ -14,7 +14,7 @@ public interface UnitService {
     UnitResponseDTO save (UnitRequestDTO unitRequestDTO);
     PageResponse<UnitResponseDTO> findAllPageable(UnitFilter unitFilter, Pageable pageable);
     List<UnitResponseDTO> findAll();
-    PageResponse<UnitResponseDTO> findAllChildUnits(UUID id, Pageable pageable);
+    List<UnitResponseDTO> findAllChildUnits(UUID id);
     UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO);
     void delete(UUID id);
     boolean existUnitByUnitName(String unitName);

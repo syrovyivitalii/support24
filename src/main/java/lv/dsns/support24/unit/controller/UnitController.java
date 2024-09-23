@@ -33,7 +33,12 @@ public class UnitController {
     }
 
     @GetMapping("/private/units/pageable")
-    public ResponseEntity<PageResponse<UnitResponseDTO>> getAllUnitsPageable(@ParameterObject UnitFilter unitFilter, @SortDefault(sort = "unitType", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
+    public ResponseEntity<PageResponse<UnitResponseDTO>> getAllUnitsPageable(@ParameterObject UnitFilter unitFilter,
+                                                                             @SortDefault.SortDefaults({
+                                                                                     @SortDefault(sort = "unitType", direction = Sort.Direction.ASC),
+                                                                                     @SortDefault(sort = "unitName", direction = Sort.Direction.ASC)
+                                                                             })
+                                                                             @ParameterObject Pageable pageable){
         PageResponse <UnitResponseDTO> responseDTOs = unitService.findAllPageable(unitFilter, pageable);
         return ResponseEntity.ok(responseDTOs);
     }
@@ -44,9 +49,9 @@ public class UnitController {
     }
 
     @GetMapping("/private/units/child-units/{id}")
-    public ResponseEntity<PageResponse<UnitResponseDTO>> getChildUnits(@PathVariable UUID id, @ParameterObject Pageable pageable){
-        PageResponse<UnitResponseDTO> unitResponseDto = unitService.findAllChildUnits(id, pageable);
-        return ResponseEntity.ok(unitResponseDto);
+    public ResponseEntity<List<UnitResponseDTO>> getChildUnits(@PathVariable UUID id){
+        var allChildUnits = unitService.findAllChildUnits(id);
+        return ResponseEntity.ok(allChildUnits);
     }
 
     @PatchMapping("/private/units/{id}")
