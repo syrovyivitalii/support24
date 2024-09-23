@@ -32,7 +32,7 @@ public class UnitController {
         this.unitService = unitService;
     }
 
-    @GetMapping("/public/units/pageable")
+    @GetMapping("/private/units/pageable")
     public ResponseEntity<PageResponse<UnitResponseDTO>> getAllUnitsPageable(@ParameterObject UnitFilter unitFilter, @SortDefault(sort = "unitType", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
         PageResponse <UnitResponseDTO> responseDTOs = unitService.findAllPageable(unitFilter, pageable);
         return ResponseEntity.ok(responseDTOs);
@@ -43,13 +43,13 @@ public class UnitController {
         return ResponseEntity.ok(allUnits);
     }
 
-    @GetMapping("/public/units/child-units/{id}")
+    @GetMapping("/private/units/child-units/{id}")
     public ResponseEntity<List<UnitResponseDTO>> getChildUnits(@PathVariable UUID id){
         var allChildUnits = unitService.findAllChildUnits(id);
         return ResponseEntity.ok(allChildUnits);
     }
 
-    @PatchMapping("/public/units/{id}")
+    @PatchMapping("/private/units/{id}")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
     @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<UnitResponseDTO> patch(@PathVariable UUID id, @RequestBody UnitRequestDTO requestDTO){
@@ -57,7 +57,7 @@ public class UnitController {
         return ResponseEntity.ok(patchedTask);
     }
 
-    @DeleteMapping("/public/units/{id}")
+    @DeleteMapping("/private/units/{id}")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
     @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
