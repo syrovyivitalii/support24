@@ -1,5 +1,6 @@
 package lv.dsns.support24.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
@@ -60,6 +61,7 @@ public class UserController {
     }
     @DeleteMapping("/private/users/delete/{id}")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+    @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

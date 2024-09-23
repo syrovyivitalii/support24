@@ -1,5 +1,6 @@
 package lv.dsns.support24.problem.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lv.dsns.support24.problem.controller.dto.request.ProblemRequestDTO;
 import lv.dsns.support24.problem.controller.dto.response.ProblemResponseDTO;
 import lv.dsns.support24.problem.service.ProblemService;
@@ -28,6 +29,7 @@ public class ProblemController {
     }
     @DeleteMapping("/private/common-problems/delete/{id}")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+    @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         problemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

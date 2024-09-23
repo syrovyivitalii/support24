@@ -1,5 +1,6 @@
 package lv.dsns.support24.unit.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
@@ -32,9 +33,14 @@ public class UnitController {
     }
 
     @GetMapping("/public/units/pageable")
-    public ResponseEntity<PageResponse<UnitResponseDTO>> getAllUnits(@ParameterObject UnitFilter unitFilter, @SortDefault(sort = "unitType", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
-        PageResponse <UnitResponseDTO> responseDTOs = unitService.findAll(unitFilter, pageable);
+    public ResponseEntity<PageResponse<UnitResponseDTO>> getAllUnitsPageable(@ParameterObject UnitFilter unitFilter, @SortDefault(sort = "unitType", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
+        PageResponse <UnitResponseDTO> responseDTOs = unitService.findAllPageable(unitFilter, pageable);
         return ResponseEntity.ok(responseDTOs);
+    }
+    @GetMapping("/public/units")
+    public ResponseEntity<List<UnitResponseDTO>> getAllUnits(){
+        var allUnits = unitService.findAll();
+        return ResponseEntity.ok(allUnits);
     }
 
     @GetMapping("/public/units/child-units/{id}")
@@ -45,6 +51,7 @@ public class UnitController {
 
     @PatchMapping("/public/units/{id}")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+    @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<UnitResponseDTO> patch(@PathVariable UUID id, @RequestBody UnitRequestDTO requestDTO){
         var patchedTask = unitService.patchUnit(id,requestDTO);
         return ResponseEntity.ok(patchedTask);
@@ -52,6 +59,7 @@ public class UnitController {
 
     @DeleteMapping("/public/units/{id}")
     @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+    @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         unitService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -51,7 +51,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public PageResponse<UnitResponseDTO> findAll(UnitFilter unitFilter, Pageable pageable){
+    public PageResponse<UnitResponseDTO> findAllPageable(UnitFilter unitFilter, Pageable pageable){
         Page<Unit> allUnits = unitRepository.findAll(getSearchSpecification(unitFilter), pageable);
 
         List<UnitResponseDTO> unitResponseDto = allUnits.stream()
@@ -63,6 +63,11 @@ public class UnitServiceImpl implements UnitService {
                 .totalElements(allUnits.getTotalElements())
                 .content(unitResponseDto)
                 .build();
+    }
+    @Override
+    public List<UnitResponseDTO> findAll(){
+        var allTasks = unitRepository.findAll();
+        return allTasks.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
     public List<UnitResponseDTO> findAllChildUnits(UUID id){

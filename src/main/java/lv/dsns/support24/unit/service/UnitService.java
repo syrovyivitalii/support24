@@ -11,7 +11,8 @@ import java.util.UUID;
 
 public interface UnitService {
     UnitResponseDTO save (UnitRequestDTO unitRequestDTO);
-    PageResponse<UnitResponseDTO> findAll(UnitFilter unitFilter, Pageable pageable);
+    PageResponse<UnitResponseDTO> findAllPageable(UnitFilter unitFilter, Pageable pageable);
+    List<UnitResponseDTO> findAll();
     List<UnitResponseDTO> findAllChildUnits(UUID id);
     UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO);
     void delete(UUID id);
