@@ -116,7 +116,8 @@ public class UnitServiceImpl implements UnitService {
     private Specification<Unit> getSearchSpecification(UnitFilter unitFilter) {
         return Specification.where((Specification<Unit>) searchOnUnitType(unitFilter.getUnitType()))
                 .and((Specification<Unit>) searchLikeString("unitName", unitFilter.getUnitName()))
-                .and((Specification<Unit>) searchOnUnitStatus(unitFilter.getStatuses()));
+                .and((Specification<Unit>) searchOnUnitStatus(unitFilter.getStatuses()))
+                .and((Specification<Unit>) searchFieldInCollectionOfIds("id", unitFilter.getUnitId()));
     }
 
 }

@@ -9,8 +9,10 @@ import lv.dsns.support24.common.util.filter.SearchFilter;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
+import lv.dsns.support24.unit.repository.entity.Unit;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -23,4 +25,5 @@ public class UnitFilter extends SearchFilter {
     Set<UnitType> unitType;
     String unitName;
     Set<UnitStatus> statuses;
+    Set<UUID> unitId;
 }
