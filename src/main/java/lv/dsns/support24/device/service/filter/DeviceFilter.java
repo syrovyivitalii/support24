@@ -26,6 +26,7 @@ public class DeviceFilter extends SearchFilter {
     String decreeNumber;
     Set<DeviceStatus> deviceStatuses;
     Set<UUID> unitIds;
+    Set<UUID> deviceIds;
     Integer startYear;
     Integer endYear;
 }

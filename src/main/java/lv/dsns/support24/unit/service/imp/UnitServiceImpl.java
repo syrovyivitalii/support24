@@ -26,6 +26,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -73,7 +74,11 @@ public class UnitServiceImpl implements UnitService {
     public List<UnitResponseDTO> findAllChildUnits(UUID id){
         var allChild = unitRepository.findHierarchyByUnitId(id);
 
-        return allChild.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
+        return allChild.stream()
+                .map(unitMapper::mapToDTO)
+                .sorted(Comparator.comparing(UnitResponseDTO::getUnitType)
+                        .thenComparing(UnitResponseDTO::getUnitName))
+                .collect(Collectors.toList());
     }
 
 
