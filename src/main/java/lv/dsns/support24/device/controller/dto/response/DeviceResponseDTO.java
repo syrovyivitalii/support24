@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
+import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
+import lv.dsns.support24.unit.repository.entity.Unit;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,6 +27,7 @@ public class DeviceResponseDTO {
     private String note;
     private DeviceStatus deviceStatus;
     private UUID unitId;
+    private UnitResponseDTO deviceUnit;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 }
