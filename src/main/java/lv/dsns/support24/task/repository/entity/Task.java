@@ -3,7 +3,7 @@ package lv.dsns.support24.task.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
-import lv.dsns.support24.problems.repository.entity.Problems;
+import lv.dsns.support24.problem.repository.entity.Problem;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.enums.Type;
@@ -80,7 +80,7 @@ public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_type_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
-    private Problems taskProblem;
+    private Problem taskProblem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)

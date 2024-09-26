@@ -1,4 +1,4 @@
-package lv.dsns.support24.problems.controller.dto.request;
+package lv.dsns.support24.problem.controller.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

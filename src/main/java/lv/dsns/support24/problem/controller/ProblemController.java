@@ -1,13 +1,12 @@
-package lv.dsns.support24.problems.controller;
+package lv.dsns.support24.problem.controller;
 
-import lv.dsns.support24.problems.controller.dto.request.ProblemRequestDTO;
-import lv.dsns.support24.problems.controller.dto.response.ProblemResponseDTO;
-import lv.dsns.support24.problems.service.ProblemService;
-import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
-import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
-import org.springframework.data.domain.Sort;
+import io.swagger.v3.oas.annotations.Operation;
+import lv.dsns.support24.problem.controller.dto.request.ProblemRequestDTO;
+import lv.dsns.support24.problem.controller.dto.response.ProblemResponseDTO;
+import lv.dsns.support24.problem.service.ProblemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +28,8 @@ public class ProblemController {
         return ResponseEntity.ok(allProblems);
     }
     @DeleteMapping("/private/common-problems/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+    @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
         problemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

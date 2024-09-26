@@ -121,18 +121,4 @@ public class UserServiceImpl implements UserService {
                 .and((Specification<SystemUsers>) searchOnUserStatus(userFilter.getStatuses()))
                 .and((Specification<SystemUsers>) searchLikeString("name", userFilter.getName()));
     }
-
-    public String getAuthenticatedUserEmail(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-        return email;
-    }
-    public Collection<? extends GrantedAuthority> getAuthenticatedUserAuthority(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-        return userDetails.getAuthorities();
-    }
-
 }
