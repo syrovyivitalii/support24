@@ -48,6 +48,14 @@ public class Device extends BaseEntity {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "user_position")
+    private String userPosition;
+
+    @Column(name = "specifications")
+    private String specifications;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)

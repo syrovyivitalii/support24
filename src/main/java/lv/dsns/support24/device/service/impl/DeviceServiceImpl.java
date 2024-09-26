@@ -68,6 +68,7 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceMapper.mapToDTO(deviceById);
     }
     @Override
+    @Transactional
     public DeviceResponseDTO patchDevice(UUID id, DeviceRequestDTO requestDTO){
         var deviceById = deviceRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.DEVICE_NOT_FOUND));

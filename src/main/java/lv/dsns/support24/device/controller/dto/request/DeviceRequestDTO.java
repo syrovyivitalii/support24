@@ -22,5 +22,8 @@ public class DeviceRequestDTO {
     private String ipAddress;
     private Integer productionYear;
     private String note;
+    private String userName;
+    private String userPosition;
+    private String specifications;
     private UUID unitId;
 }

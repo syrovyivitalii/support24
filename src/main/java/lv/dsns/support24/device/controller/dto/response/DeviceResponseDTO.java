@@ -24,6 +24,9 @@ public class DeviceResponseDTO {
     private String macAddress;
     private String ipAddress;
     private Integer productionYear;
+    private String userName;
+    private String userPosition;
+    private String specifications;
     private String note;
     private DeviceStatus deviceStatus;
     private UUID unitId;

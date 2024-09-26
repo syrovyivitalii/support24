@@ -6,10 +6,7 @@ import lv.dsns.support24.device.controller.dto.request.DeviceWriteOffRequestDTO;
 import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
 import lv.dsns.support24.device.repository.entity.Device;
 
-import lv.dsns.support24.task.controller.dto.enums.Status;
 import org.mapstruct.*;
-
-import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring", imports = {DeviceStatus.class})
 public interface DeviceMapper {
