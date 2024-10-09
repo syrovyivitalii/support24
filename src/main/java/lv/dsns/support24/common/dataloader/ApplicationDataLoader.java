@@ -32,6 +32,7 @@ public class ApplicationDataLoader {
     UserLoader userLoader;
     UnitLoader unitLoader;
     ProblemLoader problemLoader;
+    RankLoader rankLoader;
 
     static final String DATA_LOADER_CLASSPATH_LOCATION = "classpath:dataloader";
 
@@ -39,10 +40,12 @@ public class ApplicationDataLoader {
         String units = getDataLoaderJsonFullPath("units");
         String problems = getDataLoaderJsonFullPath("problems");
         String users = getDataLoaderJsonFullPath("users");
+        String ranks = getDataLoaderJsonFullPath("ranks");
 
         loadData(units, unitLoader);
         loadData(problems,problemLoader);
         loadData(users, userLoader);
+        loadData(ranks, rankLoader);
 
     }
 
