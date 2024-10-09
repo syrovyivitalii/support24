@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/private/nabat/group")
+@RequestMapping("/api/v1/private/nabat/groups")
 public class NabatGroupController {
     private final NabatGroupService nabatGroupService;
 
@@ -27,5 +28,11 @@ public class NabatGroupController {
     private ResponseEntity<List<NabatGroupResponseDTO>> findAll() {
         var allNabatGroups = nabatGroupService.findAll();
         return ResponseEntity.ok(allNabatGroups);
+    }
+
+    @GetMapping("/by-unit/{unitId}")
+    private ResponseEntity<List<NabatGroupResponseDTO>> findByUnitId(@PathVariable UUID unitId) {
+        var allByUnitId = nabatGroupService.findAllByUnitId(unitId);
+        return ResponseEntity.ok(allByUnitId);
     }
 }

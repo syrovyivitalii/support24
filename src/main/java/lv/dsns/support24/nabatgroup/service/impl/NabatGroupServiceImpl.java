@@ -13,6 +13,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,5 +34,11 @@ public class NabatGroupServiceImpl implements NabatGroupService {
     public List<NabatGroupResponseDTO> findAll() {
         var all = nabatGroupRepository.findAll(Sort.by(Sort.Direction.ASC, "groupName"));
         return all.stream().map(nabatGroupMapper ::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NabatGroupResponseDTO> findAllByUnitId(UUID unitId) {
+        var allByUnitId = nabatGroupRepository.findByUnitId(unitId);
+        return allByUnitId.stream().map(nabatGroupMapper ::mapToDTO).collect(Collectors.toList());
     }
 }
