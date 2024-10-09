@@ -1,4 +1,4 @@
-package lv.dsns.support24.problems.repository.entity;
+package lv.dsns.support24.problem.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class Problems extends BaseEntity {
+public class Problem extends BaseEntity {
 
     @Column(name = "problem",nullable = false)
     private String problem;

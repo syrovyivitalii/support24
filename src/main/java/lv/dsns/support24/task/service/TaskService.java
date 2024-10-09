@@ -7,17 +7,18 @@ import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.task.service.filter.TaskFilter;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
 public interface TaskService {
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
     List<TaskResponseDTO> findTaskById(UUID id);
-    PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable);
+    PageResponse<TaskResponseDTO> findAllPageable(Principal principal, TaskFilter taskFilter, Pageable pageable);
     List<TaskResponseDTO> findAllSubtasks(UUID parentId);
-    TaskResponseDTO save (TaskRequestDTO tasksDTO);
+    TaskResponseDTO save (Principal principal, TaskRequestDTO tasksDTO);
 
-    TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO);
+    TaskResponseDTO patch (Principal principal, UUID id, TaskRequestDTO requestDTO);
 
     TaskResponseDTO patchByUser (UUID id, PatchByUserTaskRequestDTO requestDTO);
 }

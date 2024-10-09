@@ -16,6 +16,7 @@ import lv.dsns.support24.task.repository.TaskRepository;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
+import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.UserService;
@@ -31,6 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -65,18 +67,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PageResponse<TaskResponseDTO> findAllPageable(TaskFilter taskFilter, Pageable pageable) {
-        //get email of user
-        String email = userService.getAuthenticatedUserEmail();
-
-        UUID userUUID = usersRepository.findIdByEmail(email)
+    public PageResponse<TaskResponseDTO> findAllPageable(Principal principal, TaskFilter taskFilter, Pageable pageable) {
+        var authUser = usersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-
-        Collection<? extends GrantedAuthority> authenticatedUserAuthority = userService.getAuthenticatedUserAuthority();
+        System.out.println(authUser.getRole());
 
         // Apply role-based filters
-        if (authenticatedUserAuthority.stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-            taskFilter.setAssignedForIds(Set.of(userUUID));
+        if (authUser.getRole().equals(Role.ROLE_ADMIN)){
+            taskFilter.setAssignedForIds(Collections.singleton(authUser.getId()));
         }
 
         // Retrieve tasks with pagination and filtering
@@ -98,7 +96,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskResponseDTO save(TaskRequestDTO taskDTO) {
+    public TaskResponseDTO save(Principal principal, TaskRequestDTO taskDTO) {
         // Convert DTO to entity and save
         var task = tasksMapper.mapToEntity(taskDTO);
         //set task type to SUBTASK if parent is set
@@ -112,7 +110,7 @@ public class TaskServiceImpl implements TaskService {
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
             task.setCreatedById(parentById.getCreatedById());
             task.setProblemTypeId(parentById.getProblemTypeId());
-            var byEmail = usersRepository.findByEmail(userService.getAuthenticatedUserEmail())
+            var byEmail = usersRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
             task.setAssignedById(byEmail.getId());
             //send email notification about assigned task
@@ -127,7 +125,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskResponseDTO patch (UUID id, TaskRequestDTO requestDTO){
+    public TaskResponseDTO patch (Principal principal, UUID id, TaskRequestDTO requestDTO){
 
         var taskById = taskRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
@@ -140,7 +138,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         if (requestDTO.getAssignedForId() != null){
-            var byEmail = usersRepository.findByEmail(userService.getAuthenticatedUserEmail())
+            var byEmail = usersRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
             taskById.setAssignedById(byEmail.getId());
 

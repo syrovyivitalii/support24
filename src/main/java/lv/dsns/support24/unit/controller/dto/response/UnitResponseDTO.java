@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
+import lv.dsns.support24.unit.repository.entity.Unit;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,6 +18,11 @@ public class UnitResponseDTO {
     private UUID id;
     private String unitName;
     private UnitType unitType;
+    private UUID parentUnitId;
+    private String location;
+    private String street;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private UnitStatus unitStatus;
+
 }

@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lv.dsns.support24.problems.controller.dto.response.ProblemResponseDTO;
+import lv.dsns.support24.problem.controller.dto.response.ProblemResponseDTO;
 import lv.dsns.support24.task.controller.dto.enums.Priority;
 import lv.dsns.support24.task.controller.dto.enums.Status;
 import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 @Data
