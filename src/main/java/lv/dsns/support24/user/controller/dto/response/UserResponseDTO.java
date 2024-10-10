@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.Shift;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 
 import java.time.LocalDateTime;
@@ -20,10 +21,13 @@ public class UserResponseDTO {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private String email;
+    private String phone;
     private Role role;
+    private Shift shift;
     private UserStatus status;
     private boolean verify;
     private String name;
-    private String jobTitle;
+    private UUID positionId;
+    private UUID rankId;
     private UnitResponseDTO userUnit;
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.Shift;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 
 import java.util.UUID;
@@ -15,12 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserRequestDTO {
     private String email;
+    private String phone;
     private Role role;
     private String password;
+    private Shift shift;
     private UserStatus status;
-    private boolean verify;
     private String name;
-    private String jobTitle;
+    private UUID positionId;
+    private boolean verify;
     private UUID unitId;
-
+    private UUID rankId;
 }

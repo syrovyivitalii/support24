@@ -5,6 +5,7 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
+import lv.dsns.support24.user.controller.dto.request.UserDefaultRequestDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.mapper.UserMapper;
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
-        if (systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) {
+        if ((systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) || (systemUsersRepository.existsByPhone(userRequestDTO.getPhone()))) {
             throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
@@ -79,12 +80,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO saveDefault(UserRequestDTO userRequestDTO) {
-        if (systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) {
+    public UserResponseDTO saveDefault(UserDefaultRequestDTO userDefaultRequestDTO) {
+        if (systemUsersRepository.existsByEmail(userDefaultRequestDTO.getEmail())) {
             throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
-        var user = userMapper.mapToDefaultEntity(userRequestDTO, DEFAULT_PASSWORD);
+        var user = userMapper.mapToDefaultEntity(userDefaultRequestDTO, DEFAULT_PASSWORD);
         var savedUser = systemUsersRepository.save(user);
 
         return userMapper.mapToDTO(savedUser);
