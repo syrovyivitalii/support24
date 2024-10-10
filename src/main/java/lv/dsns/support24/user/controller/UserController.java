@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
 import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
+import lv.dsns.support24.user.controller.dto.request.UserDefaultRequestDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.service.UserService;
@@ -49,8 +50,8 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
     @PostMapping("/public/users/default")
-    public ResponseEntity<UserResponseDTO> saveDefault (@RequestBody UserRequestDTO userRequestDTO){
-        var responseDto = userService.saveDefault(userRequestDTO);
+    public ResponseEntity<UserResponseDTO> saveDefault (@RequestBody UserDefaultRequestDTO userDefaultRequestDTO){
+        var responseDto = userService.saveDefault(userDefaultRequestDTO);
         return ResponseEntity.ok(responseDto);
     }
     @PatchMapping("/public/users/{id}")

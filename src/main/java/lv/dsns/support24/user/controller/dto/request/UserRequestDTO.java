@@ -22,9 +22,8 @@ public class UserRequestDTO {
     private Shift shift;
     private UserStatus status;
     private String name;
-    private String jobTitle;
+    private UUID positionId;
     private boolean verify;
     private UUID unitId;
     private UUID rankId;
-
 }

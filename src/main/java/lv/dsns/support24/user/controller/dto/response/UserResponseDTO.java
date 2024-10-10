@@ -27,7 +27,7 @@ public class UserResponseDTO {
     private UserStatus status;
     private boolean verify;
     private String name;
-    private String jobTitle;
+    private UUID positionId;
     private UUID rankId;
     private UnitResponseDTO userUnit;
 }

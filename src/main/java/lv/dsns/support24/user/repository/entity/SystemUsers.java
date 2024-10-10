@@ -56,8 +56,8 @@ public class SystemUsers extends BaseEntity implements UserDetails {
 
     private String name;
 
-    @Column(name = "job_title")
-    private String jobTitle;
+    @Column(name = "position_id")
+    private UUID positionId;
 
     @Column(name = "user_unit_id")
     private UUID unitId;

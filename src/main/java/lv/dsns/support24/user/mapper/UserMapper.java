@@ -1,5 +1,6 @@
 package lv.dsns.support24.user.mapper;
 
+import lv.dsns.support24.user.controller.dto.request.UserDefaultRequestDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
@@ -18,7 +19,7 @@ public abstract class UserMapper {
 
     @Mapping(target = "verify", constant = "false")
     @Mapping(target = "password", source = "defaultPassword", qualifiedByName = "generateDefaultPassword")
-    public abstract SystemUsers mapToDefaultEntity (UserRequestDTO userRequestDTO, String defaultPassword);
+    public abstract SystemUsers mapToDefaultEntity (UserDefaultRequestDTO userDefaultRequestDTO, String defaultPassword);
 
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
