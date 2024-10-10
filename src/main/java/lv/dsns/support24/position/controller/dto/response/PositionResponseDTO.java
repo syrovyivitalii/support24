@@ -15,6 +15,6 @@ import java.util.UUID;
 public class PositionResponseDTO {
     private UUID id;
     private String positionName;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 }
