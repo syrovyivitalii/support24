@@ -13,7 +13,7 @@ public abstract class UserMapper {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
+    @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
     public abstract SystemUsers mapToEntity (UserRequestDTO userRequestDTO);
     public abstract UserResponseDTO mapToDTO(SystemUsers systemUsers);
 
@@ -30,4 +30,8 @@ public abstract class UserMapper {
         return passwordEncoder.encode(defaultPassword);
     }
 
+    @Named("encodePassword")
+    String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
 }

@@ -21,4 +21,7 @@ public class Rank extends BaseEntity {
 
     @OneToMany(mappedBy = "userRank", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<SystemUsers> rankUser;
+
+    @Column(name = "sort_by")
+    private int sortBy;
 }

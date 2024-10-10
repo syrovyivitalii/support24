@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDTO save(UserRequestDTO userRequestDTO) {
-        if (systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) {
+        if ((systemUsersRepository.existsByEmail(userRequestDTO.getEmail())) || (systemUsersRepository.existsByPhone(userRequestDTO.getPhone()))) {
             throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
         }
 

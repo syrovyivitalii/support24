@@ -35,7 +35,7 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public List<RankResponseDTO> findAll() {
-        var allRanks = rankRepository.findAll(Sort.by(Sort.Direction.ASC, "rankName"));
+        var allRanks = rankRepository.findAll(Sort.by(Sort.Direction.ASC, "sortBy"));
         return allRanks.stream().map(rankMapper :: mapToDTO).collect(Collectors.toList());
     }
 
