@@ -80,6 +80,11 @@ public enum ErrorCode {
             "Device not found",
             404
     ),
+    GROUP_ALREADY_EXISTS(
+            "404-010",
+            "Nabat group for such unit already exists",
+            404
+    ),
 
     //403
     FORBIDDEN(

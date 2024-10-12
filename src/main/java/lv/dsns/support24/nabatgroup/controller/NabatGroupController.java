@@ -3,9 +3,11 @@ package lv.dsns.support24.nabatgroup.controller;
 import lv.dsns.support24.nabatgroup.controller.dto.request.NabatGroupRequestDTO;
 import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
 import lv.dsns.support24.nabatgroup.service.NabatGroupService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,8 +21,8 @@ public class NabatGroupController {
     }
 
     @PostMapping
-    private ResponseEntity<NabatGroupResponseDTO> save(@RequestBody NabatGroupRequestDTO nabatGroupRequestDTO) {
-        var savedNabatGroup = nabatGroupService.save(nabatGroupRequestDTO);
+    private ResponseEntity<NabatGroupResponseDTO> save(@ParameterObject Principal principal, @RequestBody NabatGroupRequestDTO nabatGroupRequestDTO) {
+        var savedNabatGroup = nabatGroupService.save(principal, nabatGroupRequestDTO);
         return ResponseEntity.ok(savedNabatGroup);
     }
 
