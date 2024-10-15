@@ -2,14 +2,18 @@ package lv.dsns.support24.nabat.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
+import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
 import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.nabat.mapper.NabatMapper;
 import lv.dsns.support24.nabat.repository.NabatRepository;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabat.service.NabatService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,10 +50,18 @@ public class NabatServiceImpl implements NabatService {
     }
 
     @Override
-    public List<NabatResponseDTO> getAllByNabatGroup(UUID nabatGroupId) {
-        var byNabatGroupId = nabatRepository.findByNabatGroupId(nabatGroupId);
+    public PageResponse<NabatResponseDTO> getAllByNabatGroup(UUID nabatGroupId, Pageable pageable) {
+        Page<Nabat> allNabats = nabatRepository.findByNabatGroupId(nabatGroupId, pageable);
 
-        return byNabatGroupId.stream().map(nabatMapper::mapToDTO).collect(Collectors.toList());
+        List<NabatResponseDTO> nabatResponseDTOS = allNabats.stream()
+                .map(nabatMapper::mapToDTO)
+                .collect(Collectors.toList());
+        return PageResponse.<NabatResponseDTO>builder()
+                .totalPages((long) allNabats.getTotalPages())
+                .pageSize((long) pageable.getPageSize())
+                .totalElements(allNabats.getTotalElements())
+                .content(nabatResponseDTOS)
+                .build();
     }
 
     @Override
