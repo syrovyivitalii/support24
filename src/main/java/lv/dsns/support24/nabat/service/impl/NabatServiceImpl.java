@@ -13,6 +13,7 @@ import lv.dsns.support24.nabat.service.NabatService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,5 +50,13 @@ public class NabatServiceImpl implements NabatService {
         var byNabatGroupId = nabatRepository.findByNabatGroupId(nabatGroupId);
 
         return byNabatGroupId.stream().map(nabatMapper::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(UUID nabatGroupId, UUID userId) {
+        var byUserIdAndNabatGroupId = nabatRepository.findByUserIdAndNabatGroupId(userId, nabatGroupId)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        nabatRepository.delete(byUserIdAndNabatGroupId);
     }
 }

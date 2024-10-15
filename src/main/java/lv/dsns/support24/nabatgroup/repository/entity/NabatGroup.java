@@ -28,6 +28,6 @@ public class NabatGroup extends BaseEntity {
     @JoinColumn(name = "unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit nabatGroupUnit;
 
-    @OneToMany(mappedBy = "nabatGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToMany(mappedBy = "nabatGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     private List<Nabat> groupNabats ;
 }

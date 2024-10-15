@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NabatService {
+
     NabatResponseDTO save(NabatRequestDTO nabatRequestDTO);
+
     List<NabatResponseDTO> getAll();
+
     List<NabatResponseDTO> getAllByNabatGroup(UUID nabatGroupId);
+
+    void delete(UUID nabatGroupId, UUID userId);
 }

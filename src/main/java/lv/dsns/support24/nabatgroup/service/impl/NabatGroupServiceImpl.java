@@ -76,4 +76,12 @@ public class NabatGroupServiceImpl implements NabatGroupService {
 
         return nabatGroupMapper.mapToDTO(nabatGroup);
     }
+
+    @Override
+    public void delete(UUID id) {
+        var nabatGroup = nabatGroupRepository.findById(id).orElseThrow(
+                () -> new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND));
+
+        nabatGroupRepository.delete(nabatGroup);
+    }
 }

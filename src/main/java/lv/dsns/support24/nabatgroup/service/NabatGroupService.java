@@ -17,4 +17,6 @@ public interface NabatGroupService {
     NabatGroupResponseDTO findById(UUID id);
 
     NabatGroupResponseDTO update(UUID id, NabatGroupRequestDTO nabatGroupRequestDTO);
+
+    void delete(UUID id);
 }
