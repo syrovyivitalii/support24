@@ -37,4 +37,9 @@ public class NabatGroupController {
         var allByUnitId = nabatGroupService.findAllByUnitId(unitId);
         return ResponseEntity.ok(allByUnitId);
     }
+    @GetMapping("/{groupId}")
+    private ResponseEntity<NabatGroupResponseDTO> findById(@PathVariable UUID groupId) {
+        var nabatGroup = nabatGroupService.findById(groupId);
+        return ResponseEntity.ok(nabatGroup);
+    }
 }

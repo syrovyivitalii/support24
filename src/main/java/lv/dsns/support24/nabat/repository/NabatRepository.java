@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface NabatRepository extends JpaRepository<Nabat, UUID> {
     List<Nabat> findByNabatGroupId(UUID nabatGroupId);
+
+    boolean existsByUserIdAndNabatGroupId(UUID userId, UUID nabatGroupId);
 }

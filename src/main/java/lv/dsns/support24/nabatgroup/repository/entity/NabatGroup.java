@@ -3,8 +3,10 @@ package lv.dsns.support24.nabatgroup.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.unit.repository.entity.Unit;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,4 +27,7 @@ public class NabatGroup extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit nabatGroupUnit;
+
+    @OneToMany(mappedBy = "nabatGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Nabat> groupNabats ;
 }

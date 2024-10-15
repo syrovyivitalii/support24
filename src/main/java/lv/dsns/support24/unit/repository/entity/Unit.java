@@ -55,7 +55,7 @@ public class Unit extends BaseEntity {
     private List<Device> unitDevice;
 
     @OneToMany(mappedBy = "nabatGroupUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<NabatGroup> unitNabatGroup ;
+    private List<NabatGroup> unitNabatGroups ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)

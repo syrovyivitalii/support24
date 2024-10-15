@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.dsns.support24.position.controller.dto.response.PositionResponseDTO;
+import lv.dsns.support24.rank.controller.dto.response.RankResponseDTO;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.controller.dto.enums.Shift;
@@ -27,7 +29,7 @@ public class UserResponseDTO {
     private UserStatus status;
     private boolean verify;
     private String name;
-    private UUID positionId;
-    private UUID rankId;
+    private PositionResponseDTO userPosition;
+    private RankResponseDTO userRank;
     private UnitResponseDTO userUnit;
 }

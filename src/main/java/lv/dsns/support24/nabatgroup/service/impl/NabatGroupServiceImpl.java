@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -52,5 +53,15 @@ public class NabatGroupServiceImpl implements NabatGroupService {
     public List<NabatGroupResponseDTO> findAllByUnitId(UUID unitId) {
         var allByUnitId = nabatGroupRepository.findByUnitId(unitId);
         return allByUnitId.stream().map(nabatGroupMapper ::mapToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public NabatGroupResponseDTO findById(UUID id) {
+        var byId = nabatGroupRepository.findById(id).orElseThrow(
+                () -> new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND));
+
+        return nabatGroupMapper.mapToDTO(byId);
+
+
     }
 }

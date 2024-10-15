@@ -85,6 +85,11 @@ public enum ErrorCode {
             "Nabat group for such unit already exists",
             404
     ),
+    NABAT_GROUP_NOT_FOUND(
+            "404-011",
+            "Nabat group not found",
+            404
+    ),
 
     //403
     FORBIDDEN(

@@ -9,6 +9,10 @@ import java.util.UUID;
 
 public interface NabatGroupService {
     NabatGroupResponseDTO save(Principal principal, NabatGroupRequestDTO nabatGroupRequestDTO);
+
     List<NabatGroupResponseDTO> findAll();
+
     List<NabatGroupResponseDTO> findAllByUnitId(UUID unitId);
+
+    NabatGroupResponseDTO findById(UUID id);
 }
