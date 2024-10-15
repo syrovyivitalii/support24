@@ -12,12 +12,11 @@ import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
 import lv.dsns.support24.nabatgroup.service.NabatGroupService;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,12 +39,14 @@ public class NabatGroupServiceImpl implements NabatGroupService {
         }
 
         nabatGroupRepository.save(nabatGroup);
+
         return nabatGroupMapper.mapToDTO(nabatGroup);
     }
 
     @Override
     public List<NabatGroupResponseDTO> findAll() {
         var all = nabatGroupRepository.findAll(Sort.by(Sort.Direction.ASC, "groupName"));
+
         return all.stream().map(nabatGroupMapper ::mapToDTO).collect(Collectors.toList());
     }
 
@@ -63,5 +64,16 @@ public class NabatGroupServiceImpl implements NabatGroupService {
         return nabatGroupMapper.mapToDTO(byId);
 
 
+    }
+
+    @Override
+    @Transactional
+    public NabatGroupResponseDTO update(UUID id, NabatGroupRequestDTO nabatGroupRequestDTO) {
+        var nabatGroup = nabatGroupRepository.findById(id).orElseThrow(
+                () -> new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND));
+
+        nabatGroupMapper.patchMerge(nabatGroupRequestDTO,nabatGroup);
+
+        return nabatGroupMapper.mapToDTO(nabatGroup);
     }
 }

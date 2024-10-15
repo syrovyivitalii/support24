@@ -42,4 +42,10 @@ public class NabatGroupController {
         var nabatGroup = nabatGroupService.findById(groupId);
         return ResponseEntity.ok(nabatGroup);
     }
+
+    @PatchMapping("/{groupId}")
+    private ResponseEntity<NabatGroupResponseDTO> patch (@PathVariable UUID groupId, @RequestBody NabatGroupRequestDTO nabatGroupRequestDTO) {
+        var updated = nabatGroupService.update(groupId, nabatGroupRequestDTO);
+        return ResponseEntity.ok(updated);
+    }
 }

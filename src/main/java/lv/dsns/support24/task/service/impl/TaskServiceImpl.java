@@ -47,7 +47,6 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper tasksMapper;
     private final SystemUsersRepository usersRepository;
-    private final UserServiceImpl userService;
     private final EmailNotificationFactory emailNotificationFactory;
 
     @Override

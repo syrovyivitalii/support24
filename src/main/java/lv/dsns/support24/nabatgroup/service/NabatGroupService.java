@@ -15,4 +15,6 @@ public interface NabatGroupService {
     List<NabatGroupResponseDTO> findAllByUnitId(UUID unitId);
 
     NabatGroupResponseDTO findById(UUID id);
+
+    NabatGroupResponseDTO update(UUID id, NabatGroupRequestDTO nabatGroupRequestDTO);
 }

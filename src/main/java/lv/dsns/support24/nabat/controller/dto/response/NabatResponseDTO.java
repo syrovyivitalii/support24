@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -15,9 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NabatResponseDTO {
+
     private UUID id;
     private UUID nabatGroupId;
     private UserResponseDTO nabatUsers;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+
 }
