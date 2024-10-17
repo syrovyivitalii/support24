@@ -10,6 +10,7 @@ import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.Shift;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -130,6 +131,10 @@ public class SpecificationCustom {
     public static Specification<? extends BaseEntity> searchOnUserStatus(Set<UserStatus> statuses) {
         return CollectionUtils.isNotEmpty(statuses)?
                 (root, query, builder) -> root.get("status").in(statuses):null;
+    }
+    public static Specification<? extends BaseEntity> searchOnShifts(Set<Shift> shifts) {
+        return CollectionUtils.isNotEmpty(shifts)?
+                (root, query, builder) -> root.get("shift").in(shifts):null;
     }
 
     public static Specification<? extends BaseEntity> searchOnUnitType(Set<UnitType> types) {

@@ -152,7 +152,10 @@ public class UserServiceImpl implements UserService {
         return Specification.where((Specification<SystemUsers>) searchLikeString("email", userFilter.getEmail()))
                 .and((Specification<SystemUsers>) searchOnRole(userFilter.getRoles()))
                 .and((Specification<SystemUsers>) searchOnUserStatus(userFilter.getStatuses()))
+                .and((Specification<SystemUsers>) searchOnShifts(userFilter.getShifts()))
                 .and((Specification<SystemUsers>) searchLikeString("name", userFilter.getName()))
-                .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("unitId", userFilter.getUnits()));
+                .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("unitId", userFilter.getUnits()))
+                .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("positionId", userFilter.getPositions()))
+                .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("rankId", userFilter.getRanks()));
     }
 }
