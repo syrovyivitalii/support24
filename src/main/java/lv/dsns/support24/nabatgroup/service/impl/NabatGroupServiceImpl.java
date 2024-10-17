@@ -8,7 +8,6 @@ import lv.dsns.support24.nabatgroup.controller.dto.request.NabatGroupRequestDTO;
 import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
 import lv.dsns.support24.nabatgroup.mapper.NabatGroupMapper;
 import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
-import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
 import lv.dsns.support24.nabatgroup.service.NabatGroupService;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import org.springframework.data.domain.Sort;

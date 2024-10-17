@@ -90,6 +90,11 @@ public enum ErrorCode {
             "Nabat group not found",
             404
     ),
+    INVALID_UNIT(
+            "404-012",
+            "Provided unit not in list of child units",
+            404
+    ),
 
     //403
     FORBIDDEN(
