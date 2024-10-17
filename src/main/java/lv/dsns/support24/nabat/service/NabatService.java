@@ -6,11 +6,14 @@ import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface NabatService {
 
     NabatResponseDTO save(NabatRequestDTO nabatRequestDTO);
+
+    List<NabatResponseDTO> saveList(Set<NabatRequestDTO> nabatRequestDTOs);
 
     List<NabatResponseDTO> getAll();
 

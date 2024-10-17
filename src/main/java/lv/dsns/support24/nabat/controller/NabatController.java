@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +26,13 @@ public class NabatController {
     @PostMapping
     public ResponseEntity<NabatResponseDTO> save (@RequestBody NabatRequestDTO nabatRequestDTO) {
         var savedNabatItem = nabatService.save(nabatRequestDTO);
+
+        return ResponseEntity.ok(savedNabatItem);
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<List<NabatResponseDTO>> saveList (@RequestBody Set<NabatRequestDTO> nabatRequestDTOList) {
+        var savedNabatItem = nabatService.saveList(nabatRequestDTOList);
 
         return ResponseEntity.ok(savedNabatItem);
     }

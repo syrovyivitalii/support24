@@ -7,6 +7,10 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface NabatMapper {
+
     Nabat mapToEntity(NabatRequestDTO nabatRequestDTO);
+
     NabatResponseDTO mapToDTO(Nabat nabat);
+
+
 }

@@ -15,10 +15,9 @@ import lv.dsns.support24.nabat.service.NabatService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +39,28 @@ public class NabatServiceImpl implements NabatService {
         nabatRepository.save(nabatItem);
 
         return nabatMapper.mapToDTO(nabatItem);
+    }
+
+    @Override
+    @Transactional
+    public List<NabatResponseDTO> saveList(Set<NabatRequestDTO> nabatRequestDTOs) {
+        List<NabatResponseDTO> savedNabatItems = new ArrayList<>();
+
+        // Validate upfront: Check if any DTOs already exist in the repository
+        for (NabatRequestDTO nabatRequestDTO : nabatRequestDTOs) {
+            if (nabatRepository.existsByUserIdAndNabatGroupId(nabatRequestDTO.getUserId(), nabatRequestDTO.getNabatGroupId())) {
+                throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
+            }
+        }
+
+        // If validation passes, proceed with the save operation
+        for (NabatRequestDTO nabatRequestDTO : nabatRequestDTOs) {
+            var nabatItem = nabatMapper.mapToEntity(nabatRequestDTO);
+            nabatItem = nabatRepository.save(nabatItem);  // Persist entity
+            savedNabatItems.add(nabatMapper.mapToDTO(nabatItem));  // Map entity to DTO and add to result list
+        }
+
+        return savedNabatItems;
     }
 
     @Override

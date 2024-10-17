@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Principal;
 import java.util.*;
@@ -35,7 +36,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UnitService unitService;
 
-    private static final String DEFAULT_PASSWORD = "123";
+    @Value("${userDefaultPassword}")
+    private String DEFAULT_PASSWORD;
 
     @Autowired
     public UserServiceImpl(SystemUsersRepository systemUsersRepository, UserMapper userMapper, UnitService unitService) {
