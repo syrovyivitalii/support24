@@ -10,5 +10,6 @@ CREATE TABLE tbl_phones (
     phone_type phone_types NOT NULL DEFAULT 'Мобільний',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status phone_statuses NOT NULL DEFAULT 'ACTIVE'
+    status phone_statuses NOT NULL DEFAULT 'ACTIVE',
+    FOREIGN KEY (user_id) REFERENCES tbl_system_users(id)
 );

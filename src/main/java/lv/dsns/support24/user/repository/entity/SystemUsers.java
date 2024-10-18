@@ -5,6 +5,7 @@ import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
+import lv.dsns.support24.phone.repository.entity.Phone;
 import lv.dsns.support24.position.repository.entity.Position;
 import lv.dsns.support24.rank.repository.entity.Rank;
 import lv.dsns.support24.task.repository.entity.Task;
@@ -91,6 +92,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "nabatUsers", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Nabat> userNabat;
+
+    @OneToMany(mappedBy = "phoneUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Phone> userPhones;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
