@@ -36,9 +36,6 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone", unique = true)
-    private String phone;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)

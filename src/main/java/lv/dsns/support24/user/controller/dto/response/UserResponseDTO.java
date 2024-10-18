@@ -23,7 +23,6 @@ public class UserResponseDTO {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private String email;
-    private String phone;
     private Role role;
     private Shift shift;
     private UserStatus status;

@@ -24,6 +24,5 @@ public interface SystemUsersRepository extends JpaRepository <SystemUsers, UUID>
 
     boolean existsByEmail(String email);
 
-    boolean existsByPhone(String phone);
 
 }
