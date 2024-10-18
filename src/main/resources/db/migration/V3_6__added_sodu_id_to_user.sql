@@ -1,0 +1,1 @@
+ALTER TABLE tbl_system_users ADD COLUMN sodu_id INT;
