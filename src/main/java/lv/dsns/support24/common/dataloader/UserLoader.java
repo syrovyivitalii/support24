@@ -33,9 +33,6 @@ public class UserLoader implements Consumer<List<Map<String, Object>>> {
                         ((List<HashMap>) x.get("users")).forEach(y -> {
                             UserRequestDTO userRequestDto = mapper.convertValue(y, UserRequestDTO.class);
                             if (!userService.existUserByEmail(userRequestDto.getEmail())) {
-                                // Encrypt the password
-                                String encryptedPassword = passwordEncoder.encode(userRequestDto.getPassword());
-                                userRequestDto.setPassword(encryptedPassword);
                                 userService.save(userRequestDto);
                             }
                         })
