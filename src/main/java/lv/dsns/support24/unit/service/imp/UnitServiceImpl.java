@@ -69,8 +69,6 @@ public class UnitServiceImpl implements UnitService {
     public List<UnitResponseDTO> findAll(){
         var allTasks = unitRepository.findAll();
         return allTasks.stream().map(unitMapper::mapToDTO)
-                .sorted(Comparator.comparing(UnitResponseDTO::getUnitType)
-                .thenComparing(UnitResponseDTO::getUnitName))
                 .collect(Collectors.toList());
     }
     @Override
@@ -79,8 +77,6 @@ public class UnitServiceImpl implements UnitService {
 
         return allChild.stream()
                 .map(unitMapper::mapToDTO)
-                .sorted(Comparator.comparing(UnitResponseDTO::getUnitType)
-                        .thenComparing(UnitResponseDTO::getUnitName))
                 .collect(Collectors.toList());
     }
 
