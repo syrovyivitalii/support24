@@ -1,0 +1,1 @@
+ALTER TABLE tbl_phones DROP COLUMN status;

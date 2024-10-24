@@ -6,6 +6,8 @@ import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.phone.controller.dto.enums.PhoneStatus;
 import lv.dsns.support24.phone.controller.dto.enums.PhoneType;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.util.UUID;
 
@@ -26,10 +28,9 @@ public class Phone extends BaseEntity {
     private String phone;
 
     @Column(name = "phone_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private PhoneType phoneType;
-
-    @Column(name = "status", nullable = false)
-    private PhoneStatus phoneStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
