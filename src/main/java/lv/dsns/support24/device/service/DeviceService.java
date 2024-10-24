@@ -10,8 +10,12 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface DeviceService {
+
     PageResponse<DeviceResponseDTO> findAllDevices(DeviceFilter deviceFilter, Pageable pageable);
+
     DeviceResponseDTO save (DeviceRequestDTO requestDTO);
+
     DeviceResponseDTO writeOffDevice(UUID id, DeviceWriteOffRequestDTO requestDTO);
+
     DeviceResponseDTO patchDevice(UUID id, DeviceRequestDTO requestDTO);
 }

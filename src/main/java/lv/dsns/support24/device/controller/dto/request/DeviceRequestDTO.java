@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
+import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 
 
 import java.util.UUID;
@@ -23,8 +24,7 @@ public class DeviceRequestDTO {
     private String ipAddress;
     private Integer productionYear;
     private String note;
-    private String userName;
-    private String userPosition;
+    private UUID userId;
     private String specifications;
     private UUID unitId;
 }

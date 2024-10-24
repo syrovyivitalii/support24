@@ -54,10 +54,6 @@ public class DeviceServiceImpl implements DeviceService {
     public DeviceResponseDTO save (DeviceRequestDTO requestDTO){
         var device = deviceMapper.mapToEntity(requestDTO);
 
-        if (deviceRepository.existsDeviceByInventoryNumber(requestDTO.getInventoryNumber())){
-            throw new ClientBackendException(ErrorCode.INVENTORY_NUMBER_ALREADY_EXISTS);
-        }
-
         var savedDevice = deviceRepository.save(device);
 
         return deviceMapper.mapToDTO(savedDevice);

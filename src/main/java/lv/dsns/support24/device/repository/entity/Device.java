@@ -6,6 +6,7 @@ import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
 import lv.dsns.support24.unit.repository.entity.Unit;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
@@ -30,7 +31,6 @@ public class Device extends BaseEntity {
     private DeviceType deviceType;
 
     @Column(name = "inventory_number")
-    @Unique
     private String inventoryNumber;
 
     @Column(name = "decree_number")
@@ -48,14 +48,9 @@ public class Device extends BaseEntity {
     @Column(name = "note")
     private String note;
 
-    @Column(name = "user_name")
-    private String userName;
-
-    @Column(name = "user_position")
-    private String userPosition;
-
     @Column(name = "specifications")
     private String specifications;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
@@ -64,9 +59,17 @@ public class Device extends BaseEntity {
     @Column(name = "unit_id")
     private UUID unitId;
 
+    @Column(name = "user_id")
+    private UUID userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit deviceUnit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private SystemUsers deviceUser;
+
     @PrePersist
     protected void onCreate() {
         if (deviceStatus == null) {

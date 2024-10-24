@@ -3,6 +3,7 @@ package lv.dsns.support24.user.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.phone.repository.entity.Phone;
 import lv.dsns.support24.position.repository.entity.Position;
@@ -90,6 +91,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "phoneUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Phone> userPhones;
+
+    @OneToMany(mappedBy = "deviceUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Device> userDevices;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

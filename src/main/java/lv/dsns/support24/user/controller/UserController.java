@@ -36,7 +36,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/public/users/pageable")
+    @GetMapping("/private/users/pageable")
     public ResponseEntity<PageResponse<UserResponseDTO>> getAllSystemUsersPageable(@ParameterObject UserFilter userFilter, @SortDefault(sort = "name", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
         PageResponse<UserResponseDTO> responseDTOS = userService.findAllPageable(userFilter,pageable);
 
@@ -61,14 +61,14 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping("/public/users/default")
+    @PostMapping("/private/users/default")
     public ResponseEntity<UserResponseDTO> saveDefault (@RequestBody UserDefaultRequestDTO userDefaultRequestDTO){
         var responseDto = userService.saveDefault(userDefaultRequestDTO);
 
         return ResponseEntity.ok(responseDto);
     }
 
-    @PatchMapping("/public/users/{id}")
+    @PatchMapping("/private/users/{id}")
     public ResponseEntity<UserResponseDTO> patch(@PathVariable UUID id, @RequestBody UserRequestDTO requestDTO){
         var patchedTask = userService.patch(id,requestDTO);
 
