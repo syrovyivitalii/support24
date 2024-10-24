@@ -1,5 +1,6 @@
 package lv.dsns.support24.user.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
@@ -31,6 +32,7 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final SystemUsersRepository systemUsersRepository;
     private final UserMapper userMapper;
@@ -38,13 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Value("${userDefaultPassword}")
     private String DEFAULT_PASSWORD;
-
-    @Autowired
-    public UserServiceImpl(SystemUsersRepository systemUsersRepository, UserMapper userMapper, UnitService unitService) {
-        this.systemUsersRepository = systemUsersRepository;
-        this.userMapper = userMapper;
-        this.unitService = unitService;
-    }
 
     @Override
     public List<UserResponseDTO> findAll(UserFilter userFilter){
@@ -152,12 +147,13 @@ public class UserServiceImpl implements UserService {
 
     private Specification<SystemUsers> getSearchSpecification(UserFilter userFilter) {
         return Specification.where((Specification<SystemUsers>) searchLikeString("email", userFilter.getEmail()))
-                .and((Specification<SystemUsers>) searchOnRole(userFilter.getRoles()))
-                .and((Specification<SystemUsers>) searchOnUserStatus(userFilter.getStatuses()))
-                .and((Specification<SystemUsers>) searchOnShifts(userFilter.getShifts()))
+                .and((Specification<SystemUsers>) searchOnField("role", userFilter.getRoles()))
+                .and((Specification<SystemUsers>) searchOnField("status", userFilter.getStatuses()))
+                .and((Specification<SystemUsers>) searchOnField("shift", userFilter.getShifts()))
                 .and((Specification<SystemUsers>) searchLikeString("name", userFilter.getName()))
                 .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("unitId", userFilter.getUnits()))
                 .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("positionId", userFilter.getPositions()))
                 .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("rankId", userFilter.getRanks()));
     }
+
 }

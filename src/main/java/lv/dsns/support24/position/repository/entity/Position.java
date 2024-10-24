@@ -16,6 +16,7 @@ import java.util.List;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Position extends BaseEntity {
+
     @Column(name = "position_name", nullable = false, unique = true)
     private String positionName;
 

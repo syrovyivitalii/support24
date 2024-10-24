@@ -16,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceResponseDTO {
+
     private UUID id;
     private String deviceName;
     private DeviceType deviceType;

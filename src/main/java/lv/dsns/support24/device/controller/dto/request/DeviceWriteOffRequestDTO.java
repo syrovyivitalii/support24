@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceWriteOffRequestDTO {
+
     private String decreeNumber;
 }

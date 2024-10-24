@@ -1,5 +1,6 @@
 package lv.dsns.support24.nabat.controller;
 
+import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
@@ -16,12 +17,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/private/nabat")
+@RequiredArgsConstructor
 public class NabatController {
     private final NabatService nabatService;
-
-    public NabatController(NabatService nabatService) {
-        this.nabatService = nabatService;
-    }
 
     @PostMapping
     public ResponseEntity<NabatResponseDTO> save (@RequestBody NabatRequestDTO nabatRequestDTO) {

@@ -1,15 +1,13 @@
 package lv.dsns.support24.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
-import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
-import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
 import lv.dsns.support24.user.controller.dto.request.UserDefaultRequestDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.service.UserService;
 import lv.dsns.support24.user.service.filter.UserFilter;
-import lv.dsns.support24.user.service.impl.UserServiceImpl;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,7 +15,6 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -26,15 +23,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserController(UserServiceImpl userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @GetMapping("/private/users")
     public ResponseEntity<List<UserResponseDTO>> getAllSystemUsers(@ParameterObject UserFilter userFilter){
@@ -42,6 +34,7 @@ public class UserController {
 
         return ResponseEntity.ok(allSystemUsers);
     }
+
 
     @GetMapping("/public/users/pageable")
     public ResponseEntity<PageResponse<UserResponseDTO>> getAllSystemUsersPageable(@ParameterObject UserFilter userFilter, @SortDefault(sort = "name", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){

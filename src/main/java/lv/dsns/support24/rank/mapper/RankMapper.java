@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RankMapper {
+
     Rank mapToEntity(RankRequestDTO rankRequestDTO);
 
     RankResponseDTO mapToDTO(Rank rank);

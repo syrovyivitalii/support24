@@ -12,10 +12,15 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TaskService {
+
     List<TaskResponseDTO> findAll(TaskFilter taskFilter);
+
     List<TaskResponseDTO> findTaskById(UUID id);
+
     PageResponse<TaskResponseDTO> findAllPageable(Principal principal, TaskFilter taskFilter, Pageable pageable);
+
     List<TaskResponseDTO> findAllSubtasks(UUID parentId);
+
     TaskResponseDTO save (Principal principal, TaskRequestDTO tasksDTO);
 
     TaskResponseDTO patch (Principal principal, UUID id, TaskRequestDTO requestDTO);

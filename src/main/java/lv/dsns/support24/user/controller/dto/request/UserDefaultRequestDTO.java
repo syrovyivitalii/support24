@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDefaultRequestDTO {
+
     private String email;
     private String password;
     private String name;

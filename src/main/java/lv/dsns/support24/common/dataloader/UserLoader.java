@@ -20,7 +20,6 @@ import java.util.function.Consumer;
 public class UserLoader implements Consumer<List<Map<String, Object>>> {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void accept(List<Map<String, Object>> maps) {

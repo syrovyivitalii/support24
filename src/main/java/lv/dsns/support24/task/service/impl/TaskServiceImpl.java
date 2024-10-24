@@ -180,9 +180,9 @@ public class TaskServiceImpl implements TaskService {
                 .and((Specification<Task>) searchFieldInCollectionOfIds("assignedById", taskFilter.getAssignedByIds()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("problemTypeId", taskFilter.getProblemTypeIds()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
-                .and((Specification<Task>) searchOnStatus(taskFilter.getStatuses()))
-                .and((Specification<Task>) searchOnPriority(taskFilter.getPriorities()))
-                .and((Specification<Task>) searchOnTaskType(taskFilter.getTaskTypes()))
+                .and((Specification<Task>) searchOnField("deviceStatus", taskFilter.getStatuses()))
+                .and((Specification<Task>) searchOnField("priority",taskFilter.getPriorities()))
+                .and((Specification<Task>) searchOnField("taskType",taskFilter.getTaskTypes()))
                 .and((Specification<Task>) searchByDateRange("createdDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
     }
 

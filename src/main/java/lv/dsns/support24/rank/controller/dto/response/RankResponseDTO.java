@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RankResponseDTO {
+
     private UUID id;
     private String rankName;
     private LocalDateTime createdDate;

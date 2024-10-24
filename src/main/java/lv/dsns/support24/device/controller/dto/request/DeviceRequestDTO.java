@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceRequestDTO {
+
     private String deviceName;
     private DeviceType deviceType;
     private String inventoryNumber;

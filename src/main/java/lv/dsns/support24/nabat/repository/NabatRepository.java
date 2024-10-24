@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NabatRepository extends JpaRepository<Nabat, UUID> {
+
     Page<Nabat> findByNabatGroupId(UUID nabatGroupId, Pageable pageable);
 
     boolean existsByUserIdAndNabatGroupId(UUID userId, UUID nabatGroupId);

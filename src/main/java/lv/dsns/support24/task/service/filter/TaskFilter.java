@@ -12,7 +12,6 @@ import lv.dsns.support24.task.controller.dto.enums.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,8 +31,6 @@ public class TaskFilter extends SearchFilter {
     Set<Status> statuses;
     Set<Priority> priorities;
     Set<Type> taskTypes;
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-//    LocalDate dueDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate startDate; // New field for start date
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

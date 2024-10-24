@@ -19,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDTO {
+
     private UUID id;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

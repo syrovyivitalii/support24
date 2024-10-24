@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
-import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
 import lv.dsns.support24.phone.repository.entity.Phone;
 import lv.dsns.support24.position.repository.entity.Position;
 import lv.dsns.support24.rank.repository.entity.Rank;
@@ -85,10 +84,6 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Position userPosition;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id", referencedColumnName = "user_id",nullable = false, insertable = false, updatable = false)
-//    private Nabat userNabat;
 
     @OneToMany(mappedBy = "nabatUsers", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Nabat> userNabat;

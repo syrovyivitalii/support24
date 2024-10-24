@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
 import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.nabat.mapper.NabatMapper;
@@ -21,8 +20,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class NabatServiceImpl implements NabatService {
 
     private final NabatRepository nabatRepository;

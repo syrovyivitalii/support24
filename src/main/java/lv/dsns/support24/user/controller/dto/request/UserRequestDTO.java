@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
+
     private String email;
     private Role role;
     private String password;

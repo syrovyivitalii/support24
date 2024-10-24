@@ -20,8 +20,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class NabatGroupServiceImpl implements NabatGroupService {
     private final NabatGroupMapper nabatGroupMapper;
     private final NabatGroupRepository nabatGroupRepository;

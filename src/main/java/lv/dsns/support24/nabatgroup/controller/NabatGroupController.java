@@ -1,5 +1,6 @@
 package lv.dsns.support24.nabatgroup.controller;
 
+import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.nabatgroup.controller.dto.request.NabatGroupRequestDTO;
 import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
 import lv.dsns.support24.nabatgroup.service.NabatGroupService;
@@ -14,12 +15,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/private/nabat/groups")
+@RequiredArgsConstructor
 public class NabatGroupController {
-    private final NabatGroupService nabatGroupService;
 
-    public NabatGroupController(NabatGroupService nabatGroupService) {
-        this.nabatGroupService = nabatGroupService;
-    }
+    private final NabatGroupService nabatGroupService;
 
     @PostMapping
     private ResponseEntity<NabatGroupResponseDTO> save(@ParameterObject Principal principal, @RequestBody NabatGroupRequestDTO nabatGroupRequestDTO) {

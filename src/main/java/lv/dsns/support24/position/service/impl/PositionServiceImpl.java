@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class PositionServiceImpl implements PositionService {
 
     private final PositionMapper positionMapper;

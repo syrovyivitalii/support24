@@ -20,6 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = PRIVATE)
 public class DeviceFilter extends SearchFilter {
+
     String deviceName;
     Set<DeviceType> deviceTypes;
     String inventoryNumber;
