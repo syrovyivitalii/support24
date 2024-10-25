@@ -61,8 +61,6 @@ public class NabatGroupServiceImpl implements NabatGroupService {
                 () -> new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND));
 
         return nabatGroupMapper.mapToDTO(byId);
-
-
     }
 
     @Override

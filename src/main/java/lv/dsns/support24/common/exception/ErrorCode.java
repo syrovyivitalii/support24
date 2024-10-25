@@ -105,7 +105,14 @@ public enum ErrorCode {
     //500
     UNKNOWN_SERVER_ERROR("500",
             "Unknown server error",
-            500);
+            500),
+
+    NOTIFICATION_FAILED(
+            "501",
+            "Notification failed",
+            501
+    ),;
+
 
 
     private Data data;

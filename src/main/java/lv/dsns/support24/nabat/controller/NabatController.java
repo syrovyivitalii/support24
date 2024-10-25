@@ -5,6 +5,8 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.nabat.service.NabatService;
+import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
+import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -54,5 +56,12 @@ public class NabatController {
         nabatService.delete(nabatGroupId, userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/notify/{nabatGroupId}")
+    public ResponseEntity<NotifyResponseDTO> notify (@PathVariable UUID nabatGroupId, @RequestBody NotifyRequestDTO requestDTO) {
+        NotifyResponseDTO notifyResponseDTO = nabatService.nabatNotify(nabatGroupId, requestDTO);
+
+        return ResponseEntity.ok(notifyResponseDTO);
     }
 }

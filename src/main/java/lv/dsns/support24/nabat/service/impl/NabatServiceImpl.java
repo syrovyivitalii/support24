@@ -11,11 +11,17 @@ import lv.dsns.support24.nabat.mapper.NabatMapper;
 import lv.dsns.support24.nabat.repository.NabatRepository;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabat.service.NabatService;
+import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
+import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
+import lv.dsns.support24.notify.NotifyClient;
+import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,7 +31,9 @@ import java.util.stream.Collectors;
 public class NabatServiceImpl implements NabatService {
 
     private final NabatRepository nabatRepository;
+    private final NabatGroupRepository nabatGroupRepository;
     private final NabatMapper nabatMapper;
+    private final NotifyClient notifyClient;
 
     @Override
     public NabatResponseDTO save(NabatRequestDTO nabatRequestDTO) {
@@ -90,5 +98,25 @@ public class NabatServiceImpl implements NabatService {
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
         nabatRepository.delete(byUserIdAndNabatGroupId);
+    }
+
+    @Override
+    public NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO message) {
+
+        boolean exists = nabatGroupRepository.existsById(nabatGroupId);
+
+        if (BooleanUtils.isFalse(exists)) {
+            throw new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND);
+        }
+
+        List<UUID> userIds = nabatRepository.findUserIdByNabatGroupId(nabatGroupId);
+
+        List<Object[]> usersToNotify = nabatRepository.findPhonesByUserIds(userIds);
+
+        try {
+            return notifyClient.notifyUsers(usersToNotify, message);  // Return the Notify object received from notifyClient
+        } catch (IOException e) {
+            throw new ClientBackendException(ErrorCode.NOTIFICATION_FAILED);
+        }
     }
 }
