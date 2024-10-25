@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
-import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 
 
 import java.util.UUID;
