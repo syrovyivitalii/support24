@@ -23,7 +23,7 @@ public interface NabatRepository extends JpaRepository<Nabat, UUID> {
     List<UUID> findUserIdByNabatGroupId(@Param("nabatGroupId") UUID nabatGroupId);
 
 
-    @Query(value = "SELECT DISTINCT p.user_id, p.phone FROM tbl_phones p WHERE p.user_id IN (:userIds) AND p.phone_type != 'МобільнийАвто'", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT p.user_id, p.phone FROM tbl_phones p WHERE p.user_id IN (:userIds) AND p.phone_type != 'ІР'", nativeQuery = true)
     List<Object[]> findPhonesByUserIds(@Param("userIds") List<UUID> userIds);
 
 }

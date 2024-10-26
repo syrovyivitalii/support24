@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
+import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
 import lv.dsns.support24.unit.repository.entity.Unit;
 
 import java.util.List;
@@ -30,4 +31,7 @@ public class NabatGroup extends BaseEntity {
 
     @OneToMany(mappedBy = "nabatGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     private List<Nabat> groupNabats ;
+
+    @OneToMany(mappedBy = "notificationLogGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    private List<NotificationLog> groupNotificationLogs;
 }
