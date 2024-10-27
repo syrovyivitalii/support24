@@ -16,6 +16,6 @@ public class NotificationLogRequestDTO {
     private String jsonResponse;
     private String jsonRequest;
     private UUID nabatGroupId;
-    private UUID notificationId;
+    private UUID eventId;
     private UUID notifiedByUserId;
 }

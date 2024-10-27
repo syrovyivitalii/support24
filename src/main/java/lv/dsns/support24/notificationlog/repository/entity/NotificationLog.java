@@ -20,8 +20,8 @@ public class NotificationLog extends BaseEntity {
     @Column(name = "nabat_group_id")
     private UUID nabatGroupId;
 
-    @Column(name = "notification_id")
-    private UUID notificationId;
+    @Column(name = "event_id")
+    private UUID eventId;
 
     @Column(name = "message")
     private String message;

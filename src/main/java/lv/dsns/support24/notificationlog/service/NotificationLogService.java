@@ -12,6 +12,8 @@ public interface NotificationLogService {
 
     PageResponse<NotificationLogResponseDTO> findByNabatGroup(UUID nabatGroupId, Pageable pageable);
 
+    boolean existByEventId(UUID eventId);
+
     NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID notificationLogId,
                                                                UUID nabatGroupId,
                                                                UUID notifiedById,

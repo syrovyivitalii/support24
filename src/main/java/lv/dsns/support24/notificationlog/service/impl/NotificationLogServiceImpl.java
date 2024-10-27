@@ -53,12 +53,17 @@ public class NotificationLogServiceImpl implements NotificationLogService {
     }
 
     @Override
-    public NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID notificationLogId,
+    public boolean existByEventId(UUID eventId) {
+        return notificationLogRepository.existsByEventId(eventId);
+    }
+
+    @Override
+    public NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID eventId,
                                                                       UUID nabatGroupId,
                                                                       UUID notifiedById,
                                                                       String message) {
         return NotificationLogRequestDTO.builder()
-                .notificationId(notificationLogId)
+                .eventId(eventId)
                 .message(message)
                 .nabatGroupId(nabatGroupId)
                 .notifiedByUserId(notifiedById)

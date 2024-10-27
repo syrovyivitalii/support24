@@ -17,7 +17,7 @@ import java.util.UUID;
 public class NotificationLogResponseDTO {
     private UUID id;
     private NabatGroupResponseDTO notificationLogGroup;
-    private UUID notificationId;
+    private UUID eventId;
     private String message;
     private String jsonResponse;
     private String jsonRequest;

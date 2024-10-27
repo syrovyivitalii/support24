@@ -5,6 +5,7 @@ import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
+import lv.dsns.support24.notifyresult.model.NotifyResult;
 import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
@@ -25,4 +26,6 @@ public interface NabatService {
     void delete(UUID nabatGroupId, UUID userId);
 
     NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO message, Principal principal);
+
+    NotifyResult getNotifyResult(UUID eventId);
 }

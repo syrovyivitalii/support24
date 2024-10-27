@@ -17,7 +17,10 @@ import lv.dsns.support24.notificationlog.service.NotificationLogService;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.client.NotifyClient;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
+import lv.dsns.support24.notifyresult.client.NotifyResultClient;
+import lv.dsns.support24.notifyresult.model.NotifyResult;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,7 @@ public class NabatServiceImpl implements NabatService {
     private final SystemUsersRepository usersRepository;
     private final NabatMapper nabatMapper;
     private final NotifyClient notifyClient;
+    private final NotifyResultClient notifyResultClient;
 
     @Override
     public NabatResponseDTO save(NabatRequestDTO nabatRequestDTO) {
@@ -123,20 +127,34 @@ public class NabatServiceImpl implements NabatService {
             throw new ClientBackendException(ErrorCode.NO_PHONES_FOUND);
         }
 
-        UUID notificationId = null;
+        UUID eventId = null;
 
         try {
             NotifyResponseDTO notifyResponseDTO = notifyClient.notifyUsers(usersToNotify, requestDTO);
 
-            notificationId = notifyResponseDTO.getNotificationId();
+            eventId = notifyResponseDTO.getEventId();
 
             return notifyResponseDTO;
         } catch (IOException e) {
             throw new ClientBackendException(ErrorCode.NOTIFICATION_FAILED);
         }finally {
-            NotificationLogRequestDTO notificationLogRequestDTO = notificationLogService.notificationLogRequestDTOBuilder(notificationId, nabatGroupId, userByEmail.getId(), requestDTO.getMessage());
+            NotificationLogRequestDTO notificationLogRequestDTO = notificationLogService.notificationLogRequestDTOBuilder(eventId, nabatGroupId, userByEmail.getId(), requestDTO.getMessage());
 
             notificationLogService.save(notificationLogRequestDTO);
+        }
+    }
+
+    @Override
+    public NotifyResult getNotifyResult(UUID eventId){
+        boolean existByEvenId = notificationLogService.existByEventId(eventId);
+
+        if (BooleanUtils.isFalse(existByEvenId)) {
+            throw new ClientBackendException(ErrorCode.EVENT_NOT_FOUND);
+        }
+        try {
+            return notifyResultClient.getNotifyResult(eventId);
+        } catch (Exception e) {
+            throw new ClientBackendException(ErrorCode.GET_NOTIFICATION_RESULT_FAILED);
         }
     }
 }

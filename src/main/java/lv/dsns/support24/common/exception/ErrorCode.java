@@ -105,6 +105,11 @@ public enum ErrorCode {
             "No phones found in nabat group",
             404
     ),
+    EVENT_NOT_FOUND(
+            "404-016",
+            "Event not found",
+            404
+    ),
 
     //403
     FORBIDDEN(
@@ -120,6 +125,11 @@ public enum ErrorCode {
     NOTIFICATION_FAILED(
             "501",
             "Notification failed",
+            501
+    ),
+    GET_NOTIFICATION_RESULT_FAILED(
+            "502",
+            "Get notification result failed",
             501
     ),;
 

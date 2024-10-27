@@ -10,4 +10,6 @@ import java.util.UUID;
 
 public interface NotificationLogRepository extends JpaRepository<NotificationLog, UUID> {
     Page<NotificationLog> findByNabatGroupId(UUID nabatGroupId, Pageable pageable);
+
+    boolean existsByEventId(UUID eventId);
 }

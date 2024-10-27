@@ -15,7 +15,7 @@ import java.util.UUID;
 public class NotifyResponseDTO {
 
     @JsonProperty("uuid")
-    private UUID notificationId;
+    private UUID eventId;
 
     @JsonProperty("ok")
     private boolean notificationStatus;
