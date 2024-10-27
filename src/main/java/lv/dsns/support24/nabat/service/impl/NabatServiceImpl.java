@@ -114,7 +114,7 @@ public class NabatServiceImpl implements NabatService {
         List<Object[]> usersToNotify = nabatRepository.findPhonesByUserIds(userIds);
 
         try {
-            return notifyClient.notifyUsers(usersToNotify, message);  // Return the Notify object received from notifyClient
+            return notifyClient.notifyUsers(usersToNotify, message);
         } catch (IOException e) {
             throw new ClientBackendException(ErrorCode.NOTIFICATION_FAILED);
         }

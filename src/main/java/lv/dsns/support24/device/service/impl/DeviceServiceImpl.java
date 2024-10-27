@@ -86,6 +86,7 @@ public class DeviceServiceImpl implements DeviceService {
                 .and((Specification<Device>) searchLikeString("decreeNumber", deviceFilter.getDecreeNumber()))
                 .and((Specification<Device>) searchByDeviceProductionYearRange("productionYear", deviceFilter.getStartYear(), deviceFilter.getEndYear()))
                 .and((Specification<Device>) searchFieldInCollectionOfIds("unitId", deviceFilter.getUnitIds()))
+                .and((Specification<Device>) searchFieldInCollectionOfIds("userId", deviceFilter.getUserIds()))
                 .and((Specification<Device>) searchFieldInCollectionOfIds("id", deviceFilter.getDeviceIds()))
                 .and((Specification<Device>) searchOnField("deviceStatus",deviceFilter.getDeviceStatuses()));
     }

@@ -28,6 +28,7 @@ public class DeviceFilter extends SearchFilter {
     Set<DeviceStatus> deviceStatuses;
     Set<UUID> unitIds;
     Set<UUID> deviceIds;
+    Set<UUID> userIds;
     Integer startYear;
     Integer endYear;
 }
