@@ -22,6 +22,9 @@ import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.client.NotifyClient;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
 import lv.dsns.support24.notifyresult.client.NotifyResultClient;
+import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
+import lv.dsns.support24.notifyresult.model.NotifiedUser;
+import lv.dsns.support24.notifyresult.model.NotifyHistory;
 import lv.dsns.support24.notifyresult.model.NotifyResult;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import org.apache.commons.lang3.BooleanUtils;
@@ -151,22 +154,50 @@ public class NabatServiceImpl implements NabatService {
     }
 
     @Override
-    public NotifyResult getNotifyResult(UUID eventId){
-        NotificationLog notificationLog = notificationLogRepository.findByEventId(eventId).orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
+    public NotifyResultResponseDTO getNotifyResult(UUID eventId) {
+
+        NotificationLog notificationLog = notificationLogRepository
+                .findByEventId(eventId)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
 
         try {
+            // Fetch the notify result
             NotifyResult notifyResult = notifyResultClient.getNotifyResult(eventId);
 
-            // Serialize NotifyResult to JSON
-            String notifyResultJson = mapper.writeValueAsString(notifyResult);
+            List<NotifyResultResponseDTO.NotifiedUserInfo> notifiedUserInfos = new ArrayList<>();
 
-            NotificationLogRequestDTO notificationLogRequestDTO = notificationLogService.notificationLogRequestDTOBuilder(notifyResultJson);
+            // Loop through each notified user from the notify result
+            for (NotifiedUser notifiedUser : notifyResult.getNotifiedUsers()) {
+                boolean notifyStatus = false;
 
+                // Check the user's notification history for a successful notification
+                for (NotifyHistory history : notifiedUser.getNotifyHistory()) {
+                    if ("0".equals(history.getReason())) {
+                        notifyStatus = true;
+                        break;
+                    }
+                }
+
+                // Add the user's notification info (ID and notification status) to the list
+                notifiedUserInfos.add(new NotifyResultResponseDTO.NotifiedUserInfo(notifiedUser.getId(), notifyStatus));
+            }
+
+            // Create the response DTO with the collected user notification info
+            NotifyResultResponseDTO response = new NotifyResultResponseDTO(notifiedUserInfos);
+
+            // Convert the response to a JSON
+            String resultJson = mapper.writeValueAsString(response);
+
+            // Build a request DTO for the notification log update
+            NotificationLogRequestDTO notificationLogRequestDTO = notificationLogService.notificationLogRequestDTOBuilder(resultJson);
+
+            // Update the notification log entry with the json of notified user info
             notificationLogService.patch(notificationLog.getId(), notificationLogRequestDTO);
 
-            return notifyResult;
+            return response;
         } catch (Exception e) {
             throw new ClientBackendException(ErrorCode.GET_NOTIFICATION_RESULT_FAILED);
         }
     }
+
 }

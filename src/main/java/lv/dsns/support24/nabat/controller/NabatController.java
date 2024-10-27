@@ -7,6 +7,7 @@ import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.nabat.service.NabatService;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
+import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import lv.dsns.support24.notifyresult.model.NotifyResult;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -70,8 +71,8 @@ public class NabatController {
     }
 
     @PostMapping("/notify/get-result/{eventId}")
-    public ResponseEntity<NotifyResult> getNotifyResult(@PathVariable UUID eventId) {
-        NotifyResult notifyResult = nabatService.getNotifyResult(eventId);
+    public ResponseEntity<NotifyResultResponseDTO> getNotifyResult(@PathVariable UUID eventId) {
+        NotifyResultResponseDTO notifyResult = nabatService.getNotifyResult(eventId);
 
         return ResponseEntity.ok(notifyResult);
     }

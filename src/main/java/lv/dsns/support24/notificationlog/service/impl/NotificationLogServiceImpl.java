@@ -65,10 +65,6 @@ public class NotificationLogServiceImpl implements NotificationLogService {
         return notificationLogMapper.mapToDTO(notificationLog);
     }
 
-    @Override
-    public boolean existByEventId(UUID eventId) {
-        return notificationLogRepository.existsByEventId(eventId);
-    }
 
     @Override
     public NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID eventId,

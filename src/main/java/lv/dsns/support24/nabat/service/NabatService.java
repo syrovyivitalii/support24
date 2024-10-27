@@ -5,6 +5,7 @@ import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
+import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import lv.dsns.support24.notifyresult.model.NotifyResult;
 import org.springframework.data.domain.Pageable;
 
@@ -27,5 +28,5 @@ public interface NabatService {
 
     NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO message, Principal principal);
 
-    NotifyResult getNotifyResult(UUID eventId);
+    NotifyResultResponseDTO getNotifyResult(UUID eventId);
 }

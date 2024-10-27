@@ -16,7 +16,6 @@ public interface NotificationLogService {
     @Transactional
     NotificationLogResponseDTO patch(UUID id, NotificationLogRequestDTO notificationLogRequestDTO);
 
-    boolean existByEventId(UUID eventId);
 
     NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID notificationLogId,
                                                                UUID nabatGroupId,

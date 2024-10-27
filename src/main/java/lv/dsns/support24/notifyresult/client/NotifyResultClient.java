@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,7 +18,8 @@ import java.util.UUID;
 
 @Component
 public class NotifyResultClient {
-    private final String URL = "http://10.114.10.21:8443/notify_result";
+    @Value("${nabat.result.url}")
+    private String URL;
 
     private final ObjectMapper mapper;
     private final OkHttpClient client;
