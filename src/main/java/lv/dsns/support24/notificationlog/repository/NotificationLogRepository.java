@@ -6,10 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface NotificationLogRepository extends JpaRepository<NotificationLog, UUID> {
     Page<NotificationLog> findByNabatGroupId(UUID nabatGroupId, Pageable pageable);
 
     boolean existsByEventId(UUID eventId);
+
+    Optional<NotificationLog> findByEventId(UUID eventId);
 }

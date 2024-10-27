@@ -22,4 +22,6 @@ public interface NotificationLogService {
                                                                UUID nabatGroupId,
                                                                UUID notifiedById,
                                                                String message);
+
+    NotificationLogRequestDTO notificationLogRequestDTOBuilder(String jsonResponse);
 }

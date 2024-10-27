@@ -20,7 +20,6 @@ public class NotificationLogResponseDTO {
     private UUID eventId;
     private String message;
     private String jsonResponse;
-    private String jsonRequest;
     private UserResponseDTO notificationLogUser;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

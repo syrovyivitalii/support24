@@ -26,9 +26,6 @@ public class NotificationLog extends BaseEntity {
     @Column(name = "message")
     private String message;
 
-    @Column(name = "json_request")
-    private String jsonRequest;
-
     @Column(name = "json_response")
     private String jsonResponse;
 

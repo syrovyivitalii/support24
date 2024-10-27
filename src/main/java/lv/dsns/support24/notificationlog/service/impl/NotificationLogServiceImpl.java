@@ -82,4 +82,11 @@ public class NotificationLogServiceImpl implements NotificationLogService {
                 .notifiedByUserId(notifiedById)
                 .build();
     }
+
+    @Override
+    public NotificationLogRequestDTO notificationLogRequestDTOBuilder(String jsonResponse){
+        return NotificationLogRequestDTO.builder()
+                .jsonResponse(jsonResponse)
+                .build();
+    }
 }

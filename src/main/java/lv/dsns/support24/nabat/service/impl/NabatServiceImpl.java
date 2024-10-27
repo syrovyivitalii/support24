@@ -1,5 +1,6 @@
 package lv.dsns.support24.nabat.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
@@ -13,6 +14,9 @@ import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabat.service.NabatService;
 import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
+import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
+import lv.dsns.support24.notificationlog.repository.NotificationLogRepository;
+import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
 import lv.dsns.support24.notificationlog.service.NotificationLogService;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.client.NotifyClient;
@@ -39,10 +43,12 @@ public class NabatServiceImpl implements NabatService {
     private final NabatRepository nabatRepository;
     private final NabatGroupRepository nabatGroupRepository;
     private final NotificationLogService notificationLogService;
+    private final NotificationLogRepository notificationLogRepository;
     private final SystemUsersRepository usersRepository;
     private final NabatMapper nabatMapper;
     private final NotifyClient notifyClient;
     private final NotifyResultClient notifyResultClient;
+    private final ObjectMapper mapper;
 
     @Override
     public NabatResponseDTO save(NabatRequestDTO nabatRequestDTO) {
@@ -146,14 +152,19 @@ public class NabatServiceImpl implements NabatService {
 
     @Override
     public NotifyResult getNotifyResult(UUID eventId){
-        boolean existByEvenId = notificationLogService.existByEventId(eventId);
-
-        if (BooleanUtils.isFalse(existByEvenId)) {
-            throw new ClientBackendException(ErrorCode.EVENT_NOT_FOUND);
-        }
+        NotificationLog notificationLog = notificationLogRepository.findByEventId(eventId).orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
 
         try {
-            return notifyResultClient.getNotifyResult(eventId);
+            NotifyResult notifyResult = notifyResultClient.getNotifyResult(eventId);
+
+            // Serialize NotifyResult to JSON
+            String notifyResultJson = mapper.writeValueAsString(notifyResult);
+
+            NotificationLogRequestDTO notificationLogRequestDTO = notificationLogService.notificationLogRequestDTOBuilder(notifyResultJson);
+
+            notificationLogService.patch(notificationLog.getId(), notificationLogRequestDTO);
+
+            return notifyResult;
         } catch (Exception e) {
             throw new ClientBackendException(ErrorCode.GET_NOTIFICATION_RESULT_FAILED);
         }
