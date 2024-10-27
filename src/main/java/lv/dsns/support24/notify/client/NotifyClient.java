@@ -1,6 +1,8 @@
-package lv.dsns.support24.notify;
+package lv.dsns.support24.notify.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lv.dsns.support24.notify.model.NotifyRequestBody;
+import lv.dsns.support24.notify.model.NotifyUser;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import okhttp3.*;
@@ -68,7 +70,7 @@ public class NotifyClient {
     // Helper method to construct the NotifyRequest from users and message
     private NotifyRequestBody buildNotifyRequest(List<Object[]> usersToNotify, String message) {
         List<NotifyUser> notifyUsers = usersToNotify.stream()
-                .map(user -> new NotifyUser(1414141415, (String) user[1]))
+                .map(user -> new NotifyUser((Integer) user[0], (String) user[1]))
                 .toList();
 
         return NotifyRequestBody.builder()

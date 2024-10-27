@@ -11,4 +11,9 @@ public interface NotificationLogService {
     NotificationLogResponseDTO save(NotificationLogRequestDTO notificationLogRequestDTO);
 
     PageResponse<NotificationLogResponseDTO> findByNabatGroup(UUID nabatGroupId, Pageable pageable);
+
+    NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID notificationLogId,
+                                                               UUID nabatGroupId,
+                                                               UUID notifiedById,
+                                                               String message);
 }

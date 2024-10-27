@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -59,8 +60,10 @@ public class NabatController {
     }
 
     @PostMapping("/notify/{nabatGroupId}")
-    public ResponseEntity<NotifyResponseDTO> notify (@PathVariable UUID nabatGroupId, @RequestBody NotifyRequestDTO requestDTO) {
-        NotifyResponseDTO notifyResponseDTO = nabatService.nabatNotify(nabatGroupId, requestDTO);
+    public ResponseEntity<NotifyResponseDTO> notify (@PathVariable UUID nabatGroupId,
+                                                     @RequestBody NotifyRequestDTO requestDTO,
+                                                     @ParameterObject Principal principal) {
+        NotifyResponseDTO notifyResponseDTO = nabatService.nabatNotify(nabatGroupId, requestDTO, principal);
 
         return ResponseEntity.ok(notifyResponseDTO);
     }

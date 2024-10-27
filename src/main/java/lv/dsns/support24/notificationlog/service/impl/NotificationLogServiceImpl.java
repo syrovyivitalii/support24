@@ -51,4 +51,17 @@ public class NotificationLogServiceImpl implements NotificationLogService {
                 .build();
 
     }
+
+    @Override
+    public NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID notificationLogId,
+                                                                      UUID nabatGroupId,
+                                                                      UUID notifiedById,
+                                                                      String message) {
+        return NotificationLogRequestDTO.builder()
+                .notificationId(notificationLogId)
+                .message(message)
+                .nabatGroupId(nabatGroupId)
+                .notifiedByUserId(notifiedById)
+                .build();
+    }
 }

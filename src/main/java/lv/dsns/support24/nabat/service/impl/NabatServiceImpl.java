@@ -12,16 +12,19 @@ import lv.dsns.support24.nabat.repository.NabatRepository;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabat.service.NabatService;
 import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
+import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
+import lv.dsns.support24.notificationlog.service.NotificationLogService;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
-import lv.dsns.support24.notify.NotifyClient;
+import lv.dsns.support24.notify.client.NotifyClient;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
-import org.apache.commons.lang3.BooleanUtils;
+import lv.dsns.support24.user.repository.SystemUsersRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,6 +35,8 @@ public class NabatServiceImpl implements NabatService {
 
     private final NabatRepository nabatRepository;
     private final NabatGroupRepository nabatGroupRepository;
+    private final NotificationLogService notificationLogService;
+    private final SystemUsersRepository usersRepository;
     private final NabatMapper nabatMapper;
     private final NotifyClient notifyClient;
 
@@ -101,22 +106,37 @@ public class NabatServiceImpl implements NabatService {
     }
 
     @Override
-    public NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO message) {
+    public NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO requestDTO, Principal principal) {
 
-        boolean exists = nabatGroupRepository.existsById(nabatGroupId);
+        nabatGroupRepository.findById(nabatGroupId).orElseThrow(() -> new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND));
 
-        if (BooleanUtils.isFalse(exists)) {
-            throw new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND);
-        }
+        var userByEmail = usersRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
         List<UUID> userIds = nabatRepository.findUserIdByNabatGroupId(nabatGroupId);
+        if (userIds.isEmpty()) {
+            throw new ClientBackendException(ErrorCode.GROUP_IS_EMPTY);
+        }
 
         List<Object[]> usersToNotify = nabatRepository.findPhonesByUserIds(userIds);
+        if (usersToNotify.isEmpty()) {
+            throw new ClientBackendException(ErrorCode.NO_PHONES_FOUND);
+        }
+
+        UUID notificationId = null;
 
         try {
-            return notifyClient.notifyUsers(usersToNotify, message);
+            NotifyResponseDTO notifyResponseDTO = notifyClient.notifyUsers(usersToNotify, requestDTO);
+
+            notificationId = notifyResponseDTO.getNotificationId();
+
+            return notifyResponseDTO;
         } catch (IOException e) {
             throw new ClientBackendException(ErrorCode.NOTIFICATION_FAILED);
+        }finally {
+            NotificationLogRequestDTO notificationLogRequestDTO = notificationLogService.notificationLogRequestDTOBuilder(notificationId, nabatGroupId, userByEmail.getId(), requestDTO.getMessage());
+
+            notificationLogService.save(notificationLogRequestDTO);
         }
     }
 }

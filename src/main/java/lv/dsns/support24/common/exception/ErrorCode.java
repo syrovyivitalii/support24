@@ -95,6 +95,16 @@ public enum ErrorCode {
             "Provided unit not in list of child units",
             404
     ),
+    GROUP_IS_EMPTY(
+            "404-013",
+            "No users provided in nabat group",
+            404
+    ),
+    NO_PHONES_FOUND(
+            "404-015",
+            "No phones found in nabat group",
+            404
+    ),
 
     //403
     FORBIDDEN(

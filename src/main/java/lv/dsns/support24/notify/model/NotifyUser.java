@@ -1,4 +1,4 @@
-package lv.dsns.support24.notify;
+package lv.dsns.support24.notify.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

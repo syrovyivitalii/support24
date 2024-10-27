@@ -1,0 +1,1 @@
+ALTER TABLE tbl_notification_log ALTER column notification_id drop NOT NULL;
