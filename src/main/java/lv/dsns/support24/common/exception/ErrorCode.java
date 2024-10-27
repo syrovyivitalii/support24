@@ -110,6 +110,11 @@ public enum ErrorCode {
             "Event not found",
             404
     ),
+    NOTIFICATION_LOG_NOT_FOUND(
+            "404-017",
+            "Notification log not found",
+            404
+    ),
 
     //403
     FORBIDDEN(

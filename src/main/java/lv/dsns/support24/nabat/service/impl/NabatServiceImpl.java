@@ -151,6 +151,7 @@ public class NabatServiceImpl implements NabatService {
         if (BooleanUtils.isFalse(existByEvenId)) {
             throw new ClientBackendException(ErrorCode.EVENT_NOT_FOUND);
         }
+
         try {
             return notifyResultClient.getNotifyResult(eventId);
         } catch (Exception e) {

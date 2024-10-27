@@ -2,6 +2,8 @@ package lv.dsns.support24.notificationlog.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
+import lv.dsns.support24.common.exception.ClientBackendException;
+import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
 import lv.dsns.support24.notificationlog.mapper.NotificationLogMapper;
@@ -50,6 +52,17 @@ public class NotificationLogServiceImpl implements NotificationLogService {
                 .content(notificationLogDTOs)
                 .build();
 
+    }
+
+    @Transactional
+    @Override
+    public NotificationLogResponseDTO patch(UUID id, NotificationLogRequestDTO notificationLogRequestDTO) {
+        var notificationLog = notificationLogRepository.findById(id).orElseThrow(
+                () -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
+
+        notificationLogMapper.patchMerge(notificationLogRequestDTO, notificationLog);
+
+        return notificationLogMapper.mapToDTO(notificationLog);
     }
 
     @Override

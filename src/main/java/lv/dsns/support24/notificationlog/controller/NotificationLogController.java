@@ -36,4 +36,10 @@ public class NotificationLogController {
 
         return ResponseEntity.ok(responseDTOs);
     }
+    @PatchMapping("/{id}")
+    public ResponseEntity<NotificationLogResponseDTO> patch (@PathVariable UUID id, @RequestBody NotificationLogRequestDTO notificationLogRequestDTO) {
+        var patched = notificationLogService.patch(id, notificationLogRequestDTO);
+
+        return ResponseEntity.ok(patched);
+    }
 }
