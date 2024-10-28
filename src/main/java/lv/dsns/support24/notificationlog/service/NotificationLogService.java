@@ -3,6 +3,7 @@ package lv.dsns.support24.notificationlog.service;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
+import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,8 @@ public interface NotificationLogService {
     @Transactional
     NotificationLogResponseDTO patch(UUID id, NotificationLogRequestDTO notificationLogRequestDTO);
 
+
+    NotifyResultResponseDTO getNotificationInfo(UUID eventId);
 
     NotificationLogRequestDTO notificationLogRequestDTOBuilder(UUID notificationLogId,
                                                                UUID nabatGroupId,

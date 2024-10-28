@@ -1,5 +1,6 @@
 package lv.dsns.support24.notificationlog.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
@@ -10,6 +11,7 @@ import lv.dsns.support24.notificationlog.mapper.NotificationLogMapper;
 import lv.dsns.support24.notificationlog.repository.NotificationLogRepository;
 import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
 import lv.dsns.support24.notificationlog.service.NotificationLogService;
+import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,6 +65,21 @@ public class NotificationLogServiceImpl implements NotificationLogService {
         notificationLogMapper.patchMerge(notificationLogRequestDTO, notificationLog);
 
         return notificationLogMapper.mapToDTO(notificationLog);
+    }
+
+    @Override
+    public NotifyResultResponseDTO getNotificationInfo(UUID eventId) {
+        NotificationLog notificationLog = notificationLogRepository.findByEventId(eventId).orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
+
+        String jsonResponse = notificationLog.getJsonResponse();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return objectMapper.readValue(jsonResponse, NotifyResultResponseDTO.class);
+        } catch (Exception e) {
+            throw new ClientBackendException(ErrorCode.UNKNOWN_SERVER_ERROR);
+        }
     }
 
 

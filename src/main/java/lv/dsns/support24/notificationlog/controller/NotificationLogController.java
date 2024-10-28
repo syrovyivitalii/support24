@@ -5,6 +5,7 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
 import lv.dsns.support24.notificationlog.service.NotificationLogService;
+import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,9 +29,9 @@ public class NotificationLogController {
         return ResponseEntity.ok(savedNotificationLog);
     }
 
-    @GetMapping("/by-nagat-group/{nabatGroupId}")
+    @GetMapping("/by-nabat-group/{nabatGroupId}/pageable")
     public ResponseEntity<PageResponse<NotificationLogResponseDTO>> findByNabatGroup (@PathVariable("nabatGroupId") UUID nabatGroupId,
-                                                                                      @SortDefault(sort = "createdDate", direction = Sort.Direction.ASC)
+                                                                                      @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC)
                                                                                       @ParameterObject Pageable pageable) {
         PageResponse<NotificationLogResponseDTO> responseDTOs = notificationLogService.findByNabatGroup(nabatGroupId, pageable);
 
@@ -41,5 +42,12 @@ public class NotificationLogController {
         var patched = notificationLogService.patch(id, notificationLogRequestDTO);
 
         return ResponseEntity.ok(patched);
+    }
+
+    @PostMapping("/notified-users/by-event-id/{eventId}")
+    public ResponseEntity<NotifyResultResponseDTO> getNotificationInfo (@PathVariable UUID eventId) {
+        var notificationInfo = notificationLogService.getNotificationInfo(eventId);
+
+        return ResponseEntity.ok(notificationInfo);
     }
 }
