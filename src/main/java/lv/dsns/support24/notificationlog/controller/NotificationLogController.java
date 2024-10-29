@@ -5,7 +5,7 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
 import lv.dsns.support24.notificationlog.service.NotificationLogService;
-import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
+import lv.dsns.support24.notificationlog.controller.dto.response.NotifiedUsersResponseDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,7 +45,7 @@ public class NotificationLogController {
     }
 
     @PostMapping("/notified-users/by-event-id/{eventId}")
-    public ResponseEntity<NotifyResultResponseDTO> getNotificationInfo (@PathVariable UUID eventId) {
+    public ResponseEntity<NotifiedUsersResponseDTO> getNotificationInfo (@PathVariable UUID eventId) {
         var notificationInfo = notificationLogService.getNotificationInfo(eventId);
 
         return ResponseEntity.ok(notificationInfo);

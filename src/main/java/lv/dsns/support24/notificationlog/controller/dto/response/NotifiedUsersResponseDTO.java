@@ -1,4 +1,4 @@
-package lv.dsns.support24.notifyresult.dto;
+package lv.dsns.support24.notificationlog.controller.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +11,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotifyResultResponseDTO {
-    private List<NotifyResultInfo> notifiedUsers;
+public class NotifiedUsersResponseDTO {
+    private List<NotifiedUserInfo> notifiedUsers;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class NotifyResultInfo {
+    public static class NotifiedUserInfo {
         private int soduId;
+        private String name;
         private String mobilePhone;
         private boolean notifyStatus;
     }

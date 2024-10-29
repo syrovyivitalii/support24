@@ -11,14 +11,17 @@ import lv.dsns.support24.notificationlog.mapper.NotificationLogMapper;
 import lv.dsns.support24.notificationlog.repository.NotificationLogRepository;
 import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
 import lv.dsns.support24.notificationlog.service.NotificationLogService;
+import lv.dsns.support24.notificationlog.controller.dto.response.NotifiedUsersResponseDTO;
 import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
+import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
+import lv.dsns.support24.user.service.UserService;
+import lv.dsns.support24.user.service.filter.UserFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,7 @@ public class NotificationLogServiceImpl implements NotificationLogService {
 
     private final NotificationLogMapper notificationLogMapper;
     private final NotificationLogRepository notificationLogRepository;
+    private final UserService userService;
 
 
     @Override
@@ -68,7 +72,7 @@ public class NotificationLogServiceImpl implements NotificationLogService {
     }
 
     @Override
-    public NotifyResultResponseDTO getNotificationInfo(UUID eventId) {
+    public NotifiedUsersResponseDTO getNotificationInfo(UUID eventId) {
         NotificationLog notificationLog = notificationLogRepository.findByEventId(eventId).orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
 
         String jsonResponse = notificationLog.getJsonResponse();
@@ -76,9 +80,33 @@ public class NotificationLogServiceImpl implements NotificationLogService {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            return objectMapper.readValue(jsonResponse, NotifyResultResponseDTO.class);
+            NotifyResultResponseDTO notifyResult  = objectMapper.readValue(jsonResponse, NotifyResultResponseDTO.class);
+
+            List<Integer> soduIds = notifyResult.getNotifiedUsers().stream()
+                    .map(NotifyResultResponseDTO.NotifyResultInfo::getSoduId)
+                    .toList();
+
+            UserFilter userFilter = new UserFilter();
+            userFilter.setSoduId(new HashSet<>(soduIds));
+            List<UserResponseDTO> allUsers = userService.findAll(userFilter);
+
+            Map<Integer, String> mapperSoduIdAndNames = allUsers.stream()
+                    .collect(Collectors.toMap(UserResponseDTO::getSoduId, UserResponseDTO::getName));
+
+            List<NotifiedUsersResponseDTO.NotifiedUserInfo> notifiedUsers = notifyResult.getNotifiedUsers().stream()
+                    .map(userInfo -> new NotifiedUsersResponseDTO.NotifiedUserInfo(
+                            userInfo.getSoduId(),
+                            mapperSoduIdAndNames.get(userInfo.getSoduId()),
+                            userInfo.getMobilePhone(),
+                            userInfo.isNotifyStatus()
+                    ))
+                    .toList();
+
+            return NotifiedUsersResponseDTO.builder()
+                    .notifiedUsers(notifiedUsers)
+                    .build();
         } catch (Exception e) {
-            throw new ClientBackendException(ErrorCode.UNKNOWN_SERVER_ERROR);
+            throw new ClientBackendException(ErrorCode.NOTIFICATION_INFO_NOT_FOUND);
         }
     }
 

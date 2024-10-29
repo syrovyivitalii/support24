@@ -13,4 +13,5 @@ public interface NotificationLogRepository extends JpaRepository<NotificationLog
     Page<NotificationLog> findByNabatGroupId(UUID nabatGroupId, Pageable pageable);
 
     Optional<NotificationLog> findByEventId(UUID eventId);
+
 }

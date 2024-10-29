@@ -115,6 +115,11 @@ public enum ErrorCode {
             "Notification log not found",
             404
     ),
+    NOTIFICATION_INFO_NOT_FOUND(
+            "404-018",
+            "Notification info not found",
+            404
+    ),
 
     //403
     FORBIDDEN(

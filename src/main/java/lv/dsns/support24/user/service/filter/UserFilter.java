@@ -30,4 +30,5 @@ public class UserFilter extends SearchFilter {
      Set<UUID> units;
      Set<UUID> ranks;
      Set<UUID> positions;
+     Set<Integer> soduId;
 }

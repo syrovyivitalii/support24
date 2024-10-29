@@ -164,7 +164,7 @@ public class NabatServiceImpl implements NabatService {
             // Fetch the notify result
             NotifyResult notifyResult = notifyResultClient.getNotifyResult(eventId);
 
-            List<NotifyResultResponseDTO.NotifiedUserInfo> notifiedUserInfos = new ArrayList<>();
+            List<NotifyResultResponseDTO.NotifyResultInfo> notifiedUserInfos = new ArrayList<>();
 
             // Loop through each notified user from the notify result
             for (NotifiedUser notifiedUser : notifyResult.getNotifiedUsers()) {
@@ -179,7 +179,7 @@ public class NabatServiceImpl implements NabatService {
                 }
 
                 // Add the user's notification info (ID and notification status) to the list
-                notifiedUserInfos.add(new NotifyResultResponseDTO.NotifiedUserInfo(notifiedUser.getId(), notifyStatus));
+                notifiedUserInfos.add(new NotifyResultResponseDTO.NotifyResultInfo(notifiedUser.getId(), notifiedUser.getMobilePhone(), notifyStatus));
             }
 
             // Create the response DTO with the collected user notification info

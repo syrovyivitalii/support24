@@ -44,6 +44,12 @@ public class SpecificationCustom {
                 null;
     }
 
+    public static Specification<? extends BaseEntity> searchFieldInCollectionOfIntegerIds(String field, Set<Integer> set) {
+        return CollectionUtils.isNotEmpty(set) ?
+                (r, rq, cb) -> r.get(field).in(set) :
+                null;
+    }
+
     public static Specification<? extends BaseEntity> searchFieldInCollectionOfJoinedIds(String joinField1, String joinField2, String field, Set<UUID> set) {
         return CollectionUtils.isNotEmpty(set) ?
                 (r, rq, cb) -> r.join(joinField1).join(joinField2).get(field).in(set) :

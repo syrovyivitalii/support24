@@ -66,6 +66,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(name = "rank_id")
     private UUID rankId;
 
+    @Column(name = "sodu_id")
+    private Integer soduId;
+
     @OneToMany(mappedBy = "assignedFor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Task> assignedForTasks;
 

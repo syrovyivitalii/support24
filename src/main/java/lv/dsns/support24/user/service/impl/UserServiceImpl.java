@@ -153,7 +153,8 @@ public class UserServiceImpl implements UserService {
                 .and((Specification<SystemUsers>) searchLikeString("name", userFilter.getName()))
                 .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("unitId", userFilter.getUnits()))
                 .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("positionId", userFilter.getPositions()))
-                .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("rankId", userFilter.getRanks()));
+                .and((Specification<SystemUsers>) searchFieldInCollectionOfIds("rankId", userFilter.getRanks()))
+                .and((Specification<SystemUsers>) searchFieldInCollectionOfIntegerIds("soduId", userFilter.getSoduId()));
     }
 
 }

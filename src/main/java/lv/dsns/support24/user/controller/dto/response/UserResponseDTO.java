@@ -29,6 +29,7 @@ public class UserResponseDTO {
     private UserStatus status;
     private boolean verify;
     private String name;
+    private int soduId;
     private PositionResponseDTO userPosition;
     private RankResponseDTO userRank;
     private UnitResponseDTO userUnit;
