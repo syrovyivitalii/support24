@@ -30,9 +30,9 @@ public class NotifyClient {
 
     public NotifyClient() {
         this.httpClient = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.HOURS)
-                .readTimeout(1, TimeUnit.HOURS)
-                .writeTimeout(1, TimeUnit.HOURS)
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(2, TimeUnit.MINUTES)
+                .writeTimeout(2, TimeUnit.MINUTES)
                 .build();
         this.objectMapper = new ObjectMapper();
     }
