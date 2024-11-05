@@ -1,6 +1,7 @@
 package lv.dsns.support24.notificationlog.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
@@ -16,11 +17,15 @@ import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.service.UserService;
 import lv.dsns.support24.user.service.filter.UserFilter;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,6 +113,45 @@ public class NotificationLogServiceImpl implements NotificationLogService {
         } catch (Exception e) {
             throw new ClientBackendException(ErrorCode.NOTIFICATION_INFO_NOT_FOUND);
         }
+    }
+
+    @Override
+    public void getNotifyInfoToCsv(HttpServletResponse response, UUID eventId) throws IOException {
+
+        NotificationLog notificationLog = notificationLogRepository.findByEventId(eventId)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
+
+        var notificationLogResponseDTO = notificationLogMapper.mapToDTO(notificationLog);
+
+        NotifiedUsersResponseDTO notificationInfo = getNotificationInfo(eventId);
+
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"notify.csv\"");
+
+        try (CSVPrinter csvPrinter = new CSVPrinter(response.getWriter(), CSVFormat.DEFAULT)) {
+            csvPrinter.printRecord("Група оповіщення", notificationLogResponseDTO.getNotificationLogGroup().getGroupName());
+            csvPrinter.printRecord("Повідомлення", notificationLogResponseDTO.getMessage());
+            csvPrinter.printRecord("Дата", notificationLogResponseDTO.getCreatedDate());
+            csvPrinter.printRecord("Оператор оповіщення", notificationLogResponseDTO.getNotificationLogUser().getName());
+            csvPrinter.println();
+
+            Map<Boolean, List<NotifiedUsersResponseDTO.NotifiedUserInfo>> groupedUsers =
+                    notificationInfo.getNotifiedUsers()
+                            .stream()
+                            .collect(Collectors.partitioningBy(NotifiedUsersResponseDTO.NotifiedUserInfo::isNotifyStatus));
+
+            printUserGroup(csvPrinter, groupedUsers.get(true), "Оповіщено");
+            printUserGroup(csvPrinter, groupedUsers.get(false), "Не оповіщено");
+        }
+    }
+
+    private void printUserGroup(CSVPrinter csvPrinter, List<NotifiedUsersResponseDTO.NotifiedUserInfo> users, String status) throws IOException {
+        csvPrinter.printRecord("Абонент", "Номер телефону", "Статус: " + status);
+        for (NotifiedUsersResponseDTO.NotifiedUserInfo user : users) {
+            csvPrinter.printRecord(user.getName(), user.getMobilePhone(), status);
+        }
+        csvPrinter.println();
     }
 
 

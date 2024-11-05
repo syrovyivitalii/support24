@@ -1,5 +1,6 @@
 package lv.dsns.support24.notificationlog.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
@@ -10,9 +11,12 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -49,5 +53,13 @@ public class NotificationLogController {
         var notificationInfo = notificationLogService.getNotificationInfo(eventId);
 
         return ResponseEntity.ok(notificationInfo);
+    }
+
+    @GetMapping("/notified-users/by-event-id/to-csv/{eventId}")
+    public ResponseEntity<Void> exportNotifyInfoToCSV(@PathVariable UUID eventId, HttpServletResponse response) throws IOException{
+
+        notificationLogService.getNotifyInfoToCsv(response, eventId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
