@@ -61,9 +61,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
         }
 
-        if (BooleanUtils.isFalse(user.isVerify())) {
-            throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
-        }
+//        if (BooleanUtils.isFalse(user.isVerify())) {
+//            throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
+//        }
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
