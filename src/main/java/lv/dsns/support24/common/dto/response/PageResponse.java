@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class PageResponse <T>{
+
     private Long totalPages;
     private Long pageSize;
     private Long totalElements;

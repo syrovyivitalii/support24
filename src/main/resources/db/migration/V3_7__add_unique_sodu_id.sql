@@ -1,0 +1,1 @@
+ALTER TABLE tbl_system_users ADD CONSTRAINT unq_sodu_id UNIQUE (sodu_id);

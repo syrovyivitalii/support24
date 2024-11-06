@@ -18,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskResponseDTO {
+
     private UUID id;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
@@ -27,9 +28,6 @@ public class TaskResponseDTO {
     private Status status;
     private Priority priority;
     private Type taskType;
-//    private UUID assignedForId;
-//    private UUID assignedById;
-//    private UUID createdById;
     private ProblemResponseDTO taskProblem;
     private UUID parentId;
     private boolean notified;

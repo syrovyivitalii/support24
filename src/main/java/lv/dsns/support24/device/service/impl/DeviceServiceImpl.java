@@ -40,6 +40,7 @@ public class DeviceServiceImpl implements DeviceService {
         List<DeviceResponseDTO> deviceResponseDTOS = allDevices.stream()
                 .map(deviceMapper::mapToDTO)
                 .collect(Collectors.toList());
+
         return PageResponse.<DeviceResponseDTO>builder()
                 .totalPages((long) allDevices.getTotalPages())
                 .pageSize((long) pageable.getPageSize())
@@ -47,14 +48,14 @@ public class DeviceServiceImpl implements DeviceService {
                 .content(deviceResponseDTOS)
                 .build();
     }
+
     @Override
     @Transactional
     public DeviceResponseDTO save (DeviceRequestDTO requestDTO){
         var device = deviceMapper.mapToEntity(requestDTO);
-        if (deviceRepository.existsDeviceByInventoryNumber(requestDTO.getInventoryNumber())){
-            throw new ClientBackendException(ErrorCode.INVENTORY_NUMBER_ALREADY_EXISTS);
-        }
+
         var savedDevice = deviceRepository.save(device);
+
         return deviceMapper.mapToDTO(savedDevice);
     }
     @Override
@@ -80,12 +81,13 @@ public class DeviceServiceImpl implements DeviceService {
 
     private Specification<Device> getSearchSpecification(DeviceFilter deviceFilter) {
         return Specification.where((Specification<Device>) searchLikeString("deviceName", deviceFilter.getDeviceName()))
-                .and((Specification<Device>) searchOnDeviceType(deviceFilter.getDeviceTypes()))
+                .and((Specification<Device>) searchOnField("deviceType",deviceFilter.getDeviceTypes()))
                 .and((Specification<Device>) searchLikeString("inventoryNumber", deviceFilter.getInventoryNumber()))
                 .and((Specification<Device>) searchLikeString("decreeNumber", deviceFilter.getDecreeNumber()))
                 .and((Specification<Device>) searchByDeviceProductionYearRange("productionYear", deviceFilter.getStartYear(), deviceFilter.getEndYear()))
                 .and((Specification<Device>) searchFieldInCollectionOfIds("unitId", deviceFilter.getUnitIds()))
+                .and((Specification<Device>) searchFieldInCollectionOfIds("userId", deviceFilter.getUserIds()))
                 .and((Specification<Device>) searchFieldInCollectionOfIds("id", deviceFilter.getDeviceIds()))
-                .and((Specification<Device>) searchOnDeviceStatus(deviceFilter.getDeviceStatuses()));
+                .and((Specification<Device>) searchOnField("deviceStatus",deviceFilter.getDeviceStatuses()));
     }
 }

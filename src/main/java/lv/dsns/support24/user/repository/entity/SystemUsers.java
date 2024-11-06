@@ -3,9 +3,16 @@ package lv.dsns.support24.user.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.device.repository.entity.Device;
+import lv.dsns.support24.nabat.repository.entity.Nabat;
+import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
+import lv.dsns.support24.phone.repository.entity.Phone;
+import lv.dsns.support24.position.repository.entity.Position;
+import lv.dsns.support24.rank.repository.entity.Rank;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.Shift;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
@@ -13,9 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "tbl_system_users")
@@ -27,11 +32,16 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class SystemUsers extends BaseEntity implements UserDetails {
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private Shift shift;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -47,11 +57,17 @@ public class SystemUsers extends BaseEntity implements UserDetails {
 
     private String name;
 
-    @Column(name = "job_title")
-    private String jobTitle;
+    @Column(name = "position_id")
+    private UUID positionId;
 
     @Column(name = "user_unit_id")
     private UUID unitId;
+
+    @Column(name = "rank_id")
+    private UUID rankId;
+
+    @Column(name = "sodu_id")
+    private Integer soduId;
 
     @OneToMany(mappedBy = "assignedFor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Task> assignedForTasks;
@@ -65,6 +81,26 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit userUnit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rank_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Rank userRank;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Position userPosition;
+
+    @OneToMany(mappedBy = "nabatUsers", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Nabat> userNabat;
+
+    @OneToMany(mappedBy = "phoneUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Phone> userPhones;
+
+    @OneToMany(mappedBy = "deviceUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Device> userDevices;
+
+    @OneToMany(mappedBy = "notificationLogUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<NotificationLog> userNotificationLogs;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -106,6 +142,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
         }
         if (status == null){
             status = UserStatus.ACTIVE;
+        }
+        if (shift == null){
+            shift = Shift.Відсутня;
         }
     }
 }

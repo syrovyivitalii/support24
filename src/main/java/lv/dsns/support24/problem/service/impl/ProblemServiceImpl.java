@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService {
+
     private final ProblemMapper problemMapper;
     private final ProblemRepository problemRepository;
 
@@ -28,14 +29,15 @@ public class ProblemServiceImpl implements ProblemService {
     @Transactional
     public ProblemResponseDTO save (ProblemRequestDTO problemRequestDTO){
         var problem = problemMapper.mapToEntity(problemRequestDTO);
-
         var savedTask = problemRepository.save(problem);
+
         return problemMapper.mapToDTO(savedTask);
     }
 
     @Override
     public List<ProblemResponseDTO> findAll(){
         var allTasks = problemRepository.findAll(Sort.by(Sort.Direction.ASC, "problem"));
+
         return allTasks.stream().map(problemMapper::mapToDTO).collect(Collectors.toList());
     }
 

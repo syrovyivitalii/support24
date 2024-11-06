@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceRequestDTO {
+
     private String deviceName;
     private DeviceType deviceType;
     private String inventoryNumber;
@@ -22,8 +23,7 @@ public class DeviceRequestDTO {
     private String ipAddress;
     private Integer productionYear;
     private String note;
-    private String userName;
-    private String userPosition;
+    private UUID userId;
     private String specifications;
     private UUID unitId;
 }
