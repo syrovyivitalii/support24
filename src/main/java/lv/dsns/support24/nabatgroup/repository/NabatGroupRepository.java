@@ -7,5 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NabatGroupRepository extends JpaRepository<NabatGroup, UUID> {
+
     List<NabatGroup> findByUnitId(UUID unitId);
+
+    boolean existsByGroupNameAndUnitId(String groupName, UUID unitId);
+
 }

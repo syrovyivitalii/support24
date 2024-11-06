@@ -14,8 +14,6 @@ public interface SystemUsersRepository extends JpaRepository <SystemUsers, UUID>
 
     Optional<SystemUsers> findByEmail(String email);
 
-    @Query("select u.id from SystemUsers u where u.email = ?1")
-    Optional<UUID> findIdByEmail(String email);
     @Query("select u.email from SystemUsers u where u.id = ?1")
     Optional<String> findEmailById(UUID id);
 
@@ -23,7 +21,5 @@ public interface SystemUsersRepository extends JpaRepository <SystemUsers, UUID>
     List<String> findEmailsByRole(Role role);
 
     boolean existsByEmail(String email);
-
-    boolean existsByPhone(String phone);
 
 }

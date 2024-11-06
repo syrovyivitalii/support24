@@ -10,6 +10,7 @@ import lv.dsns.support24.task.controller.dto.enums.Type;
 import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.user.controller.dto.enums.Role;
+import lv.dsns.support24.user.controller.dto.enums.Shift;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,12 @@ public class SpecificationCustom {
     }
 
     public static Specification<? extends BaseEntity> searchFieldInCollectionOfIds(String field, Set<UUID> set) {
+        return CollectionUtils.isNotEmpty(set) ?
+                (r, rq, cb) -> r.get(field).in(set) :
+                null;
+    }
+
+    public static Specification<? extends BaseEntity> searchFieldInCollectionOfIntegerIds(String field, Set<Integer> set) {
         return CollectionUtils.isNotEmpty(set) ?
                 (r, rq, cb) -> r.get(field).in(set) :
                 null;
@@ -98,43 +105,8 @@ public class SpecificationCustom {
         };
     }
 
-    public static Specification<? extends BaseEntity> searchOnStatus(Set<Status> statuses) {
-        return CollectionUtils.isNotEmpty(statuses)?
-                (root, query, builder) -> root.get("status").in(statuses):null;
+    public static <T> Specification<? extends BaseEntity> searchOnField(String fieldName, Set<T> values) {
+        return CollectionUtils.isNotEmpty(values) ?
+                (root, query, builder) -> root.get(fieldName).in(values) : null;
     }
-    public static Specification<? extends BaseEntity> searchOnUnitStatus(Set<UnitStatus> statuses) {
-        return CollectionUtils.isNotEmpty(statuses)?
-                (root, query, builder) -> root.get("unitStatus").in(statuses):null;
-    }
-    public static Specification<? extends BaseEntity> searchOnDeviceStatus(Set<DeviceStatus> statuses) {
-        return CollectionUtils.isNotEmpty(statuses)?
-                (root, query, builder) -> root.get("deviceStatus").in(statuses):null;
-    }
-    public static Specification<? extends BaseEntity> searchOnTaskType(Set<Type> types) {
-        return CollectionUtils.isNotEmpty(types)?
-                (root, query, builder) -> root.get("taskType").in(types):null;
-    }
-    public static Specification<? extends BaseEntity> searchOnDeviceType(Set<DeviceType> types) {
-        return CollectionUtils.isNotEmpty(types)?
-                (root, query, builder) -> root.get("deviceType").in(types):null;
-    }
-    public static Specification<? extends BaseEntity> searchOnPriority(Set<Priority> priorities) {
-        return CollectionUtils.isNotEmpty(priorities)?
-                (root, query, builder) -> root.get("priority").in(priorities):null;
-    }
-
-    public static Specification<? extends BaseEntity> searchOnRole(Set<Role> roles) {
-        return CollectionUtils.isNotEmpty(roles)?
-                (root, query, builder) -> root.get("role").in(roles):null;
-    }
-    public static Specification<? extends BaseEntity> searchOnUserStatus(Set<UserStatus> statuses) {
-        return CollectionUtils.isNotEmpty(statuses)?
-                (root, query, builder) -> root.get("status").in(statuses):null;
-    }
-
-    public static Specification<? extends BaseEntity> searchOnUnitType(Set<UnitType> types) {
-        return CollectionUtils.isNotEmpty(types)?
-                (root, query, builder) -> root.get("unitType").in(types):null;
-    }
-
 }

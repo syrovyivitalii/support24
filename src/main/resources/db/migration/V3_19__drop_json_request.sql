@@ -1,0 +1,1 @@
+ALTER TABLE tbl_notification_log DROP COLUMN json_request;

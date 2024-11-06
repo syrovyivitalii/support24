@@ -4,32 +4,33 @@ import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.common.security.*;
-import lv.dsns.support24.common.security.dto.AuthenticationRequest;
-import lv.dsns.support24.common.security.dto.AuthenticationResponse;
-import lv.dsns.support24.common.security.dto.RegisterRequest;
+import lv.dsns.support24.common.security.dto.*;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.AuthenticationService;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-   private final SystemUsersRepository usersRepository;
-   private final PasswordEncoder passwordEncoder;
+    private final SystemUsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-   private final JwtService jwtService;
-
-   private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse register (RegisterRequest request){
-
+    @Override
+    public AuthenticationResponse register(RegisterRequest request) {
         if (usersRepository.existsByEmail(request.getEmail())) {
             throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
         }
@@ -49,27 +50,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-
     }
-    public AuthenticationResponse authenticate (AuthenticationRequest request){
+
+    @Override
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        var user = usersRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        if (!UserStatus.ACTIVE.equals(user.getStatus())) {
+            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
+        }
+
+//        if (BooleanUtils.isFalse(user.isVerify())) {
+//            throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
+//        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        var user = usersRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
-            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
-        }
+
         var accessToken = jwtService.generateToken((UserDetails) user);
         var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
+
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    @Override
     public AuthenticationResponse refreshToken(String refreshToken) {
         if (jwtService.isTokenExpired(refreshToken)) {
             throw new ClientBackendException(ErrorCode.REFRESH_TOKEN_EXPIRED);
@@ -78,9 +90,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String userEmail = jwtService.extractEmail(refreshToken);
         var user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
         if (!user.getStatus().equals(UserStatus.ACTIVE)) {
             throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
         }
+
         var accessToken = jwtService.generateToken((UserDetails) user);
         var newRefreshToken = jwtService.generateRefreshToken((UserDetails) user);
 
@@ -89,27 +103,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .refreshToken(newRefreshToken)
                 .build();
     }
-    public void changePassword(String email, String currentPassword, String newPassword) {
-        var user = usersRepository.findByEmail(email)
+
+    @Override
+    public void changePassword(Principal principal, ChangePasswordRequestDTO request) {
+        var user = usersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+
+        if (!UserStatus.ACTIVE.equals(user.getStatus())) {
             throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
         }
-        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new ClientBackendException(ErrorCode.INVALID_CURRENT_PASSWORD);
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
-        usersRepository.save(user);
-    }
-    public void changePasswordByAdmin(String email, String newPassword) {
-        var user = usersRepository.findByEmail(email)
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
-            throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
-        }
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         usersRepository.save(user);
     }
 
+    @Override
+    public void changePasswordByAdmin(Principal principal, ChangePasswordByAdminRequestDTO request) {
+
+        Optional<SystemUsers> byEmail = usersRepository.findByEmail(principal.getName());
+        byEmail.ifPresent(systemUsers -> {
+            if (byEmail.get().getRole().equals(Role.ROLE_SYSTEM_ADMIN)){
+                var user = usersRepository.findByEmail(request.getEmail())
+                        .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+                if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+                    throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
+                }
+
+                user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+                usersRepository.save(user);
+            }
+        });
+    }
 }

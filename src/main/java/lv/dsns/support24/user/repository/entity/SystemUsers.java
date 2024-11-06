@@ -3,7 +3,11 @@ package lv.dsns.support24.user.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
+import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
+import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
+import lv.dsns.support24.phone.repository.entity.Phone;
+import lv.dsns.support24.position.repository.entity.Position;
 import lv.dsns.support24.rank.repository.entity.Rank;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.repository.entity.Unit;
@@ -34,9 +38,6 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone", unique = true)
-    private String phone;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
@@ -65,6 +66,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(name = "rank_id")
     private UUID rankId;
 
+    @Column(name = "sodu_id")
+    private Integer soduId;
+
     @OneToMany(mappedBy = "assignedFor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Task> assignedForTasks;
 
@@ -82,8 +86,21 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @JoinColumn(name = "rank_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Rank userRank;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Nabat> nabats = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Position userPosition;
+
+    @OneToMany(mappedBy = "nabatUsers", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Nabat> userNabat;
+
+    @OneToMany(mappedBy = "phoneUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Phone> userPhones;
+
+    @OneToMany(mappedBy = "deviceUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<Device> userDevices;
+
+    @OneToMany(mappedBy = "notificationLogUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<NotificationLog> userNotificationLogs;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -7,15 +7,24 @@ import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.service.filter.UserFilter;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
     List<UserResponseDTO> findAll(UserFilter userFilter);
+
     PageResponse<UserResponseDTO> findAllPageable(UserFilter userFilter, Pageable pageable);
+
     UserResponseDTO save(UserRequestDTO userRequestDTO);
+
     UserResponseDTO saveDefault(UserDefaultRequestDTO userDefaultRequestDTO);
+
     boolean existUserByEmail(String email);
+
     UserResponseDTO patch (UUID id, UserRequestDTO requestDTO);
+
     void delete(UUID id);
+
+    PageResponse<UserResponseDTO> findAllSubordinatedPageable(Principal principal, UserFilter userFilter, Pageable pageable);
 }

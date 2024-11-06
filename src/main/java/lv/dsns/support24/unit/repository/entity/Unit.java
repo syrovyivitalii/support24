@@ -5,10 +5,6 @@ import lombok.*;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
-import lv.dsns.support24.task.controller.dto.enums.Priority;
-import lv.dsns.support24.task.controller.dto.enums.Status;
-import lv.dsns.support24.task.controller.dto.enums.Type;
-import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
@@ -55,7 +51,7 @@ public class Unit extends BaseEntity {
     private List<Device> unitDevice;
 
     @OneToMany(mappedBy = "nabatGroupUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<NabatGroup> unitNabatGroup ;
+    private List<NabatGroup> unitNabatGroups ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)

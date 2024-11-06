@@ -25,22 +25,26 @@ public class DeviceController {
     @GetMapping("/private/devices/pageable")
     public ResponseEntity<PageResponse<DeviceResponseDTO>> getAllDevices (@ParameterObject DeviceFilter deviceFilter, @ParameterObject Pageable pageable){
        PageResponse<DeviceResponseDTO> responseDTOS = deviceService.findAllDevices(deviceFilter,pageable);
-        return ResponseEntity.ok(responseDTOS);
+
+       return ResponseEntity.ok(responseDTOS);
     }
 
     @PostMapping("/private/devices")
     public ResponseEntity<DeviceResponseDTO> save (@RequestBody DeviceRequestDTO requestDTO){
         var savedDevice = deviceService.save(requestDTO);
+
         return ResponseEntity.ok(savedDevice);
     }
     @PatchMapping("/private/devices/write-off/{id}")
     public ResponseEntity<DeviceResponseDTO> writeOffDevice (@PathVariable UUID id, @RequestBody DeviceWriteOffRequestDTO requestDTO){
         var writtenOffDevice = deviceService.writeOffDevice(id, requestDTO);
+
         return ResponseEntity.ok(writtenOffDevice);
     }
     @PatchMapping("/private/devices/{id}")
     public ResponseEntity<DeviceResponseDTO> patchDevice (@PathVariable UUID id, @RequestBody DeviceRequestDTO requestDTO){
         var patchedDevice = deviceService.patchDevice(id, requestDTO);
+
         return ResponseEntity.ok(patchedDevice);
     }
 }

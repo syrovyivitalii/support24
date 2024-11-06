@@ -1,0 +1,1 @@
+ALTER TYPE phone_types ADD VALUE 'МобільнийАвто'

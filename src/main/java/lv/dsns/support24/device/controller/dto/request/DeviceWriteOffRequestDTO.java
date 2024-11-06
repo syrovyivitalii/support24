@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 
 
 @Data
@@ -11,5 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceWriteOffRequestDTO {
+
     private String decreeNumber;
+    private String inventoryNumber;
+    private DeviceStatus deviceStatus;
 }

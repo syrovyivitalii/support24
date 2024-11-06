@@ -1,10 +1,10 @@
 package lv.dsns.support24.common.smtp;
 
+import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
 import lv.dsns.support24.problem.repository.ProblemRepository;
 import lv.dsns.support24.problem.repository.entity.Problem;
-import lv.dsns.support24.task.repository.TaskRepository;
 import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.repository.UnitRepository;
 import lv.dsns.support24.unit.repository.entity.Unit;
@@ -17,22 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Component
+@RequiredArgsConstructor
 public class EmailNotificationFactory {
     private final EmailNotificationService emailNotificationService;
     private final SystemUsersRepository usersRepository;
     private final UnitRepository unitRepository;
     private final ProblemRepository problemRepository;
-    private final TaskRepository taskRepository;
 
-    public EmailNotificationFactory(EmailNotificationService emailNotificationService, SystemUsersRepository usersRepository,
-                                    UnitRepository unitRepository, ProblemRepository problemRepository,
-                                    TaskRepository taskRepository) {
-        this.emailNotificationService = emailNotificationService;
-        this.usersRepository = usersRepository;
-        this.unitRepository = unitRepository;
-        this.problemRepository = problemRepository;
-        this.taskRepository = taskRepository;
-    }
 
     public void sendTaskCreatedNotification(Task task) {
         SystemUsers userById = usersRepository.findById(task.getCreatedById())

@@ -20,12 +20,14 @@ public class RankController {
     @PostMapping
     private ResponseEntity<RankResponseDTO> save (@RequestBody RankRequestDTO rankRequestDTO) {
         var result = rankService.save(rankRequestDTO);
+
         return ResponseEntity.ok(result);
     }
 
     @GetMapping
     private ResponseEntity<List<RankResponseDTO>> findAll() {
         var result = rankService.findAll();
+
         return ResponseEntity.ok(result);
     }
 }

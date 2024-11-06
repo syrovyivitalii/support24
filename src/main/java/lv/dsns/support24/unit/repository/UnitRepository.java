@@ -1,9 +1,6 @@
 package lv.dsns.support24.unit.repository;
 
 import lv.dsns.support24.unit.repository.entity.Unit;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +26,4 @@ public interface UnitRepository extends JpaRepository<Unit,UUID>, JpaSpecificati
         ORDER BY unit_type;
         """, nativeQuery = true)
     List<Unit> findHierarchyByUnitId(UUID unitId);
-
-
-
 }
