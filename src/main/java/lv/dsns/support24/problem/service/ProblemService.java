@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProblemService {
+
     ProblemResponseDTO save (ProblemRequestDTO problemRequestDTO);
+
     List<ProblemResponseDTO> findAll();
+
     void delete(UUID id);
+
     boolean existByProblem(String problem);
 }

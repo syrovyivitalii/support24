@@ -69,8 +69,6 @@ public class UnitServiceImpl implements UnitService {
     public List<UnitResponseDTO> findAll(){
         var allTasks = unitRepository.findAll();
         return allTasks.stream().map(unitMapper::mapToDTO)
-                .sorted(Comparator.comparing(UnitResponseDTO::getUnitType)
-                .thenComparing(UnitResponseDTO::getUnitName))
                 .collect(Collectors.toList());
     }
     @Override
@@ -79,8 +77,6 @@ public class UnitServiceImpl implements UnitService {
 
         return allChild.stream()
                 .map(unitMapper::mapToDTO)
-                .sorted(Comparator.comparing(UnitResponseDTO::getUnitType)
-                        .thenComparing(UnitResponseDTO::getUnitName))
                 .collect(Collectors.toList());
     }
 
@@ -108,9 +104,9 @@ public class UnitServiceImpl implements UnitService {
     }
 
     private Specification<Unit> getSearchSpecification(UnitFilter unitFilter) {
-        return Specification.where((Specification<Unit>) searchOnUnitType(unitFilter.getUnitType()))
+        return Specification.where((Specification<Unit>) searchOnField("unitType", unitFilter.getUnitType()))
                 .and((Specification<Unit>) searchLikeString("unitName", unitFilter.getUnitName()))
-                .and((Specification<Unit>) searchOnUnitStatus(unitFilter.getStatuses()))
+                .and((Specification<Unit>) searchOnField("unitStatus", unitFilter.getStatuses()))
                 .and((Specification<Unit>) searchFieldInCollectionOfIds("id", unitFilter.getUnitId()));
     }
 

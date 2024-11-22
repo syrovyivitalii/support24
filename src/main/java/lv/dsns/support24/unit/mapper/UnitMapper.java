@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring", imports = {LocalDateTime.class, Status.class})
 public interface UnitMapper {
+
     Unit mapToEntity(UnitRequestDTO unitRequestDTO);
+
     UnitResponseDTO mapToDTO (Unit unit);
 
     @Mapping(target = "updatedDate",expression = "java(LocalDateTime.now())")

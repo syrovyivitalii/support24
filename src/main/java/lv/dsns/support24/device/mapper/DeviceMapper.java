@@ -13,8 +13,8 @@ public interface DeviceMapper {
     Device mapToEntity(DeviceRequestDTO deviceRequestDTO);
 
     DeviceResponseDTO mapToDTO (Device device);
-    @Mapping(target = "inventoryNumber", expression = "java(null)")
-    @Mapping(target = "deviceStatus", expression = "java(DeviceStatus.WRITTENOFF)")
+    @Mapping(target = "inventoryNumber", defaultValue = "null")
+    @Mapping(target = "deviceStatus", defaultValue = "WRITTENOFF")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void patchMergeWriteOff(DeviceWriteOffRequestDTO deviceRequestDTO, @MappingTarget Device device);
 

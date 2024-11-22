@@ -80,6 +80,46 @@ public enum ErrorCode {
             "Device not found",
             404
     ),
+    GROUP_ALREADY_EXISTS(
+            "404-010",
+            "Nabat group for such unit already exists",
+            404
+    ),
+    NABAT_GROUP_NOT_FOUND(
+            "404-011",
+            "Nabat group not found",
+            404
+    ),
+    INVALID_UNIT(
+            "404-012",
+            "Provided unit not in list of child units",
+            404
+    ),
+    GROUP_IS_EMPTY(
+            "404-013",
+            "No users provided in nabat group",
+            404
+    ),
+    NO_PHONES_FOUND(
+            "404-015",
+            "No phones found in nabat group",
+            404
+    ),
+    EVENT_NOT_FOUND(
+            "404-016",
+            "Event not found",
+            404
+    ),
+    NOTIFICATION_LOG_NOT_FOUND(
+            "404-017",
+            "Notification log not found",
+            404
+    ),
+    NOTIFICATION_INFO_NOT_FOUND(
+            "404-018",
+            "Notification info not found",
+            404
+    ),
 
     //403
     FORBIDDEN(
@@ -90,7 +130,19 @@ public enum ErrorCode {
     //500
     UNKNOWN_SERVER_ERROR("500",
             "Unknown server error",
-            500);
+            500),
+
+    NOTIFICATION_FAILED(
+            "501",
+            "Notification failed",
+            501
+    ),
+    GET_NOTIFICATION_RESULT_FAILED(
+            "502",
+            "Get notification result failed",
+            501
+    ),;
+
 
 
     private Data data;
