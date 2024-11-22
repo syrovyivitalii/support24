@@ -26,4 +26,5 @@ public class UserRequestDTO {
     private boolean verify;
     private UUID unitId;
     private UUID rankId;
+    private UUID permissionUnitId;
 }
