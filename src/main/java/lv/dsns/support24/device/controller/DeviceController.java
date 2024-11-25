@@ -29,6 +29,13 @@ public class DeviceController {
        return ResponseEntity.ok(responseDTOS);
     }
 
+    @GetMapping("/private/devices/grouped/pageable")
+    public ResponseEntity<PageResponse<DeviceResponseDTO>> getAllDevicesGrouped (@ParameterObject DeviceFilter deviceFilter, @ParameterObject Pageable pageable){
+        PageResponse<DeviceResponseDTO> responseDTOS = deviceService.findDevicesGrouped(deviceFilter,pageable);
+
+        return ResponseEntity.ok(responseDTOS);
+    }
+
     @PostMapping("/private/devices")
     public ResponseEntity<DeviceResponseDTO> save (@RequestBody DeviceRequestDTO requestDTO){
         var savedDevice = deviceService.save(requestDTO);

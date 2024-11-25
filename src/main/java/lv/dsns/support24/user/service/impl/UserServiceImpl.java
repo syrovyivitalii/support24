@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
         var authUser = systemUsersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
-        List<UnitResponseDTO> allChildUnits = unitService.findAllChildUnits(authUser.getUnitId());
+        List<UnitResponseDTO> allChildUnits = unitService.findAllChildUnits(authUser.getPermissionUnitId());
 
         Set<UUID> childUnitsIds = allChildUnits.stream()
                 .map(UnitResponseDTO::getId)

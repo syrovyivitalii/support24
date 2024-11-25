@@ -13,15 +13,18 @@ import lv.dsns.support24.device.repository.DeviceRepository;
 import lv.dsns.support24.device.repository.entity.Device;
 import lv.dsns.support24.device.service.DeviceService;
 import lv.dsns.support24.device.service.filter.DeviceFilter;
-import lv.dsns.support24.task.controller.dto.response.TaskResponseDTO;
+import lv.dsns.support24.unit.controller.dto.enums.UnitType;
+import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
+import lv.dsns.support24.unit.service.UnitService;
+import lv.dsns.support24.unit.service.filter.UnitFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static lv.dsns.support24.common.specification.SpecificationCustom.*;
@@ -32,6 +35,13 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 public class DeviceServiceImpl implements DeviceService {
     private final DeviceRepository deviceRepository;
     private final DeviceMapper deviceMapper;
+    private final UnitService unitService;
+
+    @Value("${inventory.guId}")
+    private UUID guId;
+
+    @Value(value = "${inventory.arzspId}")
+    private UUID arzspId;
 
     @Override
     public PageResponse<DeviceResponseDTO> findAllDevices(DeviceFilter deviceFilter, Pageable pageable){
@@ -48,6 +58,46 @@ public class DeviceServiceImpl implements DeviceService {
                 .content(deviceResponseDTOS)
                 .build();
     }
+
+    @Override
+    public PageResponse<DeviceResponseDTO> findDevicesGrouped(DeviceFilter deviceFilter, Pageable pageable) {
+        List<UnitResponseDTO> allAPRZByUnitType = unitService.findAllByUnitType(UnitType.ДПРЗ);
+        Set<UUID> dprzUnitIds = allAPRZByUnitType.stream().map(UnitResponseDTO::getId).collect(Collectors.toSet());
+
+        // Modify unit IDs based on filter conditions
+        if (deviceFilter.getUnitIds().contains(guId)) {
+            // Fetch GU unit IDs
+            UnitFilter unitFilterGU = new UnitFilter();
+            unitFilterGU.setUnitType(Collections.singleton(UnitType.ГУ));
+            PageResponse<UnitResponseDTO> guPageable = unitService.findAllPageable(unitFilterGU, pageable);
+            Set<UUID> guUnitIds = guPageable.getContent()
+                    .stream()
+                    .map(UnitResponseDTO::getId)
+                    .collect(Collectors.toSet());
+            deviceFilter.setUnitIds(guUnitIds);
+        } else if (deviceFilter.getUnitIds().contains(arzspId)) {
+            // Fetch child units for ARZSP
+            List<UnitResponseDTO> childUnits = unitService.findAllChildUnits(arzspId);
+            Set<UUID> childUnitIds = childUnits.stream()
+                    .map(UnitResponseDTO::getId)
+                    .collect(Collectors.toSet());
+            deviceFilter.setUnitIds(childUnitIds);
+        } else if (!Collections.disjoint(deviceFilter.getUnitIds(), dprzUnitIds)) {
+            // Fetch child units for all DPRZ units
+            Set<UUID> hierarchyDprzUnitIds = new HashSet<>();
+            for (UUID dprzId : dprzUnitIds) {
+                List<UnitResponseDTO> dprzChildUnits = unitService.findAllChildUnits(dprzId);
+                hierarchyDprzUnitIds.addAll(dprzChildUnits.stream()
+                        .map(UnitResponseDTO::getId)
+                        .collect(Collectors.toSet()));
+            }
+            deviceFilter.setUnitIds(hierarchyDprzUnitIds);
+        }
+
+        // Fetch devices with the updated filter
+        return findAllDevices(deviceFilter, pageable);
+    }
+
 
     @Override
     @Transactional

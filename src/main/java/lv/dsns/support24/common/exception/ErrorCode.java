@@ -34,6 +34,13 @@ public enum ErrorCode {
             400
     ),
 
+    //401
+    INVALID_CREDENTIALS(
+            "401",
+            "Invalid credentials",
+            401
+    ),
+
     // 404
     NOT_FOUND(
             "404-001",
