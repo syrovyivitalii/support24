@@ -31,4 +31,6 @@ public class DeviceFilter extends SearchFilter {
     Set<UUID> userIds;
     Integer startYear;
     Integer endYear;
+    String macAddress;
+    String ipAddress;
 }

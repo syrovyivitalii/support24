@@ -16,7 +16,6 @@ import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.UserService;
 import lv.dsns.support24.user.service.filter.UserFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -64,6 +63,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
     public PageResponse<UserResponseDTO> findAllSubordinatedPageable(Principal principal, UserFilter userFilter, Pageable pageable){
         var authUser = systemUsersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
@@ -93,6 +93,38 @@ public class UserServiceImpl implements UserService {
         }
 
         return findAllPageable(userFilter,pageable);
+    }
+
+    @Override
+    public List<UserResponseDTO> findAllSubordinated(Principal principal, UserFilter userFilter){
+        var authUser = systemUsersRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        List<UnitResponseDTO> allChildUnits = unitService.findAllChildUnits(authUser.getPermissionUnitId());
+
+        Set<UUID> childUnitsIds = allChildUnits.stream()
+                .map(UnitResponseDTO::getId)
+                .collect(Collectors.toSet());
+
+        // If user has added a specific unit filter, ensure it belongs to the child units
+        if (userFilter.getUnits() != null && !userFilter.getUnits().isEmpty()) {
+            // Check if any unit in userFilter is not part of child units
+            boolean hasInvalidUnits = userFilter.getUnits().stream()
+                    .anyMatch(unitId -> !childUnitsIds.contains(unitId));
+
+            // If invalid units are found, throw an exception or handle as required
+            if (hasInvalidUnits) {
+                throw new ClientBackendException(ErrorCode.INVALID_UNIT);
+            }
+
+            // Filter the user's units to only include those in the child units
+            userFilter.getUnits().retainAll(childUnitsIds);
+        } else {
+            // If no specific units were in the filter, apply all child units
+            userFilter.setUnits(childUnitsIds);
+        }
+
+        return findAll(userFilter);
     }
 
     @Override

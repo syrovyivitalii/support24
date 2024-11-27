@@ -15,6 +15,7 @@ import lv.dsns.support24.device.service.DeviceService;
 import lv.dsns.support24.device.service.filter.DeviceFilter;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
+import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.unit.service.UnitService;
 import lv.dsns.support24.unit.service.filter.UnitFilter;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,29 +62,24 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public PageResponse<DeviceResponseDTO> findDevicesGrouped(DeviceFilter deviceFilter, Pageable pageable) {
+        Set<UUID> finalUnitIds = new HashSet<>(deviceFilter.getUnitIds());
+
+
         List<UnitResponseDTO> allAPRZByUnitType = unitService.findAllByUnitType(UnitType.ДПРЗ);
         Set<UUID> dprzUnitIds = allAPRZByUnitType.stream().map(UnitResponseDTO::getId).collect(Collectors.toSet());
 
-        // Modify unit IDs based on filter conditions
         if (deviceFilter.getUnitIds().contains(guId)) {
-            // Fetch GU unit IDs
-            UnitFilter unitFilterGU = new UnitFilter();
-            unitFilterGU.setUnitType(Collections.singleton(UnitType.ГУ));
-            PageResponse<UnitResponseDTO> guPageable = unitService.findAllPageable(unitFilterGU, pageable);
-            Set<UUID> guUnitIds = guPageable.getContent()
+            List<UnitResponseDTO> allGUByUnitType = unitService.findAllByUnitType(UnitType.ГУ);
+            finalUnitIds = allGUByUnitType
                     .stream()
                     .map(UnitResponseDTO::getId)
                     .collect(Collectors.toSet());
-            deviceFilter.setUnitIds(guUnitIds);
         } else if (deviceFilter.getUnitIds().contains(arzspId)) {
-            // Fetch child units for ARZSP
-            List<UnitResponseDTO> childUnits = unitService.findAllChildUnits(arzspId);
-            Set<UUID> childUnitIds = childUnits.stream()
+            List<UnitResponseDTO> childARZSPUnits = unitService.findAllChildUnits(arzspId);
+            finalUnitIds = childARZSPUnits.stream()
                     .map(UnitResponseDTO::getId)
                     .collect(Collectors.toSet());
-            deviceFilter.setUnitIds(childUnitIds);
         } else if (!Collections.disjoint(deviceFilter.getUnitIds(), dprzUnitIds)) {
-            // Fetch child units for all DPRZ units
             Set<UUID> hierarchyDprzUnitIds = new HashSet<>();
             for (UUID dprzId : dprzUnitIds) {
                 List<UnitResponseDTO> dprzChildUnits = unitService.findAllChildUnits(dprzId);
@@ -91,10 +87,10 @@ public class DeviceServiceImpl implements DeviceService {
                         .map(UnitResponseDTO::getId)
                         .collect(Collectors.toSet()));
             }
-            deviceFilter.setUnitIds(hierarchyDprzUnitIds);
+            finalUnitIds = hierarchyDprzUnitIds;
         }
+        deviceFilter.setUnitIds(finalUnitIds);
 
-        // Fetch devices with the updated filter
         return findAllDevices(deviceFilter, pageable);
     }
 
@@ -130,7 +126,13 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     private Specification<Device> getSearchSpecification(DeviceFilter deviceFilter) {
-        return Specification.where((Specification<Device>) searchLikeString("deviceName", deviceFilter.getDeviceName()))
+        return Specification.where((Specification<Device>) searchLikeString("deviceName", deviceFilter.getSearch()))
+                .or((Specification<Device>) searchLikeString("inventoryNumber",deviceFilter.getSearch()))
+                .or((Specification<Device>) searchLikeString("decreeNumber",deviceFilter.getSearch()))
+                .or((Specification<Device>) searchLikeString("macAddress",deviceFilter.getSearch()))
+                .or((Specification<Device>) searchLikeString("ipAddress",deviceFilter.getSearch()))
+                .or((Specification<Device>) searchLikeStringWithJoin("deviceUser", "name", deviceFilter.getSearch()))
+                .or((Specification<Device>) searchLikeStringWithJoin("deviceUnit", "unitName", deviceFilter.getSearch()))
                 .and((Specification<Device>) searchOnField("deviceType",deviceFilter.getDeviceTypes()))
                 .and((Specification<Device>) searchLikeString("inventoryNumber", deviceFilter.getInventoryNumber()))
                 .and((Specification<Device>) searchLikeString("decreeNumber", deviceFilter.getDecreeNumber()))
