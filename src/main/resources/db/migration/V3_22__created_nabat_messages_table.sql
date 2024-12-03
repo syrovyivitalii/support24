@@ -1,0 +1,6 @@
+CREATE TABLE tbl_nabat_messages (
+    id UUID PRIMARY KEY,
+    message VARCHAR NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

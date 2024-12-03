@@ -205,7 +205,8 @@ public class NabatServiceImpl implements NabatService {
 
     private Specification<Nabat> getSearchSpecification (NabatFilter nabatFilter) {
         return Specification.where((Specification<Nabat>) searchLikeStringWithJoin("nabatUsers", "name", nabatFilter.getSearch()))
-                .and((Specification<Nabat>) searchFieldInCollectionOfIds("nabatGroupId", nabatFilter.getNabatGroupIds()));
+                .and((Specification<Nabat>) searchFieldInCollectionOfIds("nabatGroupId", nabatFilter.getNabatGroupIds()))
+                .and((Specification<Nabat>) distinct());
 
     }
 

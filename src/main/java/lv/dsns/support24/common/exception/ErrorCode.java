@@ -128,6 +128,17 @@ public enum ErrorCode {
             404
     ),
 
+    NABAT_MESSAGE_ALREADY_EXISTS(
+            "404-019",
+            "Nabat message already exists",
+            404
+    ),
+    NABAT_MESSAGE_NOT_FOUND(
+            "404-020",
+            "Nabat message not found",
+            404
+    ),
+
     //403
     FORBIDDEN(
             "403",
