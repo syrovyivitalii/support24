@@ -3,10 +3,10 @@ package lv.dsns.support24.nabat.service;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
+import lv.dsns.support24.nabat.service.filter.NabatFilter;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
 import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
-import lv.dsns.support24.notifyresult.model.NotifyResult;
 import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
@@ -22,7 +22,7 @@ public interface NabatService {
 
     List<NabatResponseDTO> getAll();
 
-    PageResponse<NabatResponseDTO> getAllByNabatGroup(UUID nabatGroupId, Pageable pageable);
+    PageResponse<NabatResponseDTO> getAllByNabatGroup(NabatFilter nabatFilter, Pageable pageable);
 
     void delete(UUID nabatGroupId, UUID userId);
 

@@ -1,6 +1,7 @@
 package lv.dsns.support24.unit.service;
 
 import lv.dsns.support24.common.dto.response.PageResponse;
+import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
 import lv.dsns.support24.unit.service.filter.UnitFilter;
@@ -18,4 +19,6 @@ public interface UnitService {
     UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO);
     void delete(UUID id);
     boolean existUnitByUnitName(String unitName);
+
+    List<UnitResponseDTO> findAllByUnitType(UnitType unitType);
 }

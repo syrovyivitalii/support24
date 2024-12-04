@@ -11,10 +11,10 @@ import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
 import lv.dsns.support24.nabat.mapper.NabatMapper;
 import lv.dsns.support24.nabat.repository.NabatRepository;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
+import lv.dsns.support24.nabat.service.filter.NabatFilter;
 import lv.dsns.support24.nabat.service.NabatService;
 import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
-import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
 import lv.dsns.support24.notificationlog.repository.NotificationLogRepository;
 import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
 import lv.dsns.support24.notificationlog.service.NotificationLogService;
@@ -27,9 +27,9 @@ import lv.dsns.support24.notifyresult.model.NotifiedUser;
 import lv.dsns.support24.notifyresult.model.NotifyHistory;
 import lv.dsns.support24.notifyresult.model.NotifyResult;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 
 @Service
 @Slf4j
@@ -96,12 +98,13 @@ public class NabatServiceImpl implements NabatService {
     }
 
     @Override
-    public PageResponse<NabatResponseDTO> getAllByNabatGroup(UUID nabatGroupId, Pageable pageable) {
-        Page<Nabat> allNabats = nabatRepository.findByNabatGroupId(nabatGroupId, pageable);
+    public PageResponse<NabatResponseDTO> getAllByNabatGroup(NabatFilter nabatFilter, Pageable pageable) {
+        Page<Nabat> allNabats = nabatRepository.findAll(getSearchSpecification(nabatFilter), pageable);
 
         List<NabatResponseDTO> nabatResponseDTOS = allNabats.stream()
                 .map(nabatMapper::mapToDTO)
                 .collect(Collectors.toList());
+
         return PageResponse.<NabatResponseDTO>builder()
                 .totalPages((long) allNabats.getTotalPages())
                 .pageSize((long) pageable.getPageSize())
@@ -198,6 +201,13 @@ public class NabatServiceImpl implements NabatService {
         } catch (Exception e) {
             throw new ClientBackendException(ErrorCode.GET_NOTIFICATION_RESULT_FAILED);
         }
+    }
+
+    private Specification<Nabat> getSearchSpecification (NabatFilter nabatFilter) {
+        return Specification.where((Specification<Nabat>) searchLikeStringWithJoin("nabatUsers", "name", nabatFilter.getSearch()))
+                .and((Specification<Nabat>) searchFieldInCollectionOfIds("nabatGroupId", nabatFilter.getNabatGroupIds()))
+                .and((Specification<Nabat>) distinct());
+
     }
 
 }

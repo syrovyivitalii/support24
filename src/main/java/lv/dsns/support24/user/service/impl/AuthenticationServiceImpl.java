@@ -13,6 +13,7 @@ import lv.dsns.support24.user.service.AuthenticationService;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,16 +62,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
         }
 
-//        if (BooleanUtils.isFalse(user.isVerify())) {
-//            throw new ClientBackendException(ErrorCode.USER_ALREADY_EXISTS);
-//        }
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        }catch(AuthenticationException e){
+            throw new ClientBackendException(ErrorCode.INVALID_CREDENTIALS);
+        }
 
         var accessToken = jwtService.generateToken((UserDetails) user);
         var refreshToken = jwtService.generateRefreshToken((UserDetails) user);

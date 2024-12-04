@@ -16,6 +16,8 @@ public interface UserService {
 
     PageResponse<UserResponseDTO> findAllPageable(UserFilter userFilter, Pageable pageable);
 
+    List<UserResponseDTO> findAllSubordinated(Principal principal, UserFilter userFilter);
+
     UserResponseDTO save(UserRequestDTO userRequestDTO);
 
     UserResponseDTO saveDefault(UserDefaultRequestDTO userDefaultRequestDTO);
