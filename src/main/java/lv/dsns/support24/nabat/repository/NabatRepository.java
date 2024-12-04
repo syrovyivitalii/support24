@@ -4,6 +4,7 @@ import lv.dsns.support24.nabat.repository.entity.Nabat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface NabatRepository extends JpaRepository<Nabat, UUID> {
+public interface NabatRepository extends JpaRepository<Nabat, UUID>, JpaSpecificationExecutor<Nabat> {
 
     Page<Nabat> findByNabatGroupId(UUID nabatGroupId, Pageable pageable);
 

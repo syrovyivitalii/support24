@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.nabat.controller.dto.request.NabatRequestDTO;
 import lv.dsns.support24.nabat.controller.dto.response.NabatResponseDTO;
+import lv.dsns.support24.nabat.service.filter.NabatFilter;
 import lv.dsns.support24.nabat.service.NabatService;
 import lv.dsns.support24.notify.dto.response.NotifyResponseDTO;
 import lv.dsns.support24.notify.dto.request.NotifyRequestDTO;
 import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
-import lv.dsns.support24.notifyresult.model.NotifyResult;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -47,9 +47,9 @@ public class NabatController {
         return ResponseEntity.ok(all);
     }
 
-    @GetMapping("/by-nabat-group/{nabatGroupId}/pageable")
-    public ResponseEntity<PageResponse<NabatResponseDTO>> findByNabatGroupId(@PathVariable UUID nabatGroupId, @ParameterObject Pageable pageable) {
-        var allByNabatGroup = nabatService.getAllByNabatGroup(nabatGroupId, pageable);
+    @GetMapping("/pageable")
+    public ResponseEntity<PageResponse<NabatResponseDTO>> findByNabatGroupId(@ParameterObject NabatFilter nabatFilter, @ParameterObject Pageable pageable) {
+        var allByNabatGroup = nabatService.getAllByNabatGroup(nabatFilter, pageable);
 
         return ResponseEntity.ok(allByNabatGroup);
     }

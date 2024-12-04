@@ -1,5 +1,7 @@
 package lv.dsns.support24.common.specification;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Path;
 import lv.dsns.support24.common.entity.BaseEntity;
 import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
@@ -37,6 +39,17 @@ public class SpecificationCustom {
                         (r, rq, cb) -> cb.like(cb.lower(r.get(propertyName)), "%" + property.toLowerCase().trim() + "%"))
                     .orElse(null);
     }
+
+    public static Specification<? extends BaseEntity> searchLikeStringWithJoin(String joinField, String targetField, String value) {
+        return (root, query, criteriaBuilder) -> {
+            if (value == null || value.isEmpty()) {
+                return null;
+            }
+            Join<Object, Object> join = root.join(joinField, JoinType.LEFT);
+            return criteriaBuilder.like(criteriaBuilder.lower(join.get(targetField)), "%" + value.toLowerCase() + "%");
+        };
+    }
+
 
     public static Specification<? extends BaseEntity> searchFieldInCollectionOfIds(String field, Set<UUID> set) {
         return CollectionUtils.isNotEmpty(set) ?

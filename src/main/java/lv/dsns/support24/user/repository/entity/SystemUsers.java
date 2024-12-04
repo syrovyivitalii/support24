@@ -63,6 +63,9 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @Column(name = "user_unit_id")
     private UUID unitId;
 
+    @Column(name = "permission_unit_id")
+    private UUID permissionUnitId;
+
     @Column(name = "rank_id")
     private UUID rankId;
 
@@ -81,6 +84,10 @@ public class SystemUsers extends BaseEntity implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private Unit userUnit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "permission_unit_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
+    private Unit userPermittedUnit;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rank_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)

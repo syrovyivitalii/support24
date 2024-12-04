@@ -13,6 +13,8 @@ public interface DeviceService {
 
     PageResponse<DeviceResponseDTO> findAllDevices(DeviceFilter deviceFilter, Pageable pageable);
 
+    PageResponse<DeviceResponseDTO> findDevicesGrouped(DeviceFilter deviceFilter, Pageable pageable);
+
     DeviceResponseDTO save (DeviceRequestDTO requestDTO);
 
     DeviceResponseDTO writeOffDevice(UUID id, DeviceWriteOffRequestDTO requestDTO);

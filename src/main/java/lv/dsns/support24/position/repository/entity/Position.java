@@ -20,6 +20,7 @@ public class Position extends BaseEntity {
     @Column(name = "position_name", nullable = false, unique = true)
     private String positionName;
 
+
     @OneToMany(mappedBy = "userPosition", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<SystemUsers> positionUsers;
 }
