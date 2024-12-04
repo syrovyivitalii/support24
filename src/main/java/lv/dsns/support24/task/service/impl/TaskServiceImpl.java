@@ -69,7 +69,6 @@ public class TaskServiceImpl implements TaskService {
     public PageResponse<TaskResponseDTO> findAllPageable(Principal principal, TaskFilter taskFilter, Pageable pageable) {
         var authUser = usersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
-        System.out.println(authUser.getRole());
 
         // Apply role-based filters
         if (authUser.getRole().equals(Role.ROLE_ADMIN)){

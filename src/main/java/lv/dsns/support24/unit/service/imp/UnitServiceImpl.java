@@ -5,9 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.device.controller.dto.response.DeviceResponseDTO;
-import lv.dsns.support24.device.repository.entity.Device;
-import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.unit.controller.dto.enums.UnitStatus;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.unit.controller.dto.request.UnitRequestDTO;
@@ -17,18 +14,13 @@ import lv.dsns.support24.unit.repository.UnitRepository;
 import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.unit.service.UnitService;
 import lv.dsns.support24.unit.service.filter.UnitFilter;
-import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -108,6 +100,12 @@ public class UnitServiceImpl implements UnitService {
                 .and((Specification<Unit>) searchLikeString("unitName", unitFilter.getUnitName()))
                 .and((Specification<Unit>) searchOnField("unitStatus", unitFilter.getStatuses()))
                 .and((Specification<Unit>) searchFieldInCollectionOfIds("id", unitFilter.getUnitId()));
+    }
+
+    @Override
+    public List<UnitResponseDTO> findAllByUnitType(UnitType unitType){
+        var allByUnitType = unitRepository.findAllByUnitType(unitType);
+        return allByUnitType.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
     }
 
 }

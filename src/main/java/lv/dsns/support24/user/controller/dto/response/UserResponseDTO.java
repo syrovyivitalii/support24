@@ -33,4 +33,5 @@ public class UserResponseDTO {
     private PositionResponseDTO userPosition;
     private RankResponseDTO userRank;
     private UnitResponseDTO userUnit;
+    private UnitResponseDTO userPermittedUnit;
 }

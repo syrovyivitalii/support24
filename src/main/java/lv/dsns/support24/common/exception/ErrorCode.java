@@ -34,6 +34,13 @@ public enum ErrorCode {
             400
     ),
 
+    //401
+    INVALID_CREDENTIALS(
+            "401",
+            "Invalid credentials",
+            401
+    ),
+
     // 404
     NOT_FOUND(
             "404-001",
@@ -118,6 +125,17 @@ public enum ErrorCode {
     NOTIFICATION_INFO_NOT_FOUND(
             "404-018",
             "Notification info not found",
+            404
+    ),
+
+    NABAT_MESSAGE_ALREADY_EXISTS(
+            "404-019",
+            "Nabat message already exists",
+            404
+    ),
+    NABAT_MESSAGE_NOT_FOUND(
+            "404-020",
+            "Nabat message not found",
             404
     ),
 

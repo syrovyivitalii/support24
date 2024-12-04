@@ -47,6 +47,9 @@ public class Unit extends BaseEntity {
     @OneToMany(mappedBy = "userUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<SystemUsers> unitUser;
 
+    @OneToMany(mappedBy = "userPermittedUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<SystemUsers> permittedUnitUser;
+
     @OneToMany(mappedBy = "deviceUnit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Device> unitDevice;
 
