@@ -139,6 +139,22 @@ public enum ErrorCode {
             404
     ),
 
+    NOTIFICATION_LOG_NOT_THE_LATEST(
+            "404-021",
+            "Notification log not the latest",
+            404
+    ),
+    INVALID_JSON_RESPONSE(
+            "404-022",
+                    "Invalid json response",
+                    404
+                    ),
+    NO_JSON_RESPONSE(
+            "404-024",
+                    "No json response",
+                    404
+                    ),
+
     //403
     FORBIDDEN(
             "403",

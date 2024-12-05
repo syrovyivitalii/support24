@@ -31,4 +31,6 @@ public interface NotificationLogService {
                                                                String message);
 
     NotificationLogRequestDTO notificationLogRequestDTOBuilder(String jsonResponse);
+
+    boolean isLatestNotificationLog(UUID nabatGroupId, UUID eventId);
 }
