@@ -64,68 +64,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponse<UserResponseDTO> findAllSubordinatedPageable(Principal principal, UserFilter userFilter, Pageable pageable){
+    public PageResponse<UserResponseDTO> findAllSubordinatedPageable(Principal principal, UserFilter userFilter, Pageable pageable) {
         var authUser = systemUsersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
         List<UnitResponseDTO> allChildUnits = unitService.findAllChildUnits(authUser.getPermissionUnitId());
-
         Set<UUID> childUnitsIds = allChildUnits.stream()
                 .map(UnitResponseDTO::getId)
                 .collect(Collectors.toSet());
 
-        // If user has added a specific unit filter, ensure it belongs to the child units
-        if (userFilter.getUnits() != null && !userFilter.getUnits().isEmpty()) {
-            // Check if any unit in userFilter is not part of child units
-            boolean hasInvalidUnits = userFilter.getUnits().stream()
-                    .anyMatch(unitId -> !childUnitsIds.contains(unitId));
+        validateAndSetUserFilterUnits(userFilter, childUnitsIds);
 
-            // If invalid units are found, throw an exception or handle as required
-            if (hasInvalidUnits) {
-                throw new ClientBackendException(ErrorCode.INVALID_UNIT);
-            }
-
-            // Filter the user's units to only include those in the child units
-            userFilter.getUnits().retainAll(childUnitsIds);
-        } else {
-            // If no specific units were in the filter, apply all child units
-            userFilter.setUnits(childUnitsIds);
-        }
-
-        return findAllPageable(userFilter,pageable);
+        return findAllPageable(userFilter, pageable);
     }
 
     @Override
-    public List<UserResponseDTO> findAllSubordinated(Principal principal, UserFilter userFilter){
+    public List<UserResponseDTO> findAllSubordinated(Principal principal, UserFilter userFilter) {
         var authUser = systemUsersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
         List<UnitResponseDTO> allChildUnits = unitService.findAllChildUnits(authUser.getPermissionUnitId());
-
         Set<UUID> childUnitsIds = allChildUnits.stream()
                 .map(UnitResponseDTO::getId)
                 .collect(Collectors.toSet());
 
-        // If user has added a specific unit filter, ensure it belongs to the child units
+        validateAndSetUserFilterUnits(userFilter, childUnitsIds);
+
+        return findAll(userFilter);
+    }
+
+    private void validateAndSetUserFilterUnits(UserFilter userFilter, Set<UUID> childUnitsIds) {
         if (userFilter.getUnits() != null && !userFilter.getUnits().isEmpty()) {
-            // Check if any unit in userFilter is not part of child units
             boolean hasInvalidUnits = userFilter.getUnits().stream()
                     .anyMatch(unitId -> !childUnitsIds.contains(unitId));
 
-            // If invalid units are found, throw an exception or handle as required
             if (hasInvalidUnits) {
                 throw new ClientBackendException(ErrorCode.INVALID_UNIT);
             }
 
-            // Filter the user's units to only include those in the child units
             userFilter.getUnits().retainAll(childUnitsIds);
         } else {
-            // If no specific units were in the filter, apply all child units
             userFilter.setUnits(childUnitsIds);
         }
-
-        return findAll(userFilter);
     }
+
 
     @Override
     @Transactional
