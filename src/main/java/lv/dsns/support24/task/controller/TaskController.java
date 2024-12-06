@@ -1,5 +1,6 @@
 package lv.dsns.support24.task.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.task.controller.dto.request.PatchByUserTaskRequestDTO;
@@ -26,13 +27,15 @@ public class TaskController {
     private final TaskServiceImpl tasksService;
 
     @GetMapping("/private/tasks")
+    @Operation(summary = "Get all tasks with filters as list")
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(@ParameterObject TaskFilter taskFilter){
         var allTasks = tasksService.findAll(taskFilter);
 
         return ResponseEntity.ok(allTasks);
     }
 
-    @GetMapping("/private/task/{id}")
+    @GetMapping("/private/tasks/{id}")
+    @Operation(summary = "Get task by id")
     public ResponseEntity<List<TaskResponseDTO>> getTaskById(@PathVariable UUID id){
         var taskById = tasksService.findTaskById(id);
 
@@ -40,20 +43,23 @@ public class TaskController {
     }
 
     @GetMapping("/private/tasks/pageable")
+    @Operation(summary = "Get all tasks with filters, pageable, sorted by createdDate ")
     public ResponseEntity<PageResponse<TaskResponseDTO>> getAllTasksPageable(@ParameterObject Principal principal, @ParameterObject TaskFilter taskFilter, @SortDefault(sort = "createdDate", direction = Sort.Direction.DESC) @ParameterObject Pageable pageable){
-        PageResponse<TaskResponseDTO> responseDTOS = tasksService.findAllPageable(principal,taskFilter,pageable);
+        PageResponse<TaskResponseDTO> allTasks = tasksService.findAllPageable(principal,taskFilter,pageable);
 
-        return ResponseEntity.ok(responseDTOS);
+        return ResponseEntity.ok(allTasks);
     }
 
-    @GetMapping("/private/tasks/get-subtasks/{id}")
-    public ResponseEntity<List<TaskResponseDTO>> getAllSubtask(@PathVariable UUID id){
-        var allSubtasks = tasksService.findAllSubtasks(id);
+    @GetMapping("/private/tasks/get-subtasks/{parentTaskId}")
+    @Operation(summary = "Get all subtasks by parent id")
+    public ResponseEntity<List<TaskResponseDTO>> getAllSubtask(@PathVariable UUID parentTaskId){
+        var allSubtasks = tasksService.findAllSubtasks(parentTaskId);
 
         return ResponseEntity.ok(allSubtasks);
     }
 
     @PostMapping("/public/tasks")
+    @Operation(summary = "Save task")
     public ResponseEntity<TaskResponseDTO> save (@ParameterObject Principal principal, @RequestBody TaskRequestDTO tasksDTO){
         var saveTask = tasksService.save(principal,tasksDTO);
 
@@ -61,6 +67,7 @@ public class TaskController {
     }
 
     @PatchMapping("/private/tasks/{id}")
+    @Operation(summary = "Patch task")
     public ResponseEntity<TaskResponseDTO> patch(@ParameterObject Principal principal, @PathVariable UUID id, @RequestBody TaskRequestDTO requestDTO){
         var patchedTask = tasksService.patch(principal,id,requestDTO);
 
@@ -68,8 +75,9 @@ public class TaskController {
     }
 
     @PatchMapping("/private/tasks/by-user/{id}")
-    public ResponseEntity<TaskResponseDTO> patchByUser(@PathVariable UUID id, @RequestBody PatchByUserTaskRequestDTO requestDTO){
-        var patchedTask = tasksService.patchByUser(id,requestDTO);
+    @Operation(summary = "Patch task by user")
+    public ResponseEntity<TaskResponseDTO> patchByUser(@ParameterObject Principal principal, @PathVariable UUID id, @RequestBody PatchByUserTaskRequestDTO requestDTO){
+        var patchedTask = tasksService.patchByUser(principal, id, requestDTO);
 
         return ResponseEntity.ok(patchedTask);
     }

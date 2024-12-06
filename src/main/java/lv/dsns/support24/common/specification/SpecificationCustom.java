@@ -50,6 +50,19 @@ public class SpecificationCustom {
         };
     }
 
+    public static Specification<? extends BaseEntity> searchLikeStringWithTwoJoins(
+            String firstJoinField, String secondJoinField, String targetField, String value) {
+        return (root, query, criteriaBuilder) -> {
+            if (value == null || value.isEmpty()) {
+                return null;
+            }
+            Join<Object, Object> firstJoin = root.join(firstJoinField, JoinType.LEFT);
+            Join<Object, Object> secondJoin = firstJoin.join(secondJoinField, JoinType.LEFT);
+
+            return criteriaBuilder.like(criteriaBuilder.lower(secondJoin.get(targetField)), "%" + value.toLowerCase() + "%");
+        };
+    }
+
 
     public static Specification<? extends BaseEntity> searchFieldInCollectionOfIds(String field, Set<UUID> set) {
         return CollectionUtils.isNotEmpty(set) ?

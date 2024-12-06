@@ -25,5 +25,5 @@ public interface TaskService {
 
     TaskResponseDTO patch (Principal principal, UUID id, TaskRequestDTO requestDTO);
 
-    TaskResponseDTO patchByUser (UUID id, PatchByUserTaskRequestDTO requestDTO);
+    TaskResponseDTO patchByUser (Principal principal, UUID id, PatchByUserTaskRequestDTO requestDTO);
 }
