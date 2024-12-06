@@ -17,6 +17,7 @@ public interface TaskMapper {
     TaskResponseDTO mapToDTO (Task task);
 
     @Mapping(target = "completedDate", expression = "java(tasksDTO.getStatus() == Status.COMPLETED ? LocalDateTime.now() : null)")
+    @Mapping(target = "updatedDate", expression = "java(LocalDateTime.now())")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void patchMerge(TaskRequestDTO tasksDTO, @MappingTarget Task task);
 

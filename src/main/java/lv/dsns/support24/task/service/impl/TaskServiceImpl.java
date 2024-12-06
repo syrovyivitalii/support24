@@ -18,19 +18,11 @@ import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
-import lv.dsns.support24.user.repository.entity.SystemUsers;
-import lv.dsns.support24.user.service.UserService;
-import lv.dsns.support24.user.service.impl.UserServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -52,16 +44,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
         var allTasks = taskRepository.findAll(getSearchSpecification(taskFilter));
+
         return allTasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
     public List<TaskResponseDTO> findTaskById(UUID id){
         var taskById = taskRepository.findById(id);
+
         return taskById.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
     public List<TaskResponseDTO> findAllSubtasks(UUID parentId){
         var allSubtasks = taskRepository.findAllSubtasks(parentId);
+
         return allSubtasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
 
@@ -98,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
         // Convert DTO to entity and save
         var task = tasksMapper.mapToEntity(taskDTO);
         //set task type to SUBTASK if parent is set
-        task.setTaskType(taskDTO.getParentId() != null ? Type.SUBTASK : Type.TASK);
+        task.setTaskType(Objects.nonNull(taskDTO.getParentId()) ? Type.SUBTASK : Type.TASK);
 
         if (task.getTaskType().equals(Type.TASK)){
             //send email notification about created task
@@ -106,16 +101,23 @@ public class TaskServiceImpl implements TaskService {
         }else {
             var parentById = taskRepository.findById(task.getParentId())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
+
             task.setCreatedById(parentById.getCreatedById());
+
             task.setProblemTypeId(parentById.getProblemTypeId());
+
             var byEmail = usersRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
             task.setAssignedById(byEmail.getId());
+
             //send email notification about assigned task
             emailNotificationFactory.sendTaskAssignedNotification(task);
+
             task.setNotified(true);
         }
         var savedTask = taskRepository.save(task);
+
         // Return the saved task DTO
         return tasksMapper.mapToDTO(savedTask);
     }
@@ -131,13 +133,14 @@ public class TaskServiceImpl implements TaskService {
         tasksMapper.patchMerge(requestDTO, taskById);
 
         //add user comment to description
-        if (requestDTO.getComment() != null){
-            setCommentToTask(requestDTO.getComment(),taskById);
+        if (Objects.nonNull(requestDTO.getComment())){
+            setCommentToTask(principal, requestDTO.getComment(), taskById);
         }
 
-        if (requestDTO.getAssignedForId() != null){
+        if (Objects.nonNull(requestDTO.getAssignedForId()) && Objects.isNull(taskById.getAssignedById())){
             var byEmail = usersRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
             taskById.setAssignedById(byEmail.getId());
 
             if (!taskById.isNotified()){
@@ -150,7 +153,7 @@ public class TaskServiceImpl implements TaskService {
     }
     @Override
     @Transactional
-    public TaskResponseDTO patchByUser (UUID id, PatchByUserTaskRequestDTO requestDTO){
+    public TaskResponseDTO patchByUser (Principal principal, UUID id, PatchByUserTaskRequestDTO requestDTO){
 
         var taskById = taskRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
@@ -163,8 +166,8 @@ public class TaskServiceImpl implements TaskService {
         }
 
         //add user comment to description
-        if (requestDTO.getComment() != null){
-            setCommentToTask(requestDTO.getComment(),taskById);
+        if (Objects.nonNull(requestDTO.getComment())){
+            setCommentToTask(principal, requestDTO.getComment(),taskById);
         }
 
         tasksMapper.patchMergeByUser(requestDTO,taskById);
@@ -173,24 +176,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private Specification<Task> getSearchSpecification(TaskFilter taskFilter) {
-        return Specification.where((Specification<Task>) searchLikeString("name", taskFilter.getSearch()))
+        return Specification.where((Specification<Task>) searchLikeString("description", taskFilter.getSearch()))
+                .or((Specification<Task>) searchLikeStringWithJoin("assignedFor", "name", taskFilter.getSearch()))
+                .or((Specification<Task>) searchLikeStringWithJoin("assignedBy", "name", taskFilter.getSearch()))
+                .or((Specification<Task>) searchLikeStringWithJoin("createdBy", "name", taskFilter.getSearch()))
+                .or((Specification<Task>) searchLikeStringWithJoin("taskProblem", "problem", taskFilter.getSearch()))
+                .or((Specification<Task>) searchLikeStringWithTwoJoins("createdBy", "userUnit", "unitName", taskFilter.getSearch()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("id", taskFilter.getIds()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("assignedForId", taskFilter.getAssignedForIds()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("assignedById", taskFilter.getAssignedByIds()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("problemTypeId", taskFilter.getProblemTypeIds()))
                 .and((Specification<Task>) searchFieldInCollectionOfIds("createdById", taskFilter.getCreatedByIds()))
-                .and((Specification<Task>) searchOnField("deviceStatus", taskFilter.getStatuses()))
+                .and((Specification<Task>) searchOnField("status", taskFilter.getStatuses()))
                 .and((Specification<Task>) searchOnField("priority",taskFilter.getPriorities()))
                 .and((Specification<Task>) searchOnField("taskType",taskFilter.getTaskTypes()))
                 .and((Specification<Task>) searchByDateRange("createdDate", taskFilter.getStartDate(), taskFilter.getEndDate()));
     }
 
-    private void setCommentToTask(String comment, Task taskById){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
+    private void setCommentToTask(Principal principal, String comment, Task taskById){
 
-        var byEmail = usersRepository.findByEmail(email)
+        var byEmail = usersRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
 
         String description = String.format(

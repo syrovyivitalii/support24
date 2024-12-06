@@ -11,13 +11,13 @@ import java.util.Optional;
 import java.util.UUID;
 
     public interface TaskRepository extends JpaRepository<Task,UUID>, JpaSpecificationExecutor<Task> {
-    Optional<Task> findById (UUID id);
 
-    @Query("SELECT t FROM Task t WHERE t.parentId = ?1")
-    List<Task> findAllSubtasks(UUID parentId);
+        @Query("SELECT t FROM Task t WHERE t.parentId = ?1")
+        List<Task> findAllSubtasks(UUID parentId);
 
-    @Modifying
-    @Query("UPDATE Task t set t.status = 'EXPIRED' where t.dueDate < ?1 AND t.status != 'COMPLETED'")
-    void updateStatus(LocalDateTime currentDate);
+
+        @Modifying
+        @Query("UPDATE Task t set t.status = 'EXPIRED' where t.dueDate < ?1 AND t.status != 'COMPLETED'")
+        void updateStatus(LocalDateTime currentDate);
 
 }

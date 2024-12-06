@@ -32,8 +32,8 @@ public class TaskFilter extends SearchFilter {
     Set<Priority> priorities;
     Set<Type> taskTypes;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    LocalDate startDate; // New field for start date
+    LocalDate startDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    LocalDate endDate;   // New field for end date
+    LocalDate endDate;
 
 }

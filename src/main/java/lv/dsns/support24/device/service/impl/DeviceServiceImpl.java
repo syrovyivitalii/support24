@@ -80,8 +80,11 @@ public class DeviceServiceImpl implements DeviceService {
                     .map(UnitResponseDTO::getId)
                     .collect(Collectors.toSet());
         } else if (!Collections.disjoint(deviceFilter.getUnitIds(), dprzUnitIds)) {
+            Set<UUID> commonElements = new HashSet<>(deviceFilter.getUnitIds());
+            commonElements.retainAll(dprzUnitIds);
+
             Set<UUID> hierarchyDprzUnitIds = new HashSet<>();
-            for (UUID dprzId : dprzUnitIds) {
+            for (UUID dprzId : commonElements) {
                 List<UnitResponseDTO> dprzChildUnits = unitService.findAllChildUnits(dprzId);
                 hierarchyDprzUnitIds.addAll(dprzChildUnits.stream()
                         .map(UnitResponseDTO::getId)
