@@ -174,4 +174,14 @@ public class NotificationLogServiceImpl implements NotificationLogService {
                 .jsonResponse(jsonResponse)
                 .build();
     }
+
+    @Override
+    public boolean isLatestNotificationLog(UUID nabatGroupId, UUID eventId){
+        Optional<NotificationLog> latestNotificationLog = notificationLogRepository.findTopByNabatGroupIdOrderByCreatedDateDesc(nabatGroupId);
+
+        return latestNotificationLog.isPresent() && latestNotificationLog.get().getEventId().equals(eventId);
+
+    }
+
+
 }

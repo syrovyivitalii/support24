@@ -14,4 +14,4 @@ EXPOSE 8085
 ENV TZ=Europe/Kiev
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "support24.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=Europe/Kiev", "-jar", "support24.jar"]

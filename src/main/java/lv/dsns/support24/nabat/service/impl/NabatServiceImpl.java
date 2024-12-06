@@ -163,6 +163,24 @@ public class NabatServiceImpl implements NabatService {
                 .findByEventId(eventId)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
 
+
+        // Check if the notification log is not the latest
+        if (!notificationLogService.isLatestNotificationLog(notificationLog.getNabatGroupId(), notificationLog.getEventId())) {
+
+            String jsonResponse = notificationLog.getJsonResponse();
+
+            if (jsonResponse != null && !jsonResponse.isEmpty()) {
+                try {
+                    // Convert JSON to NotifyResultResponseDTO
+                    return mapper.readValue(jsonResponse, NotifyResultResponseDTO.class);
+                } catch (Exception e) {
+                    throw new ClientBackendException(ErrorCode.INVALID_JSON_RESPONSE);
+                }
+            } else {
+                throw new ClientBackendException(ErrorCode.NO_JSON_RESPONSE);
+            }
+        }
+
         try {
             // Fetch the notify result
             NotifyResult notifyResult = notifyResultClient.getNotifyResult(eventId);
