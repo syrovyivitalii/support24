@@ -21,6 +21,8 @@ import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.UserService;
 import lv.dsns.support24.user.service.impl.UserServiceImpl;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -52,16 +54,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponseDTO> findAll(TaskFilter taskFilter){
         var allTasks = taskRepository.findAll(getSearchSpecification(taskFilter));
+
         return allTasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
     public List<TaskResponseDTO> findTaskById(UUID id){
         var taskById = taskRepository.findById(id);
+
         return taskById.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
     @Override
     public List<TaskResponseDTO> findAllSubtasks(UUID parentId){
         var allSubtasks = taskRepository.findAllSubtasks(parentId);
+
         return allSubtasks.stream().map(tasksMapper::mapToDTO).collect(Collectors.toList());
     }
 
@@ -131,13 +136,14 @@ public class TaskServiceImpl implements TaskService {
         tasksMapper.patchMerge(requestDTO, taskById);
 
         //add user comment to description
-        if (requestDTO.getComment() != null){
-            setCommentToTask(requestDTO.getComment(),taskById);
+        if (Objects.nonNull(requestDTO.getComment())){
+            setCommentToTask(requestDTO.getComment(), taskById);
         }
 
-        if (requestDTO.getAssignedForId() != null){
+        if (Objects.nonNull(requestDTO.getAssignedForId()) && Objects.isNull(taskById.getAssignedById())){
             var byEmail = usersRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
             taskById.setAssignedById(byEmail.getId());
 
             if (!taskById.isNotified()){
