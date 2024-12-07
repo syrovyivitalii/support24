@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
-import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 
 import java.time.LocalDateTime;

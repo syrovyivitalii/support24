@@ -13,7 +13,9 @@ import lv.dsns.support24.nabat.repository.NabatRepository;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabat.service.filter.NabatFilter;
 import lv.dsns.support24.nabat.service.NabatService;
+import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
 import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
+import lv.dsns.support24.nabatgroup.service.NabatGroupService;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.repository.NotificationLogRepository;
 import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
@@ -26,7 +28,9 @@ import lv.dsns.support24.notifyresult.dto.NotifyResultResponseDTO;
 import lv.dsns.support24.notifyresult.model.NotifiedUser;
 import lv.dsns.support24.notifyresult.model.NotifyHistory;
 import lv.dsns.support24.notifyresult.model.NotifyResult;
+import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
+import lv.dsns.support24.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,6 +51,8 @@ public class NabatServiceImpl implements NabatService {
 
     private final NabatRepository nabatRepository;
     private final NabatGroupRepository nabatGroupRepository;
+    private final UserService userService;
+    private final NabatGroupService nabatGroupService;
     private final NotificationLogService notificationLogService;
     private final NotificationLogRepository notificationLogRepository;
     private final SystemUsersRepository usersRepository;
@@ -124,10 +130,11 @@ public class NabatServiceImpl implements NabatService {
     @Override
     public NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO requestDTO, Principal principal) {
 
-        nabatGroupRepository.findById(nabatGroupId).orElseThrow(() -> new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND));
+        if (!nabatGroupService.existByNabatGroupId(nabatGroupId)){
+            throw new ClientBackendException(ErrorCode.USER_NOT_FOUND);
+        }
 
-        var userByEmail = usersRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+        UserResponseDTO userByEmail = userService.getUserByEmail(principal.getName());
 
         List<UUID> userIds = nabatRepository.findUserIdByNabatGroupId(nabatGroupId);
         if (userIds.isEmpty()) {

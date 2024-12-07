@@ -159,6 +159,13 @@ public class UserServiceImpl implements UserService {
         return systemUsersRepository.existsByEmail(email);
     }
 
+    @Override
+    public UserResponseDTO getUserByEmail(String email){
+        var byEmail = systemUsersRepository.findByEmail(email).orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        return userMapper.mapToDTO(byEmail);
+    }
+
     private Specification<SystemUsers> getSearchSpecification(UserFilter userFilter) {
         return Specification.where((Specification<SystemUsers>) searchLikeString("email", userFilter.getEmail()))
                 .and((Specification<SystemUsers>) searchOnField("role", userFilter.getRoles()))

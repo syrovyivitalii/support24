@@ -12,4 +12,6 @@ public interface NabatGroupRepository extends JpaRepository<NabatGroup, UUID> {
 
     boolean existsByGroupNameAndUnitId(String groupName, UUID unitId);
 
+    boolean existsByNabatGroupId(UUID nabatGroupId);
+
 }

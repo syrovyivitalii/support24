@@ -7,7 +7,6 @@ import lv.dsns.support24.device.controller.dto.enums.DeviceStatus;
 import lv.dsns.support24.device.controller.dto.enums.DeviceType;
 import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
-import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 

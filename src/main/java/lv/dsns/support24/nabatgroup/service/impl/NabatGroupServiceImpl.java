@@ -81,4 +81,9 @@ public class NabatGroupServiceImpl implements NabatGroupService {
 
         nabatGroupRepository.delete(nabatGroup);
     }
+
+    @Override
+    public boolean existByNabatGroupId(UUID nabatGroupId) {
+        return nabatGroupRepository.existsByNabatGroupId(nabatGroupId);
+    }
 }

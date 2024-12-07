@@ -19,4 +19,6 @@ public interface NabatGroupService {
     NabatGroupResponseDTO update(UUID id, NabatGroupRequestDTO nabatGroupRequestDTO);
 
     void delete(UUID id);
+
+    boolean existByNabatGroupId(UUID nabatGroupId);
 }

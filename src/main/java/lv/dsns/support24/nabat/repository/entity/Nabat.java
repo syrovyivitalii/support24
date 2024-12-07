@@ -31,7 +31,6 @@ public class Nabat extends BaseEntity {
     @JoinColumn(name = "nabat_group_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private NabatGroup nabatGroup;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false, insertable = false, updatable = false)
     private SystemUsers nabatUsers;

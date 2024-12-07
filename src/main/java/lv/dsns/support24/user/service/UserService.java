@@ -29,4 +29,6 @@ public interface UserService {
     void delete(UUID id);
 
     PageResponse<UserResponseDTO> findAllSubordinatedPageable(Principal principal, UserFilter userFilter, Pageable pageable);
+
+    UserResponseDTO getUserByEmail(String email);
 }

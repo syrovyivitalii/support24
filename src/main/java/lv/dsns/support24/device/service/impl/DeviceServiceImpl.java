@@ -15,9 +15,7 @@ import lv.dsns.support24.device.service.DeviceService;
 import lv.dsns.support24.device.service.filter.DeviceFilter;
 import lv.dsns.support24.unit.controller.dto.enums.UnitType;
 import lv.dsns.support24.unit.controller.dto.response.UnitResponseDTO;
-import lv.dsns.support24.unit.repository.entity.Unit;
 import lv.dsns.support24.unit.service.UnitService;
-import lv.dsns.support24.unit.service.filter.UnitFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +36,10 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceMapper deviceMapper;
     private final UnitService unitService;
 
-    @Value("${inventory.guId}")
+    //@Value("${inventory.guId}")
     private UUID guId;
 
-    @Value(value = "${inventory.arzspId}")
+    //@Value(value = "${inventory.arzspId}")
     private UUID arzspId;
 
     @Override
