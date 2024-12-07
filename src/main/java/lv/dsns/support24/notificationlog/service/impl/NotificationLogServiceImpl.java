@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NotificationLogServiceImpl implements NotificationLogService {
 
-    private final NotificationLogMapper notificationLogMapper;
     private final NotificationLogRepository notificationLogRepository;
     private final UserService userService;
+    private final NotificationLogMapper notificationLogMapper;
 
 
     @Override
@@ -170,6 +170,7 @@ public class NotificationLogServiceImpl implements NotificationLogService {
 
     @Override
     public NotificationLogRequestDTO notificationLogRequestDTOBuilder(String jsonResponse){
+
         return NotificationLogRequestDTO.builder()
                 .jsonResponse(jsonResponse)
                 .build();
@@ -181,6 +182,13 @@ public class NotificationLogServiceImpl implements NotificationLogService {
 
         return latestNotificationLog.isPresent() && latestNotificationLog.get().getEventId().equals(eventId);
 
+    }
+
+    @Override
+    public NotificationLog getNotificationLogByEventId(UUID eventId){
+
+        return notificationLogRepository.findByEventId(eventId)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
     }
 
 

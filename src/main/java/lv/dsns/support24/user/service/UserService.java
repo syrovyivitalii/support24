@@ -4,6 +4,7 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.user.controller.dto.request.UserDefaultRequestDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.filter.UserFilter;
 import org.springframework.data.domain.Pageable;
 
@@ -30,5 +31,5 @@ public interface UserService {
 
     PageResponse<UserResponseDTO> findAllSubordinatedPageable(Principal principal, UserFilter userFilter, Pageable pageable);
 
-    UserResponseDTO getUserByEmail(String email);
+    SystemUsers getUserByEmail(String email);
 }

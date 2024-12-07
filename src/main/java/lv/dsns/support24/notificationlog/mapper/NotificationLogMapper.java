@@ -3,8 +3,6 @@ package lv.dsns.support24.notificationlog.mapper;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
 import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
-import lv.dsns.support24.task.controller.dto.request.TaskRequestDTO;
-import lv.dsns.support24.task.repository.entity.Task;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

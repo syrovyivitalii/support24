@@ -35,7 +35,6 @@ public class UserController {
         return ResponseEntity.ok(allSystemUsers);
     }
 
-
     @GetMapping("/private/users/pageable")
     public ResponseEntity<PageResponse<UserResponseDTO>> getAllSystemUsersPageable(@ParameterObject UserFilter userFilter, @SortDefault(sort = "name", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
         PageResponse<UserResponseDTO> responseDTOS = userService.findAllPageable(userFilter,pageable);

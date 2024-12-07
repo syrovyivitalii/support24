@@ -13,8 +13,6 @@ import lv.dsns.support24.nabat.repository.NabatRepository;
 import lv.dsns.support24.nabat.repository.entity.Nabat;
 import lv.dsns.support24.nabat.service.filter.NabatFilter;
 import lv.dsns.support24.nabat.service.NabatService;
-import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
-import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
 import lv.dsns.support24.nabatgroup.service.NabatGroupService;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.repository.NotificationLogRepository;
@@ -29,7 +27,7 @@ import lv.dsns.support24.notifyresult.model.NotifiedUser;
 import lv.dsns.support24.notifyresult.model.NotifyHistory;
 import lv.dsns.support24.notifyresult.model.NotifyResult;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
-import lv.dsns.support24.user.repository.SystemUsersRepository;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
 import lv.dsns.support24.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,15 +48,12 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 public class NabatServiceImpl implements NabatService {
 
     private final NabatRepository nabatRepository;
-    private final NabatGroupRepository nabatGroupRepository;
     private final UserService userService;
     private final NabatGroupService nabatGroupService;
     private final NotificationLogService notificationLogService;
-    private final NotificationLogRepository notificationLogRepository;
-    private final SystemUsersRepository usersRepository;
-    private final NabatMapper nabatMapper;
     private final NotifyClient notifyClient;
     private final NotifyResultClient notifyResultClient;
+    private final NabatMapper nabatMapper;
     private final ObjectMapper mapper;
 
     @Override
@@ -130,11 +125,11 @@ public class NabatServiceImpl implements NabatService {
     @Override
     public NotifyResponseDTO nabatNotify(UUID nabatGroupId, NotifyRequestDTO requestDTO, Principal principal) {
 
-        if (!nabatGroupService.existByNabatGroupId(nabatGroupId)){
-            throw new ClientBackendException(ErrorCode.USER_NOT_FOUND);
-        }
+        if (!nabatGroupService.existsNabatGroupId(nabatGroupId)){
+            throw new ClientBackendException(ErrorCode.NABAT_GROUP_NOT_FOUND);
+        };
 
-        UserResponseDTO userByEmail = userService.getUserByEmail(principal.getName());
+        SystemUsers userByEmail = userService.getUserByEmail(principal.getName());
 
         List<UUID> userIds = nabatRepository.findUserIdByNabatGroupId(nabatGroupId);
         if (userIds.isEmpty()) {
@@ -166,17 +161,14 @@ public class NabatServiceImpl implements NabatService {
     @Override
     public NotifyResultResponseDTO getNotifyResult(UUID eventId) {
 
-        NotificationLog notificationLog = notificationLogRepository
-                .findByEventId(eventId)
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.NOTIFICATION_LOG_NOT_FOUND));
-
+        NotificationLog notificationLog = notificationLogService.getNotificationLogByEventId(eventId);
 
         // Check if the notification log is not the latest
         if (!notificationLogService.isLatestNotificationLog(notificationLog.getNabatGroupId(), notificationLog.getEventId())) {
 
             String jsonResponse = notificationLog.getJsonResponse();
 
-            if (jsonResponse != null && !jsonResponse.isEmpty()) {
+            if (Objects.nonNull(jsonResponse) && !jsonResponse.isEmpty()) {
                 try {
                     // Convert JSON to NotifyResultResponseDTO
                     return mapper.readValue(jsonResponse, NotifyResultResponseDTO.class);
