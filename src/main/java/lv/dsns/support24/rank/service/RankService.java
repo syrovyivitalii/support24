@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface RankService {
     RankResponseDTO save(RankRequestDTO rankRequestDTO);
+
     boolean existsByRankName(String rankName);
+
     List<RankResponseDTO> findAll();
 }

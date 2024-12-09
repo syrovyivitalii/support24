@@ -17,7 +17,8 @@ import lv.dsns.support24.task.repository.entity.Task;
 import lv.dsns.support24.task.service.TaskService;
 import lv.dsns.support24.task.service.filter.TaskFilter;
 import lv.dsns.support24.user.controller.dto.enums.Role;
-import lv.dsns.support24.user.repository.SystemUsersRepository;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
+import lv.dsns.support24.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,9 +37,10 @@ import static lv.dsns.support24.common.specification.SpecificationCustom.*;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
+
     private final TaskRepository taskRepository;
     private final TaskMapper tasksMapper;
-    private final SystemUsersRepository usersRepository;
+    private final UserService userService;
     private final EmailNotificationFactory emailNotificationFactory;
 
     @Override
@@ -62,8 +64,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public PageResponse<TaskResponseDTO> findAllPageable(Principal principal, TaskFilter taskFilter, Pageable pageable) {
-        var authUser = usersRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+        SystemUsers authUser = userService.getUserByEmail(principal.getName());
 
         // Apply role-based filters
         if (authUser.getRole().equals(Role.ROLE_ADMIN)){
@@ -106,8 +107,7 @@ public class TaskServiceImpl implements TaskService {
 
             task.setProblemTypeId(parentById.getProblemTypeId());
 
-            var byEmail = usersRepository.findByEmail(principal.getName())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+            SystemUsers byEmail = userService.getUserByEmail(principal.getName());
 
             task.setAssignedById(byEmail.getId());
 
@@ -138,8 +138,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         if (Objects.nonNull(requestDTO.getAssignedForId()) && Objects.isNull(taskById.getAssignedById())){
-            var byEmail = usersRepository.findByEmail(principal.getName())
-                    .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+            SystemUsers byEmail = userService.getUserByEmail(principal.getName());
 
             taskById.setAssignedById(byEmail.getId());
 
@@ -194,9 +193,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private void setCommentToTask(Principal principal, String comment, Task taskById){
-
-        var byEmail = usersRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+        SystemUsers byEmail = userService.getUserByEmail(principal.getName());
 
         String description = String.format(
                 "%s%n%n%s %s: %s",

@@ -160,10 +160,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO getUserByEmail(String email){
-        var byEmail = systemUsersRepository.findByEmail(email).orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+    public SystemUsers getUserByEmail(String email){
 
-        return userMapper.mapToDTO(byEmail);
+        return systemUsersRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
     }
 
     private Specification<SystemUsers> getSearchSpecification(UserFilter userFilter) {

@@ -1,10 +1,12 @@
-package lv.dsns.support24.user.controller;
+package lv.dsns.support24.auth.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import lv.dsns.support24.common.security.dto.*;
-import lv.dsns.support24.user.service.AuthenticationService;
+import lv.dsns.support24.auth.controller.dto.*;
+import lv.dsns.support24.auth.service.AuthService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -12,9 +14,9 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/public/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthController {
 
-    private final AuthenticationService authenticationService;
+    private final AuthService authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -42,7 +44,7 @@ public class AuthenticationController {
     public ResponseEntity<Void> changePassword(
             @RequestBody ChangePasswordRequestDTO request,
             @ParameterObject Principal principal
-            ){
+    ){
 
         authenticationService.changePassword(principal, request);
 
@@ -50,6 +52,8 @@ public class AuthenticationController {
     }
 
     @PutMapping("/change-password/by-admin")
+    @PreAuthorize("hasRole('ROLE_SYSTEM_ADMIN')")
+    @Operation(summary = "Accessible by ROLE_SYSTEM_ADMIN only")
     public ResponseEntity<Void> changePasswordByAdmin(
             @RequestBody ChangePasswordByAdminRequestDTO request,
             @ParameterObject Principal principal

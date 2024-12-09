@@ -35,7 +35,6 @@ public class UserController {
         return ResponseEntity.ok(allSystemUsers);
     }
 
-
     @GetMapping("/private/users/pageable")
     public ResponseEntity<PageResponse<UserResponseDTO>> getAllSystemUsersPageable(@ParameterObject UserFilter userFilter, @SortDefault(sort = "name", direction = Sort.Direction.ASC) @ParameterObject Pageable pageable){
         PageResponse<UserResponseDTO> responseDTOS = userService.findAllPageable(userFilter,pageable);
@@ -44,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/private/users/subordinated/pageable")
-    @Operation(summary = "Get only subordinated users pageable (filter by child units)")
+    @Operation(summary = "Get only subordinated users of authenticated user, pageable (filter by child units)")
     public ResponseEntity<PageResponse<UserResponseDTO>> getAllSubordinatedUsersPageable(@ParameterObject Principal principal,
                                                                                  @ParameterObject UserFilter userFilter,
                                                                                  @SortDefault(sort = "name") @ParameterObject Pageable pageable){
@@ -54,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping("/private/users/subordinated")
-    @Operation(summary = "Get only subordinated users (filter by child units)")
+    @Operation(summary = "Get only subordinated users of authenticated user (filter by child units)")
     public ResponseEntity<List<UserResponseDTO>> getAllSubordinatedUsers(@ParameterObject Principal principal,
                                                                                  @ParameterObject UserFilter userFilter){
         List<UserResponseDTO> responseDTOs = userService.findAllSubordinated(principal,userFilter);

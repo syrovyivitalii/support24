@@ -1,5 +1,6 @@
 package lv.dsns.support24.user.mapper;
 
+import lombok.RequiredArgsConstructor;
 import lv.dsns.support24.user.controller.dto.request.UserDefaultRequestDTO;
 import lv.dsns.support24.user.controller.dto.request.UserRequestDTO;
 import lv.dsns.support24.user.controller.dto.response.UserResponseDTO;
@@ -16,6 +17,7 @@ public abstract class UserMapper {
 
     @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
     public abstract SystemUsers mapToEntity (UserRequestDTO userRequestDTO);
+
     public abstract UserResponseDTO mapToDTO(SystemUsers systemUsers);
 
     @Mapping(target = "verify", constant = "false")

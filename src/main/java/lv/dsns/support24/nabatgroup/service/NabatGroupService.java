@@ -2,6 +2,7 @@ package lv.dsns.support24.nabatgroup.service;
 
 import lv.dsns.support24.nabatgroup.controller.dto.request.NabatGroupRequestDTO;
 import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
+import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
 
 import java.security.Principal;
 import java.util.List;
@@ -20,5 +21,5 @@ public interface NabatGroupService {
 
     void delete(UUID id);
 
-    boolean existByNabatGroupId(UUID nabatGroupId);
+    boolean existsNabatGroupId(UUID nabatGroupId);
 }

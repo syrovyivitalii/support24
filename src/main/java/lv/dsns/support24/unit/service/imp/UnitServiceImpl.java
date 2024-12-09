@@ -60,6 +60,7 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public List<UnitResponseDTO> findAll(){
         var allTasks = unitRepository.findAll();
+
         return allTasks.stream().map(unitMapper::mapToDTO)
                 .collect(Collectors.toList());
     }
@@ -78,7 +79,9 @@ public class UnitServiceImpl implements UnitService {
     public UnitResponseDTO patchUnit(UUID id, UnitRequestDTO requestDTO){
         var unitById = unitRepository.findById(id)
                 .orElseThrow(() -> new ClientBackendException(ErrorCode.UNIT_NOT_FOUND));
+
         unitMapper.patchMerge(requestDTO, unitById);
+
         return unitMapper.mapToDTO(unitById);
     }
     @Override
@@ -95,17 +98,19 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.existsUnitsByUnitName(unitName);
     }
 
+
+    @Override
+    public List<UnitResponseDTO> findAllByUnitType(UnitType unitType){
+        var allByUnitType = unitRepository.findAllByUnitType(unitType);
+
+        return allByUnitType.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
+    }
+
     private Specification<Unit> getSearchSpecification(UnitFilter unitFilter) {
         return Specification.where((Specification<Unit>) searchOnField("unitType", unitFilter.getUnitType()))
                 .and((Specification<Unit>) searchLikeString("unitName", unitFilter.getUnitName()))
                 .and((Specification<Unit>) searchOnField("unitStatus", unitFilter.getStatuses()))
                 .and((Specification<Unit>) searchFieldInCollectionOfIds("id", unitFilter.getUnitId()));
-    }
-
-    @Override
-    public List<UnitResponseDTO> findAllByUnitType(UnitType unitType){
-        var allByUnitType = unitRepository.findAllByUnitType(unitType);
-        return allByUnitType.stream().map(unitMapper::mapToDTO).collect(Collectors.toList());
     }
 
 }

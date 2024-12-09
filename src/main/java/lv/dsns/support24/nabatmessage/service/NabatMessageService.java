@@ -1,6 +1,5 @@
 package lv.dsns.support24.nabatmessage.service;
 
-import jakarta.transaction.Transactional;
 import lv.dsns.support24.nabatmessage.controller.dto.request.NabatMessageRequestDTO;
 import lv.dsns.support24.nabatmessage.controller.dto.response.NabatMessageResponseDTO;
 

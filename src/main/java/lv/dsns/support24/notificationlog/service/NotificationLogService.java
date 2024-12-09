@@ -5,11 +5,11 @@ import lv.dsns.support24.common.dto.response.PageResponse;
 import lv.dsns.support24.notificationlog.controller.dto.request.NotificationLogRequestDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotificationLogResponseDTO;
 import lv.dsns.support24.notificationlog.controller.dto.response.NotifiedUsersResponseDTO;
+import lv.dsns.support24.notificationlog.repository.entity.NotificationLog;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.UUID;
 
 public interface NotificationLogService {
@@ -33,4 +33,6 @@ public interface NotificationLogService {
     NotificationLogRequestDTO notificationLogRequestDTOBuilder(String jsonResponse);
 
     boolean isLatestNotificationLog(UUID nabatGroupId, UUID eventId);
+
+    NotificationLog getNotificationLogByEventId(UUID eventId);
 }

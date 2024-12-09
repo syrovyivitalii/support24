@@ -1,20 +1,19 @@
-package lv.dsns.support24.user.service.impl;
+package lv.dsns.support24.auth.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lv.dsns.support24.auth.controller.dto.*;
+import lv.dsns.support24.auth.entity.AuthUser;
+import lv.dsns.support24.auth.service.AuthService;
+import lv.dsns.support24.auth.service.JwtService;
 import lv.dsns.support24.common.exception.ClientBackendException;
 import lv.dsns.support24.common.exception.ErrorCode;
-import lv.dsns.support24.common.security.*;
-import lv.dsns.support24.common.security.dto.*;
 import lv.dsns.support24.user.controller.dto.enums.Role;
 import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import lv.dsns.support24.user.repository.entity.SystemUsers;
-import lv.dsns.support24.user.service.AuthenticationService;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService {
-
+public class AuthServiceImpl implements AuthService {
     private final SystemUsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -44,8 +42,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
         usersRepository.save(user);
 
-        var accessToken = jwtService.generateToken((UserDetails) user);
-        var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
+        var authUser = new AuthUser(user);
+        var accessToken = jwtService.generateToken(authUser);
+        var refreshToken = jwtService.generateRefreshToken(authUser);
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
@@ -73,8 +72,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ClientBackendException(ErrorCode.INVALID_CREDENTIALS);
         }
 
-        var accessToken = jwtService.generateToken((UserDetails) user);
-        var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
+        var authUser = new AuthUser(user);
+        var accessToken = jwtService.generateToken(authUser);
+        var refreshToken = jwtService.generateRefreshToken(authUser);
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
@@ -96,8 +96,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ClientBackendException(ErrorCode.USER_NOT_ACTIVE);
         }
 
-        var accessToken = jwtService.generateToken((UserDetails) user);
-        var newRefreshToken = jwtService.generateRefreshToken((UserDetails) user);
+        var authUser = new AuthUser(user);
+        var accessToken = jwtService.generateToken(authUser);
+        var newRefreshToken = jwtService.generateRefreshToken(authUser);
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)

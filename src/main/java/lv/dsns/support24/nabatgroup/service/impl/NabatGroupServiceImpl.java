@@ -8,14 +8,17 @@ import lv.dsns.support24.nabatgroup.controller.dto.request.NabatGroupRequestDTO;
 import lv.dsns.support24.nabatgroup.controller.dto.response.NabatGroupResponseDTO;
 import lv.dsns.support24.nabatgroup.mapper.NabatGroupMapper;
 import lv.dsns.support24.nabatgroup.repository.NabatGroupRepository;
+import lv.dsns.support24.nabatgroup.repository.entity.NabatGroup;
 import lv.dsns.support24.nabatgroup.service.NabatGroupService;
-import lv.dsns.support24.user.repository.SystemUsersRepository;
+import lv.dsns.support24.user.repository.entity.SystemUsers;
+import lv.dsns.support24.user.service.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,14 +26,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class NabatGroupServiceImpl implements NabatGroupService {
-    private final NabatGroupMapper nabatGroupMapper;
+
     private final NabatGroupRepository nabatGroupRepository;
-    private final SystemUsersRepository usersRepository;
+    private final UserService userService;
+    private final NabatGroupMapper nabatGroupMapper;
+
 
     @Override
     public NabatGroupResponseDTO save(Principal principal, NabatGroupRequestDTO nabatGroupRequestDTO) {
-        var authUser = usersRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new ClientBackendException(ErrorCode.USER_NOT_FOUND));
+
+        SystemUsers authUser = userService.getUserByEmail(principal.getName());
+
         var nabatGroup = nabatGroupMapper.mapToEntity(nabatGroupRequestDTO);
 
         if (nabatGroupRepository.existsByGroupNameAndUnitId(nabatGroup.getGroupName(), authUser.getUnitId())) {
@@ -52,6 +58,7 @@ public class NabatGroupServiceImpl implements NabatGroupService {
     @Override
     public List<NabatGroupResponseDTO> findAllByUnitId(UUID unitId) {
         var allByUnitId = nabatGroupRepository.findByUnitId(unitId);
+
         return allByUnitId.stream().map(nabatGroupMapper ::mapToDTO).collect(Collectors.toList());
     }
 
@@ -83,7 +90,7 @@ public class NabatGroupServiceImpl implements NabatGroupService {
     }
 
     @Override
-    public boolean existByNabatGroupId(UUID nabatGroupId) {
-        return nabatGroupRepository.existsByNabatGroupId(nabatGroupId);
+    public boolean existsNabatGroupId(UUID nabatGroupId) {
+        return nabatGroupRepository.existsById(nabatGroupId);
     }
 }
