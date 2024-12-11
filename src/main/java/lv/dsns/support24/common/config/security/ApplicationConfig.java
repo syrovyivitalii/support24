@@ -1,6 +1,8 @@
 package lv.dsns.support24.common.config.security;
 
 import lombok.RequiredArgsConstructor;
+import lv.dsns.support24.auth.entity.AuthUser;
+import lv.dsns.support24.user.controller.dto.enums.UserStatus;
 import lv.dsns.support24.user.repository.SystemUsersRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +23,11 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> usersRepository.findByEmail(username)
+        return username -> usersRepository.findByEmailAndStatus(username, UserStatus.ACTIVE)
+                .map(AuthUser::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider(){

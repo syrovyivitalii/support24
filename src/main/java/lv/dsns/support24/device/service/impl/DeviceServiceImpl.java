@@ -36,10 +36,10 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceMapper deviceMapper;
     private final UnitService unitService;
 
-    //@Value("${inventory.guId}")
+    @Value("${inventory.guId}")
     private UUID guId;
 
-    //@Value(value = "${inventory.arzspId}")
+    @Value(value = "${inventory.arzspId}")
     private UUID arzspId;
 
     @Override
