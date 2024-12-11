@@ -174,6 +174,14 @@ public class TaskServiceImpl implements TaskService {
         return tasksMapper.mapToDTO(taskById);
     }
 
+    @Override
+    public void deleteTaskById(UUID id){
+        var taskById = taskRepository.findById(id)
+                .orElseThrow(() -> new ClientBackendException(ErrorCode.TASK_NOT_FOUND));
+
+        taskRepository.delete(taskById);
+    }
+
     private Specification<Task> getSearchSpecification(TaskFilter taskFilter) {
         return Specification.where((Specification<Task>) searchLikeString("description", taskFilter.getSearch()))
                 .or((Specification<Task>) searchLikeStringWithJoin("assignedFor", "name", taskFilter.getSearch()))
