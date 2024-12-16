@@ -12,6 +12,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,4 +82,11 @@ public class TaskController {
 
         return ResponseEntity.ok(patchedTask);
     }
+
+    @DeleteMapping("/private/tasks/{id}")
+    @Operation(summary = "Delete task by id")
+    public ResponseEntity<Void> deleteTaskById(@PathVariable UUID id){
+        tasksService.deleteTaskById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);    }
 }

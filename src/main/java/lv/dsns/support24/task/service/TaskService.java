@@ -26,4 +26,6 @@ public interface TaskService {
     TaskResponseDTO patch (Principal principal, UUID id, TaskRequestDTO requestDTO);
 
     TaskResponseDTO patchByUser (Principal principal, UUID id, PatchByUserTaskRequestDTO requestDTO);
+
+    void deleteTaskById(UUID id);
 }
