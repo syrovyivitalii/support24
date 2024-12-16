@@ -39,7 +39,7 @@ public class NabatGroupServiceImpl implements NabatGroupService {
 
         var nabatGroup = nabatGroupMapper.mapToEntity(nabatGroupRequestDTO);
 
-        if (nabatGroupRepository.existsByGroupNameAndUnitId(nabatGroup.getGroupName(), authUser.getUnitId())) {
+        if (nabatGroupRepository.existsByGroupNameAndUnitId(nabatGroup.getGroupName(), authUser.getPermissionUnitId())) {
             throw new ClientBackendException(ErrorCode.GROUP_ALREADY_EXISTS);
         }
 
